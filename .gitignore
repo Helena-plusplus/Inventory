@@ -1,0 +1,24 @@
+```text
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+build/
+
+# Banco local
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+```
