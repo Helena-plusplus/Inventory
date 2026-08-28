@@ -1,8 +1,20 @@
-FROM tomcat:8.5-jdk8
+FROM maven:3.9.16-eclipse-temurin-8 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+
+FROM tomcat:8.5.87-jdk8-temurin-focal
 
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-COPY target/GameBoxdWeb-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/target/GameBoxdWeb-1.0-SNAPSHOT.war \
+    /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
