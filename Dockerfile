@@ -13,8 +13,7 @@ FROM tomcat:8.5.87-jdk8-temurin-focal
 
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-COPY --from=build /app/target/GameBoxdWeb-1.0-SNAPSHOT.war \
-    /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
