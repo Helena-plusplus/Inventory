@@ -189,7 +189,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // -----------------------------------------------------
-        // TOPO DO PERFIL
+        // TOPO
         // -----------------------------------------------------
 
         html.append(
@@ -260,7 +260,7 @@ public class PerfilServlet extends HttpServlet {
                 ".nome-com-emblema{"
                 + "display:flex;"
                 + "align-items:center;"
-                + "gap:10px;"
+                + "gap:14px;"
                 + "flex-wrap:wrap;"
                 + "}"
         );
@@ -299,28 +299,69 @@ public class PerfilServlet extends HttpServlet {
                 ".emblema-player1{"
                 + "display:inline-flex;"
                 + "align-items:center;"
-                + "gap:6px;"
-                + "padding:6px 12px;"
-                + "border-radius:20px;"
+                + "justify-content:center;"
+                + "gap:9px;"
+                + "padding:10px 18px;"
+                + "border-radius:30px;"
                 + "background:"
                 + "linear-gradient("
-                + "135deg,#3a174d,#6d2b8c"
+                + "135deg,"
+                + "#351344,"
+                + "#6d2b8c,"
+                + "#9d4edd"
                 + ");"
-                + "border:1px solid #b56ee0;"
-                + "color:#f1d8fb;"
-                + "font-size:12px;"
-                + "font-weight:700;"
+                + "border:2px solid #d8a4f7;"
+                + "color:#ffe8ff;"
+                + "font-size:15px;"
+                + "font-weight:800;"
+                + "letter-spacing:.5px;"
                 + "box-shadow:"
-                + "0 0 16px rgba(181,110,224,.2);"
+                + "0 0 10px rgba(216,164,247,.35),"
+                + "0 0 25px rgba(168,85,247,.22),"
+                + "inset 0 0 14px rgba(255,255,255,.06);"
+                + "text-shadow:"
+                + "0 1px 8px rgba(255,255,255,.18);"
+                + "position:relative;"
+                + "overflow:hidden;"
                 + "white-space:nowrap;"
                 + "}"
         );
 
         html.append(
+                ".emblema-player1:before{"
+                + "content:'';"
+                + "position:absolute;"
+                + "width:90px;"
+                + "height:90px;"
+                + "border-radius:50%;"
+                + "background:rgba(255,255,255,.08);"
+                + "top:-50px;"
+                + "left:-20px;"
+                + "}"
+        );
+
+        html.append(
+                ".emblema-player1:after{"
+                + "content:'✦';"
+                + "position:absolute;"
+                + "right:9px;"
+                + "top:3px;"
+                + "font-size:12px;"
+                + "color:#fff;"
+                + "opacity:.95;"
+                + "}"
+        );
+
+        html.append(
                 ".coracao-player1{"
-                + "font-size:18px;"
-                + "color:#f2b6ff;"
+                + "font-size:25px;"
+                + "color:#ffd6ff;"
                 + "line-height:1;"
+                + "text-shadow:"
+                + "0 0 8px #ffb3ff,"
+                + "0 0 15px rgba(255,179,255,.55);"
+                + "position:relative;"
+                + "z-index:2;"
                 + "}"
         );
 
@@ -436,9 +477,9 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        // -----------------------------------------------------
+        // =====================================================
         // FAVORITOS
-        // -----------------------------------------------------
+        // =====================================================
 
         html.append(
                 ".favoritos-grid{"
@@ -545,9 +586,9 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        // -----------------------------------------------------
+        // =====================================================
         // AVALIAÇÕES
-        // -----------------------------------------------------
+        // =====================================================
 
         html.append(
                 ".avaliacao-card{"
@@ -642,9 +683,9 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        // -----------------------------------------------------
+        // =====================================================
         // RESPONSIVO
-        // -----------------------------------------------------
+        // =====================================================
 
         html.append(
                 "@media(max-width:900px){"
@@ -701,6 +742,15 @@ public class PerfilServlet extends HttpServlet {
 
                 + ".nome-perfil{"
                 + "font-size:27px;"
+                + "}"
+
+                + ".emblema-player1{"
+                + "font-size:13px;"
+                + "padding:8px 14px;"
+                + "}"
+
+                + ".coracao-player1{"
+                + "font-size:21px;"
                 + "}"
 
                 + ".dados-principais{"
@@ -1071,7 +1121,9 @@ public class PerfilServlet extends HttpServlet {
                 quantidadeFavoritos++;
 
                 int idJogo =
-                        rsFavoritos.getInt("id");
+                        rsFavoritos.getInt(
+                                "id"
+                        );
 
                 String titulo =
                         rsFavoritos.getString(
@@ -1089,7 +1141,8 @@ public class PerfilServlet extends HttpServlet {
                         );
 
                 html.append(
-                        "<article class='favorito-card'>"
+                        "<article "
+                        + "class='favorito-card'>"
                 );
 
                 String caminhoCapa =
@@ -1371,9 +1424,7 @@ public class PerfilServlet extends HttpServlet {
                     );
                 }
 
-                html.append(
-                        "</div>"
-                );
+                html.append("</div>");
 
                 html.append(
                         "<div class='nota-texto'>"
@@ -1401,9 +1452,7 @@ public class PerfilServlet extends HttpServlet {
 
                 html.append("</p>");
 
-                html.append(
-                        "</div>"
-                );
+                html.append("</div>");
 
                 html.append(
                         "</article>"
@@ -1422,7 +1471,9 @@ public class PerfilServlet extends HttpServlet {
             }
 
             resultado.close();
+
             stmt.close();
+
             conexao.close();
 
         } catch (Exception e) {
@@ -1441,10 +1492,13 @@ public class PerfilServlet extends HttpServlet {
         html.append("</section>");
 
         html.append("</div>");
+
         html.append("</div>");
+
         html.append("</main>");
 
         html.append("</body>");
+
         html.append("</html>");
 
         response.getWriter().println(
