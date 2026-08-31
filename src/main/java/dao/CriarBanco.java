@@ -166,7 +166,22 @@ public class CriarBanco {
                     + "UNIQUE(id_usuario, id_jogo)"
                     + ")"
             );
+// =====================================================
+// TABELA FAVORITOS
+// =====================================================
 
+String tabelaFavorito =
+        "CREATE TABLE IF NOT EXISTS favorito ("
+        + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        + "id_usuario INTEGER NOT NULL,"
+        + "id_jogo INTEGER NOT NULL,"
+        + "data_adicionado TEXT DEFAULT CURRENT_TIMESTAMP,"
+        + "UNIQUE(id_usuario, id_jogo),"
+        + "FOREIGN KEY(id_usuario) REFERENCES usuario(id),"
+        + "FOREIGN KEY(id_jogo) REFERENCES jogo(id)"
+        + ")";
+
+stmt.execute(tabelaFavorito);
             adicionarColunaSeNaoExistir(
                     conexao,
                     "avaliacao",

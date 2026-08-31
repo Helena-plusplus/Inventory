@@ -4,10 +4,11 @@ import dao.Conexao;
 import model.Usuario;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,10 @@ public class PerfilServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
+
+        // =====================================================
+        // SESSÃO
+        // =====================================================
 
         HttpSession sessao =
                 request.getSession(false);
@@ -46,125 +51,6 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // =====================================================
-        // FOTO
-        // =====================================================
-
-        String foto =
-                usuario.getFoto();
-
-        String caminhoFoto = "";
-
-        if (foto != null &&
-                !foto.trim().isEmpty()) {
-
-            String fotoLimpa =
-                    foto.trim();
-
-            if (fotoLimpa.startsWith("http://") ||
-                    fotoLimpa.startsWith("https://")) {
-
-                caminhoFoto =
-                        fotoLimpa;
-
-            } else {
-
-                caminhoFoto =
-                        request.getContextPath()
-                        + "/foto-perfil?arquivo="
-                        + URLEncoder.encode(
-                                fotoLimpa,
-                                "UTF-8"
-                        );
-            }
-        }
-
-        // =====================================================
-        // ESTATÍSTICAS
-        // =====================================================
-
-        int quantidadeAvaliacoes = 0;
-        int quantidadeJogosZerados = 0;
-        double totalHoras = 0;
-        double mediaNotas = 0;
-
-        try {
-
-            Connection conexao =
-                    Conexao.conectar();
-
-            // ---------------------------------------------
-            // AVALIAÇÕES
-            // ---------------------------------------------
-
-            PreparedStatement stmtAvaliacoes =
-                    conexao.prepareStatement(
-                            "SELECT COUNT(*), " +
-                            "COALESCE(AVG(nota), 0) " +
-                            "FROM avaliacao " +
-                            "WHERE id_usuario = ?"
-                    );
-
-            stmtAvaliacoes.setInt(
-                    1,
-                    idUsuario
-            );
-
-            ResultSet rsAvaliacoes =
-                    stmtAvaliacoes.executeQuery();
-
-            if (rsAvaliacoes.next()) {
-
-                quantidadeAvaliacoes =
-                        rsAvaliacoes.getInt(1);
-
-                mediaNotas =
-                        rsAvaliacoes.getDouble(2);
-            }
-
-            rsAvaliacoes.close();
-            stmtAvaliacoes.close();
-
-            // ---------------------------------------------
-            // JOGOS ZERADOS + HORAS
-            // ---------------------------------------------
-
-            PreparedStatement stmtHoras =
-                    conexao.prepareStatement(
-                            "SELECT COUNT(*), " +
-                            "COALESCE(SUM(horas_jogadas), 0) " +
-                            "FROM biblioteca " +
-                            "WHERE id_usuario = ? " +
-                            "AND status = 'zerado'"
-                    );
-
-            stmtHoras.setInt(
-                    1,
-                    idUsuario
-            );
-
-            ResultSet rsHoras =
-                    stmtHoras.executeQuery();
-
-            if (rsHoras.next()) {
-
-                quantidadeJogosZerados =
-                        rsHoras.getInt(1);
-
-                totalHoras =
-                        rsHoras.getDouble(2);
-            }
-
-            rsHoras.close();
-            stmtHoras.close();
-
-            conexao.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-        // =====================================================
         // HTML
         // =====================================================
 
@@ -181,8 +67,9 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<meta name='viewport' " +
-                "content='width=device-width, initial-scale=1.0'>"
+                "<meta name='viewport' "
+                + "content='width=device-width, "
+                + "initial-scale=1.0'>"
         );
 
         html.append(
@@ -190,8 +77,8 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<link rel='stylesheet' " +
-                "href='style.css'>"
+                "<link rel='stylesheet' "
+                + "href='style.css'>"
         );
 
         // =====================================================
@@ -203,77 +90,35 @@ public class PerfilServlet extends HttpServlet {
         html.append(
                 "body {"
                 + "background:"
-                + "radial-gradient(circle at 20% 0%,#55208a 0%,transparent 28%),"
-                + "radial-gradient(circle at 90% 20%,#32115c 0%,transparent 25%),"
-                + "linear-gradient(135deg,#09060d,#120b18 45%,#09060d);"
+                + "radial-gradient("
+                + "circle at top,"
+                + "#32134d,"
+                + "#12091b 55%,"
+                + "#09050d"
+                + ");"
                 + "min-height:100vh;"
                 + "}"
         );
 
         html.append(
                 ".perfil-container {"
-                + "max-width:1100px;"
-                + "margin:45px auto 80px;"
+                + "max-width:1050px;"
+                + "margin:45px auto;"
                 + "padding:20px;"
                 + "}"
         );
 
-        // =====================================================
-        // CAPA
-        // =====================================================
-
         html.append(
-                ".perfil-banner {"
-                + "height:230px;"
-                + "border-radius:26px;"
-                + "position:relative;"
-                + "overflow:hidden;"
+                ".perfil-box {"
                 + "background:"
-                + "linear-gradient(135deg,#3b1260,#7c3aed 45%,#c084fc);"
-                + "box-shadow:0 25px 60px rgba(0,0,0,.45);"
-                + "}"
-        );
-
-        html.append(
-                ".perfil-banner:before {"
-                + "content:'';"
-                + "position:absolute;"
-                + "width:400px;"
-                + "height:400px;"
-                + "background:rgba(255,255,255,.08);"
-                + "border-radius:50%;"
-                + "top:-280px;"
-                + "left:-80px;"
-                + "}"
-        );
-
-        html.append(
-                ".perfil-banner:after {"
-                + "content:'INVENTORY';"
-                + "position:absolute;"
-                + "right:30px;"
-                + "bottom:18px;"
-                + "font-family:'Orbitron',sans-serif;"
-                + "font-size:48px;"
-                + "font-weight:900;"
-                + "letter-spacing:5px;"
-                + "color:rgba(255,255,255,.09);"
-                + "}"
-        );
-
-        // =====================================================
-        // CARD
-        // =====================================================
-
-        html.append(
-                ".perfil-card {"
-                + "position:relative;"
-                + "margin-top:-80px;"
-                + "background:linear-gradient(145deg,rgba(32,19,45,.98),rgba(14,9,19,.99));"
-                + "border:1px solid #4a2860;"
-                + "border-radius:26px;"
+                + "linear-gradient("
+                + "145deg,#21142c,#140b1b"
+                + ");"
+                + "border:1px solid #45245d;"
+                + "border-radius:22px;"
                 + "padding:35px;"
-                + "box-shadow:0 25px 70px rgba(0,0,0,.5);"
+                + "box-shadow:"
+                + "0 15px 50px rgba(0,0,0,.4);"
                 + "}"
         );
 
@@ -284,65 +129,76 @@ public class PerfilServlet extends HttpServlet {
         html.append(
                 ".perfil-topo {"
                 + "text-align:center;"
+                + "padding-bottom:30px;"
+                + "border-bottom:1px solid #382043;"
                 + "}"
         );
 
         html.append(
-                ".foto-wrapper {"
-                + "display:flex;"
-                + "justify-content:center;"
-                + "margin-top:-125px;"
-                + "position:relative;"
-                + "z-index:2;"
+                ".titulo-perfil {"
+                + "font-size:36px;"
+                + "margin-bottom:20px;"
+                + "background:"
+                + "linear-gradient("
+                + "90deg,#a855f7,#c084fc,#7c3aed"
+                + ");"
+                + "-webkit-background-clip:text;"
+                + "-webkit-text-fill-color:transparent;"
                 + "}"
         );
+
+        // =====================================================
+        // FOTO
+        // =====================================================
 
         html.append(
                 ".foto-perfil {"
-                + "width:190px;"
-                + "height:190px;"
+                + "display:flex;"
+                + "justify-content:center;"
+                + "margin:20px 0;"
+                + "}"
+        );
+
+        html.append(
+                ".foto-perfil img,"
+                + ".sem-foto {"
+                + "width:170px;"
+                + "height:170px;"
                 + "border-radius:50%;"
                 + "object-fit:cover;"
-                + "background:#251532;"
-                + "border:7px solid #17101f;"
+                + "border:5px solid #7c3aed;"
                 + "box-shadow:"
-                + "0 0 0 5px #a855f7,"
-                + "0 0 45px rgba(168,85,247,.55);"
+                + "0 0 35px rgba(124,58,237,.45);"
                 + "}"
         );
 
         html.append(
                 ".sem-foto {"
+                + "background:#251532;"
                 + "display:flex;"
                 + "align-items:center;"
                 + "justify-content:center;"
-                + "font-size:55px;"
-                + "color:#aa9bb8;"
+                + "color:#aaa;"
+                + "font-size:15px;"
                 + "}"
         );
 
+        // =====================================================
+        // NOME
+        // =====================================================
+
         html.append(
                 ".nome-perfil {"
-                + "font-size:34px;"
-                + "margin:20px 0 4px;"
+                + "font-size:28px;"
+                + "margin:10px 0 3px;"
                 + "color:white;"
                 + "}"
         );
 
         html.append(
                 ".username-perfil {"
-                + "color:#c084fc;"
-                + "font-weight:bold;"
+                + "color:#a855f7;"
                 + "font-size:16px;"
-                + "}"
-        );
-
-        html.append(
-                ".bio {"
-                + "max-width:650px;"
-                + "margin:18px auto;"
-                + "line-height:1.6;"
-                + "color:#bcb1c5;"
                 + "}"
         );
 
@@ -353,12 +209,15 @@ public class PerfilServlet extends HttpServlet {
         html.append(
                 ".botao-editar {"
                 + "display:inline-block;"
-                + "margin-top:10px;"
-                + "padding:13px 24px;"
-                + "border-radius:11px;"
-                + "background:linear-gradient(135deg,#7c3aed,#a855f7);"
+                + "margin-top:20px;"
+                + "padding:12px 24px;"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#7c3aed,#9333ea"
+                + ");"
                 + "color:white;"
                 + "text-decoration:none;"
+                + "border-radius:10px;"
                 + "font-weight:bold;"
                 + "transition:.25s;"
                 + "}"
@@ -367,168 +226,30 @@ public class PerfilServlet extends HttpServlet {
         html.append(
                 ".botao-editar:hover {"
                 + "transform:translateY(-3px);"
-                + "box-shadow:0 12px 30px rgba(124,58,237,.35);"
+                + "box-shadow:"
+                + "0 10px 25px rgba(124,58,237,.35);"
                 + "}"
         );
 
         // =====================================================
-        // ESTATÍSTICAS
+        // DADOS
         // =====================================================
-
-        html.append(
-                ".estatisticas {"
-                + "display:grid;"
-                + "grid-template-columns:repeat(4,1fr);"
-                + "gap:15px;"
-                + "margin:38px 0;"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica {"
-                + "position:relative;"
-                + "background:linear-gradient(145deg,#1b1026,#120b18);"
-                + "border:1px solid #39234b;"
-                + "border-radius:16px;"
-                + "padding:22px;"
-                + "text-align:center;"
-                + "overflow:hidden;"
-                + "transition:.25s;"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica:hover {"
-                + "transform:translateY(-4px);"
-                + "border-color:#8b5cf6;"
-                + "box-shadow:0 12px 30px rgba(124,58,237,.15);"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica:before {"
-                + "content:'';"
-                + "position:absolute;"
-                + "width:80px;"
-                + "height:80px;"
-                + "border-radius:50%;"
-                + "background:#8b5cf6;"
-                + "filter:blur(45px);"
-                + "opacity:.08;"
-                + "top:-40px;"
-                + "right:-20px;"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica-icone {"
-                + "font-size:23px;"
-                + "margin-bottom:7px;"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica-numero {"
-                + "display:block;"
-                + "font-size:29px;"
-                + "font-weight:800;"
-                + "color:#d8b4fe;"
-                + "}"
-        );
-
-        html.append(
-                ".estatistica-label {"
-                + "display:block;"
-                + "color:#8f8399;"
-                + "font-size:12px;"
-                + "margin-top:5px;"
-                + "text-transform:uppercase;"
-                + "letter-spacing:1px;"
-                + "}"
-        );
-
-        // =====================================================
-        // HORAS DESTAQUE
-        // =====================================================
-
-        html.append(
-                ".horas-destaque {"
-                + "background:"
-                + "linear-gradient(135deg,#28123c,#160d20);"
-                + "border:1px solid #66358b;"
-                + "border-radius:18px;"
-                + "padding:25px;"
-                + "margin-bottom:30px;"
-                + "display:flex;"
-                + "align-items:center;"
-                + "justify-content:space-between;"
-                + "gap:20px;"
-                + "box-shadow:0 10px 35px rgba(124,58,237,.12);"
-                + "}"
-        );
-
-        html.append(
-                ".horas-texto h3 {"
-                + "margin:0 0 5px;"
-                + "color:white;"
-                + "font-size:20px;"
-                + "}"
-        );
-
-        html.append(
-                ".horas-texto p {"
-                + "margin:0;"
-                + "color:#96889f;"
-                + "}"
-        );
-
-        html.append(
-                ".horas-total {"
-                + "font-family:'Orbitron',sans-serif;"
-                + "font-size:33px;"
-                + "font-weight:bold;"
-                + "color:#c084fc;"
-                + "text-shadow:0 0 18px rgba(192,132,252,.25);"
-                + "white-space:nowrap;"
-                + "}"
-        );
-
-        // =====================================================
-        // INFORMAÇÕES
-        // =====================================================
-
-        html.append(
-                ".secao-titulo {"
-                + "margin:35px 0 18px;"
-                + "font-size:25px;"
-                + "color:white;"
-                + "}"
-        );
-
-        html.append(
-                ".linha-roxa {"
-                + "width:65px;"
-                + "height:3px;"
-                + "margin-top:8px;"
-                + "background:linear-gradient(90deg,#7c3aed,#c084fc);"
-                + "border-radius:10px;"
-                + "}"
-        );
 
         html.append(
                 ".dados-perfil {"
                 + "display:grid;"
                 + "grid-template-columns:repeat(2,1fr);"
                 + "gap:15px;"
+                + "margin-top:30px;"
                 + "}"
         );
 
         html.append(
                 ".dado {"
-                + "background:#150c1d;"
-                + "border:1px solid #34203f;"
-                + "border-radius:15px;"
-                + "padding:19px;"
+                + "background:#160d1e;"
+                + "border:1px solid #352044;"
+                + "padding:17px;"
+                + "border-radius:12px;"
                 + "transition:.25s;"
                 + "}"
         );
@@ -543,23 +264,151 @@ public class PerfilServlet extends HttpServlet {
         html.append(
                 ".dado strong {"
                 + "display:block;"
-                + "font-size:12px;"
                 + "color:#a855f7;"
-                + "text-transform:uppercase;"
-                + "letter-spacing:.6px;"
-                + "margin-bottom:7px;"
+                + "font-size:13px;"
+                + "margin-bottom:5px;"
                 + "}"
         );
 
         html.append(
                 ".dado span {"
-                + "color:#e5dfea;"
+                + "color:#ddd;"
                 + "}"
         );
 
         html.append(
                 ".dado-bio {"
+                + "grid-column:1 / -1;"
+                + "}"
+        );
+
+        // =====================================================
+        // FAVORITOS
+        // =====================================================
+
+        html.append(
+                ".favoritos-perfil {"
+                + "margin-top:45px;"
+                + "padding-top:35px;"
+                + "border-top:1px solid #382043;"
+                + "}"
+        );
+
+        html.append(
+                ".titulo-favoritos {"
+                + "font-size:28px;"
+                + "color:white;"
+                + "margin:0;"
+                + "}"
+        );
+
+        html.append(
+                ".descricao-favoritos {"
+                + "color:#999;"
+                + "margin:8px 0 25px;"
+                + "}"
+        );
+
+        html.append(
+                ".favoritos-grid {"
+                + "display:grid;"
+                + "grid-template-columns:"
+                + "repeat(5,1fr);"
+                + "gap:15px;"
+                + "}"
+        );
+
+        html.append(
+                ".favorito-card {"
+                + "background:#160d1e;"
+                + "border:1px solid #45245d;"
+                + "border-radius:14px;"
+                + "padding:10px;"
+                + "text-align:center;"
+                + "transition:.25s;"
+                + "}"
+        );
+
+        html.append(
+                ".favorito-card:hover {"
+                + "transform:translateY(-5px);"
+                + "border-color:#8b5cf6;"
+                + "box-shadow:"
+                + "0 10px 25px rgba(124,58,237,.25);"
+                + "}"
+        );
+
+        html.append(
+                ".capa-favorito {"
+                + "width:100%;"
+                + "height:210px;"
+                + "object-fit:cover;"
+                + "border-radius:9px;"
+                + "display:block;"
+                + "}"
+        );
+
+        html.append(
+                ".sem-capa-favorito {"
+                + "width:100%;"
+                + "height:210px;"
+                + "display:flex;"
+                + "align-items:center;"
+                + "justify-content:center;"
+                + "background:#251532;"
+                + "border-radius:9px;"
+                + "font-size:35px;"
+                + "color:#777;"
+                + "}"
+        );
+
+        html.append(
+                ".favorito-card h3 {"
+                + "color:#fff;"
+                + "font-size:15px;"
+                + "margin:12px 4px 7px;"
+                + "min-height:40px;"
+                + "}"
+        );
+
+        html.append(
+                ".genero-favorito {"
+                + "color:#a855f7;"
+                + "font-size:12px;"
+                + "min-height:28px;"
+                + "}"
+        );
+
+        html.append(
+                ".botao-remover-favorito {"
+                + "width:100%;"
+                + "padding:8px;"
+                + "border:1px solid #6d28d9;"
+                + "border-radius:8px;"
+                + "background:#241434;"
+                + "color:#ddd;"
+                + "cursor:pointer;"
+                + "font-weight:bold;"
+                + "transition:.2s;"
+                + "}"
+        );
+
+        html.append(
+                ".botao-remover-favorito:hover {"
+                + "background:#6d28d9;"
+                + "color:white;"
+                + "}"
+        );
+
+        html.append(
+                ".nenhum-favorito {"
                 + "grid-column:1/-1;"
+                + "padding:35px;"
+                + "text-align:center;"
+                + "background:#160d1e;"
+                + "border:1px solid #352044;"
+                + "border-radius:12px;"
+                + "color:#888;"
                 + "}"
         );
 
@@ -574,13 +423,21 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
+                ".titulo-avaliacoes {"
+                + "font-size:25px;"
+                + "color:white;"
+                + "margin-bottom:20px;"
+                + "}"
+        );
+
+        html.append(
                 ".avaliacao-card {"
                 + "display:flex;"
                 + "gap:20px;"
-                + "background:linear-gradient(145deg,#1b1023,#120a16);"
-                + "border:1px solid #34203f;"
-                + "border-radius:17px;"
+                + "background:#160d1e;"
+                + "border:1px solid #352044;"
                 + "padding:20px;"
+                + "border-radius:15px;"
                 + "margin-top:15px;"
                 + "transition:.25s;"
                 + "}"
@@ -590,29 +447,28 @@ public class PerfilServlet extends HttpServlet {
                 ".avaliacao-card:hover {"
                 + "border-color:#7c3aed;"
                 + "transform:translateY(-3px);"
-                + "box-shadow:0 12px 30px rgba(0,0,0,.3);"
                 + "}"
         );
 
         html.append(
                 ".capa-avaliacao {"
-                + "width:110px;"
-                + "height:150px;"
+                + "width:100px;"
+                + "height:140px;"
                 + "object-fit:cover;"
-                + "border-radius:10px;"
+                + "border-radius:8px;"
                 + "flex-shrink:0;"
                 + "}"
         );
 
         html.append(
                 ".sem-capa-avaliacao {"
-                + "width:110px;"
-                + "height:150px;"
-                + "border-radius:10px;"
-                + "background:#24152f;"
+                + "width:100px;"
+                + "height:140px;"
+                + "background:#251532;"
                 + "display:flex;"
                 + "align-items:center;"
                 + "justify-content:center;"
+                + "border-radius:8px;"
                 + "color:#888;"
                 + "flex-shrink:0;"
                 + "}"
@@ -626,22 +482,8 @@ public class PerfilServlet extends HttpServlet {
 
         html.append(
                 ".texto-avaliacao h3 {"
-                + "margin:0 0 8px;"
                 + "color:white;"
-                + "font-size:21px;"
-                + "}"
-        );
-
-        html.append(
-                ".nota-pill {"
-                + "display:inline-block;"
-                + "padding:5px 10px;"
-                + "background:#2a1738;"
-                + "border-radius:20px;"
-                + "color:#d8b4fe;"
-                + "font-size:12px;"
-                + "font-weight:bold;"
-                + "margin-bottom:8px;"
+                + "margin-top:0;"
                 + "}"
         );
 
@@ -650,25 +492,24 @@ public class PerfilServlet extends HttpServlet {
                 + "color:#c084fc;"
                 + "font-size:22px;"
                 + "letter-spacing:2px;"
-                + "margin-bottom:8px;"
                 + "}"
         );
 
         html.append(
                 ".texto-avaliacao p {"
                 + "color:#aaa;"
-                + "line-height:1.6;"
+                + "line-height:1.5;"
                 + "}"
         );
 
         html.append(
                 ".sem-avaliacoes {"
-                + "background:#150c1d;"
-                + "border:1px dashed #4d2b60;"
-                + "padding:35px;"
-                + "border-radius:15px;"
+                + "background:#160d1e;"
+                + "border:1px solid #352044;"
+                + "padding:30px;"
+                + "border-radius:12px;"
                 + "text-align:center;"
-                + "color:#8f8399;"
+                + "color:#888;"
                 + "}"
         );
 
@@ -678,27 +519,47 @@ public class PerfilServlet extends HttpServlet {
 
         html.append(
                 "@media(max-width:800px){"
-                + ".estatisticas{grid-template-columns:repeat(2,1fr);}"
-                + ".dados-perfil{grid-template-columns:1fr;}"
-                + ".dado-bio{grid-column:auto;}"
-                + ".perfil-banner{height:180px;}"
-                + ".perfil-card{margin-top:-60px;padding:25px;}"
-                + ".foto-wrapper{margin-top:-105px;}"
-                + ".foto-perfil{width:160px;height:160px;}"
+                + ".favoritos-grid{"
+                + "grid-template-columns:"
+                + "repeat(2,1fr);"
+                + "}"
                 + "}"
         );
 
         html.append(
-                "@media(max-width:550px){"
-                + ".perfil-container{padding:10px;margin-top:25px;}"
-                + ".estatisticas{grid-template-columns:1fr 1fr;gap:10px;}"
-                + ".estatistica{padding:15px 8px;}"
-                + ".estatistica-numero{font-size:22px;}"
-                + ".horas-destaque{flex-direction:column;align-items:flex-start;}"
-                + ".horas-total{font-size:27px;}"
-                + ".avaliacao-card{flex-direction:column;}"
-                + ".capa-avaliacao,.sem-capa-avaliacao{width:140px;height:190px;}"
-                + ".nome-perfil{font-size:28px;}"
+                "@media(max-width:650px){"
+
+                + ".perfil-container{"
+                + "padding:10px;"
+                + "margin:25px auto;"
+                + "}"
+
+                + ".perfil-box{"
+                + "padding:20px;"
+                + "}"
+
+                + ".dados-perfil{"
+                + "grid-template-columns:1fr;"
+                + "}"
+
+                + ".dado-bio{"
+                + "grid-column:auto;"
+                + "}"
+
+                + ".avaliacao-card{"
+                + "flex-direction:column;"
+                + "}"
+
+                + ".capa-avaliacao,"
+                + ".sem-capa-avaliacao{"
+                + "width:130px;"
+                + "height:180px;"
+                + "}"
+
+                + ".favoritos-grid{"
+                + "grid-template-columns:repeat(2,1fr);"
+                + "}"
+
                 + "}"
         );
 
@@ -714,7 +575,9 @@ public class PerfilServlet extends HttpServlet {
 
         html.append("<header>");
 
-        html.append("<h1>Inventory</h1>");
+        html.append(
+                "<h1>Inventory</h1>"
+        );
 
         html.append("<nav>");
 
@@ -749,7 +612,7 @@ public class PerfilServlet extends HttpServlet {
         html.append("</header>");
 
         // =====================================================
-        // PERFIL
+        // INÍCIO DO PERFIL
         // =====================================================
 
         html.append(
@@ -757,27 +620,87 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<div class='perfil-banner'></div>"
+                "<div class='perfil-box'>"
         );
 
-        html.append(
-                "<div class='perfil-card'>"
-        );
+        // =====================================================
+        // TOPO
+        // =====================================================
 
         html.append(
                 "<section class='perfil-topo'>"
         );
 
         html.append(
-                "<div class='foto-wrapper'>"
+                "<h2 class='titulo-perfil'>"
+                + "Meu Perfil"
+                + "</h2>"
+        );
+
+        // =====================================================
+        // FOTO
+        // =====================================================
+
+        String foto =
+                usuario.getFoto();
+
+        String caminhoFoto =
+                "";
+
+        if (foto != null &&
+                !foto.trim().isEmpty()) {
+
+            String fotoLimpa =
+                    foto.trim();
+
+            if (fotoLimpa.startsWith(
+                    "http://")
+                    ||
+                    fotoLimpa.startsWith(
+                    "https://")) {
+
+                caminhoFoto =
+                        fotoLimpa;
+
+            } else {
+
+                while (
+                        fotoLimpa.startsWith("/")
+                ) {
+
+                    fotoLimpa =
+                            fotoLimpa.substring(1);
+                }
+
+                if (
+                        fotoLimpa.startsWith(
+                                "imagens/"
+                        )
+                ) {
+
+                    caminhoFoto =
+                            request.getContextPath()
+                            + "/"
+                            + fotoLimpa;
+
+                } else {
+
+                    caminhoFoto =
+                            request.getContextPath()
+                            + "/imagens/"
+                            + fotoLimpa;
+                }
+            }
+        }
+
+        html.append(
+                "<div class='foto-perfil'>"
         );
 
         if (!caminhoFoto.isEmpty()) {
 
             html.append(
-                    "<img "
-                    + "class='foto-perfil' "
-                    + "src='"
+                    "<img src='"
                     + escapar(caminhoFoto)
                     + "' "
                     + "alt='Foto de perfil'>"
@@ -786,35 +709,34 @@ public class PerfilServlet extends HttpServlet {
         } else {
 
             html.append(
-                    "<div class='foto-perfil sem-foto'>"
-                    + "👤"
+                    "<div class='sem-foto'>"
+                    + "Sem foto"
                     + "</div>"
             );
         }
 
         html.append("</div>");
 
+        // =====================================================
+        // NOME
+        // =====================================================
+
         html.append(
-                "<h2 class='nome-perfil'>"
+                "<h3 class='nome-perfil'>"
                 + escapar(usuario.getNome())
-                + "</h2>"
+                + "</h3>"
         );
 
         html.append(
-                "<div class='username-perfil'>@"
+                "<div class='username-perfil'>"
+                + "@"
                 + escapar(usuario.getUsername())
                 + "</div>"
         );
 
-        if (usuario.getBio() != null &&
-                !usuario.getBio().trim().isEmpty()) {
-
-            html.append(
-                    "<p class='bio'>"
-                    + escapar(usuario.getBio())
-                    + "</p>"
-            );
-        }
+        // =====================================================
+        // EDITAR
+        // =====================================================
 
         html.append(
                 "<a class='botao-editar' "
@@ -826,94 +748,16 @@ public class PerfilServlet extends HttpServlet {
         html.append("</section>");
 
         // =====================================================
-        // ESTATÍSTICAS
+        // DADOS
         // =====================================================
 
         html.append(
-                "<section class='estatisticas'>"
-        );
-
-        html.append(
-                "<div class='estatistica'>"
-                + "<div class='estatistica-icone'>🎮</div>"
-                + "<span class='estatistica-numero'>"
-                + quantidadeJogosZerados
-                + "</span>"
-                + "<span class='estatistica-label'>Jogos zerados</span>"
-                + "</div>"
-        );
-
-        html.append(
-                "<div class='estatistica'>"
-                + "<div class='estatistica-icone'>⏱️</div>"
-                + "<span class='estatistica-numero'>"
-                + formatarNumero(totalHoras)
-                + "</span>"
-                + "<span class='estatistica-label'>Horas jogadas</span>"
-                + "</div>"
-        );
-
-        html.append(
-                "<div class='estatistica'>"
-                + "<div class='estatistica-icone'>⭐</div>"
-                + "<span class='estatistica-numero'>"
-                + formatarNumero(mediaNotas)
-                + "</span>"
-                + "<span class='estatistica-label'>Média</span>"
-                + "</div>"
-        );
-
-        html.append(
-                "<div class='estatistica'>"
-                + "<div class='estatistica-icone'>📝</div>"
-                + "<span class='estatistica-numero'>"
-                + quantidadeAvaliacoes
-                + "</span>"
-                + "<span class='estatistica-label'>Avaliações</span>"
-                + "</div>"
-        );
-
-        html.append("</section>");
-
-        // =====================================================
-        // HORAS EM DESTAQUE
-        // =====================================================
-
-        html.append(
-                "<section class='horas-destaque'>"
-                + "<div class='horas-texto'>"
-                + "<h3>⏱️ Seu tempo no mundo dos jogos</h3>"
-                + "<p>Total acumulado das suas horas jogadas.</p>"
-                + "</div>"
-                + "<div class='horas-total'>"
-                + formatarNumero(totalHoras)
-                + " h"
-                + "</div>"
-                + "</section>"
-        );
-
-        // =====================================================
-        // INFORMAÇÕES
-        // =====================================================
-
-        html.append(
-                "<section>"
-        );
-
-        html.append(
-                "<h2 class='secao-titulo'>"
-                + "👾 Informações"
-                + "<div class='linha-roxa'></div>"
-                + "</h2>"
-        );
-
-        html.append(
-                "<div class='dados-perfil'>"
+                "<section class='dados-perfil'>"
         );
 
         html.append(
                 "<div class='dado'>"
-                + "<strong>📧 E-mail</strong>"
+                + "<strong>E-mail</strong>"
                 + "<span>"
                 + escapar(usuario.getEmail())
                 + "</span>"
@@ -922,47 +766,270 @@ public class PerfilServlet extends HttpServlet {
 
         html.append(
                 "<div class='dado'>"
-                + "<strong>🌎 País</strong>"
+                + "<strong>País</strong>"
                 + "<span>"
-                + (
-                    usuario.getPais() != null &&
-                    !usuario.getPais().trim().isEmpty()
-                    ? escapar(usuario.getPais())
-                    : "Não informado"
-                )
+                + escapar(usuario.getPais())
                 + "</span>"
                 + "</div>"
         );
 
         html.append(
                 "<div class='dado'>"
-                + "<strong>🎮 Plataforma favorita</strong>"
+                + "<strong>Plataforma favorita</strong>"
                 + "<span>"
-                + (
-                    usuario.getPlataformaFavorita() != null &&
-                    !usuario.getPlataformaFavorita().trim().isEmpty()
-                    ? escapar(
-                            usuario.getPlataformaFavorita()
-                    )
-                    : "Não informada"
-                )
+                + escapar(
+                        usuario.getPlataformaFavorita()
+                  )
                 + "</span>"
                 + "</div>"
         );
 
         html.append(
                 "<div class='dado dado-bio'>"
-                + "<strong>📝 Sobre mim</strong>"
+                + "<strong>Biografia</strong>"
                 + "<span>"
                 + (
-                    usuario.getBio() != null &&
-                    !usuario.getBio().trim().isEmpty()
-                    ? escapar(usuario.getBio())
-                    : "Você ainda não adicionou uma biografia."
-                )
+                    usuario.getBio() != null
+                    &&
+                    !usuario.getBio()
+                            .trim()
+                            .isEmpty()
+                    ?
+                    escapar(usuario.getBio())
+                    :
+                    "Nenhuma biografia adicionada."
+                  )
                 + "</span>"
                 + "</div>"
         );
+
+        html.append("</section>");
+
+        // =====================================================
+        // FAVORITOS
+        // =====================================================
+
+        html.append(
+                "<section class='favoritos-perfil'>"
+        );
+
+        html.append(
+                "<h2 class='titulo-favoritos'>"
+                + "⭐ Meus favoritos"
+                + "</h2>"
+        );
+
+        html.append(
+                "<p class='descricao-favoritos'>"
+                + "Escolha até 5 jogos para aparecer aqui."
+                + "</p>"
+        );
+
+        html.append(
+                "<div class='favoritos-grid'>"
+        );
+
+        try {
+
+            Connection conexaoFavoritos =
+                    Conexao.conectar();
+
+            String sqlFavoritos =
+                    "SELECT "
+                    + "j.id, "
+                    + "j.titulo, "
+                    + "j.genero, "
+                    + "j.capa "
+                    + "FROM favorito f "
+                    + "INNER JOIN jogo j "
+                    + "ON f.id_jogo = j.id "
+                    + "WHERE f.id_usuario = ? "
+                    + "ORDER BY f.data_adicionado "
+                    + "LIMIT 5";
+
+            PreparedStatement stmtFavoritos =
+                    conexaoFavoritos.prepareStatement(
+                            sqlFavoritos
+                    );
+
+            stmtFavoritos.setInt(
+                    1,
+                    idUsuario
+            );
+
+            ResultSet rsFavoritos =
+                    stmtFavoritos.executeQuery();
+
+            int quantidadeFavoritos =
+                    0;
+
+            while (rsFavoritos.next()) {
+
+                quantidadeFavoritos++;
+
+                int idJogo =
+                        rsFavoritos.getInt("id");
+
+                String titulo =
+                        rsFavoritos.getString(
+                                "titulo"
+                        );
+
+                String genero =
+                        rsFavoritos.getString(
+                                "genero"
+                        );
+
+                String capa =
+                        rsFavoritos.getString(
+                                "capa"
+                        );
+
+                html.append(
+                        "<article class='favorito-card'>"
+                );
+
+                // =================================================
+                // CAPA
+                // =================================================
+
+                String caminhoCapa =
+                        montarCaminhoCapa(
+                                request,
+                                capa
+                        );
+
+                if (caminhoCapa != null &&
+                        !caminhoCapa.isEmpty()) {
+
+                    html.append(
+                            "<img "
+                            + "class='capa-favorito' "
+                            + "src='"
+                            + escapar(caminhoCapa)
+                            + "' "
+                            + "alt='"
+                            + escapar(titulo)
+                            + "' "
+                            + "onerror=\""
+                            + "this.style.display='none';"
+                            + "this.nextElementSibling"
+                            + ".style.display='flex';"
+                            + "\""
+                            + ">"
+                    );
+
+                    html.append(
+                            "<div "
+                            + "class='sem-capa-favorito' "
+                            + "style='display:none;'>"
+                            + "🎮"
+                            + "</div>"
+                    );
+
+                } else {
+
+                    html.append(
+                            "<div "
+                            + "class='sem-capa-favorito'>"
+                            + "🎮"
+                            + "</div>"
+                    );
+                }
+
+                // =================================================
+                // TITULO
+                // =================================================
+
+                html.append(
+                        "<h3>"
+                        + escapar(titulo)
+                        + "</h3>"
+                );
+
+                // =================================================
+                // GENERO
+                // =================================================
+
+                if (genero != null &&
+                        !genero.trim().isEmpty()) {
+
+                    html.append(
+                            "<p class='genero-favorito'>"
+                            + escapar(genero)
+                            + "</p>"
+                    );
+                }
+
+                // =================================================
+                // REMOVER
+                // =================================================
+
+                html.append(
+                        "<form "
+                        + "method='POST' "
+                        + "action='favorito'>"
+                );
+
+                html.append(
+                        "<input "
+                        + "type='hidden' "
+                        + "name='idJogo' "
+                        + "value='"
+                        + idJogo
+                        + "'>"
+                );
+
+                html.append(
+                        "<button "
+                        + "type='submit' "
+                        + "class='botao-remover-favorito'>"
+                        + "Remover"
+                        + "</button>"
+                );
+
+                html.append(
+                        "</form>"
+                );
+
+                html.append(
+                        "</article>"
+                );
+            }
+
+            rsFavoritos.close();
+
+            stmtFavoritos.close();
+
+            conexaoFavoritos.close();
+
+            // =================================================
+            // NENHUM FAVORITO
+            // =================================================
+
+            if (quantidadeFavoritos == 0) {
+
+                html.append(
+                        "<div "
+                        + "class='nenhum-favorito'>"
+                        + "Você ainda não escolheu "
+                        + "seus favoritos."
+                        + "</div>"
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            html.append(
+                    "<div "
+                    + "class='nenhum-favorito'>"
+                    + "Não foi possível carregar "
+                    + "seus favoritos."
+                    + "</div>"
+            );
+        }
 
         html.append("</div>");
 
@@ -977,9 +1044,8 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<h2 class='secao-titulo'>"
+                "<h2 class='titulo-avaliacoes'>"
                 + "⭐ Minhas avaliações"
-                + "<div class='linha-roxa'></div>"
                 + "</h2>"
         );
 
@@ -1016,7 +1082,8 @@ public class PerfilServlet extends HttpServlet {
 
             while (resultado.next()) {
 
-                possuiAvaliacao = true;
+                possuiAvaliacao =
+                        true;
 
                 String titulo =
                         resultado.getString(
@@ -1039,38 +1106,18 @@ public class PerfilServlet extends HttpServlet {
                         );
 
                 html.append(
-                        "<article class='avaliacao-card'>"
+                        "<article "
+                        + "class='avaliacao-card'>"
                 );
 
-                // -----------------------------------------
-                // CAPA
-                // -----------------------------------------
+                String caminhoCapa =
+                        montarCaminhoCapa(
+                                request,
+                                capa
+                        );
 
-                if (capa != null &&
-                        !capa.trim().isEmpty()) {
-
-                    String caminhoCapa =
-                            capa.trim();
-
-                    if (!caminhoCapa.startsWith(
-                            "http://")
-                            &&
-                            !caminhoCapa.startsWith(
-                            "https://")) {
-
-                        while (
-                                caminhoCapa.startsWith("/")
-                        ) {
-
-                            caminhoCapa =
-                                    caminhoCapa.substring(1);
-                        }
-
-                        caminhoCapa =
-                                request.getContextPath()
-                                + "/"
-                                + caminhoCapa;
-                    }
+                if (caminhoCapa != null &&
+                        !caminhoCapa.isEmpty()) {
 
                     html.append(
                             "<img "
@@ -1078,21 +1125,20 @@ public class PerfilServlet extends HttpServlet {
                             + "src='"
                             + escapar(caminhoCapa)
                             + "' "
-                            + "alt='Capa'>"
+                            + "alt='Capa de "
+                            + escapar(titulo)
+                            + "'>"
                     );
 
                 } else {
 
                     html.append(
-                            "<div class='sem-capa-avaliacao'>"
-                            + "🎮"
+                            "<div "
+                            + "class='sem-capa-avaliacao'>"
+                            + "Sem capa"
                             + "</div>"
                     );
                 }
-
-                // -----------------------------------------
-                // TEXTO
-                // -----------------------------------------
 
                 html.append(
                         "<div class='texto-avaliacao'>"
@@ -1105,22 +1151,20 @@ public class PerfilServlet extends HttpServlet {
                 );
 
                 html.append(
-                        "<span class='nota-pill'>"
-                        + "Nota "
-                        + nota
-                        + "/5"
-                        + "</span>"
-                );
-
-                html.append(
-                        "<div class='estrelas-perfil'>"
+                        "<div "
+                        + "class='estrelas-perfil'>"
                 );
 
                 int estrelas =
                         (int) Math.round(nota);
 
-                if (estrelas < 0) estrelas = 0;
-                if (estrelas > 5) estrelas = 5;
+                if (estrelas < 0) {
+                    estrelas = 0;
+                }
+
+                if (estrelas > 5) {
+                    estrelas = 5;
+                }
 
                 for (int i = 1; i <= 5; i++) {
 
@@ -1133,6 +1177,14 @@ public class PerfilServlet extends HttpServlet {
 
                 html.append(
                         "</div>"
+                );
+
+                html.append(
+                        "<p>"
+                        + "<strong>Nota:</strong> "
+                        + nota
+                        + "/5"
+                        + "</p>"
                 );
 
                 html.append(
@@ -1154,25 +1206,33 @@ public class PerfilServlet extends HttpServlet {
                     );
                 }
 
-                html.append("</p>");
+                html.append(
+                        "</p>"
+                );
 
-                html.append("</div>");
+                html.append(
+                        "</div>"
+                );
 
-                html.append("</article>");
+                html.append(
+                        "</article>"
+                );
             }
 
             if (!possuiAvaliacao) {
 
                 html.append(
-                        "<div class='sem-avaliacoes'>"
-                        + "🎮<br><br>"
+                        "<div "
+                        + "class='sem-avaliacoes'>"
                         + "Você ainda não avaliou nenhum jogo."
                         + "</div>"
                 );
             }
 
             resultado.close();
+
             stmt.close();
+
             conexao.close();
 
         } catch (Exception e) {
@@ -1180,13 +1240,19 @@ public class PerfilServlet extends HttpServlet {
             e.printStackTrace();
 
             html.append(
-                    "<div class='sem-avaliacoes'>"
-                    + "Não foi possível carregar suas avaliações."
+                    "<div "
+                    + "class='sem-avaliacoes'>"
+                    + "Não foi possível carregar "
+                    + "suas avaliações."
                     + "</div>"
             );
         }
 
         html.append("</section>");
+
+        // =====================================================
+        // FECHAMENTO
+        // =====================================================
 
         html.append("</div>");
 
@@ -1202,24 +1268,81 @@ public class PerfilServlet extends HttpServlet {
     }
 
     // =====================================================
-    // FORMATA NÚMEROS
+    // CAPA
     // =====================================================
 
-    private String formatarNumero(
-            double numero) {
+    private String montarCaminhoCapa(
+            HttpServletRequest request,
+            String capa) {
 
-        if (numero == Math.floor(numero)) {
+        if (capa == null ||
+                capa.trim().isEmpty()) {
 
-            return String.valueOf(
-                    (int) numero
-            );
+            return null;
         }
 
-        return String.format(
-                java.util.Locale.US,
-                "%.1f",
-                numero
-        );
+        String caminho =
+                capa.trim();
+
+        /*
+         * Se já for uma URL da Steam,
+         * reconstrói usando o CDN que
+         * funcionou no catálogo.
+         */
+
+        Pattern pattern =
+                Pattern.compile(
+                        "/apps/(\\d+)"
+                );
+
+        Matcher matcher =
+                pattern.matcher(caminho);
+
+        if (matcher.find()) {
+
+            String appId =
+                    matcher.group(1);
+
+            return
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + appId
+                    + "/library_600x900_2x.jpg";
+        }
+
+        /*
+         * Se for somente um App ID.
+         */
+
+        if (caminho.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + caminho
+                    + "/library_600x900_2x.jpg";
+        }
+
+        /*
+         * Se for uma URL normal ou caminho local,
+         * mantém o valor.
+         */
+
+        if (caminho.startsWith("http://") ||
+                caminho.startsWith("https://")) {
+
+            return caminho;
+        }
+
+        while (caminho.startsWith("/")) {
+
+            caminho =
+                    caminho.substring(1);
+        }
+
+        return request.getContextPath()
+                + "/"
+                + caminho;
     }
 
     // =====================================================
