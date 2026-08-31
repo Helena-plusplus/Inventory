@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.Conexao;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-
 @WebServlet("/editar-perfil")
 
 @MultipartConfig(
@@ -36,24 +34,51 @@ public class EditarPerfilServlet extends HttpServlet {
 
     static {
 
-        String sistema =
-                System.getProperty("os.name")
-                        .toLowerCase();
+        String uploadsPath =
+                System.getenv("UPLOADS_PATH");
 
-        if (sistema.contains("win")) {
+        if (uploadsPath != null &&
+                !uploadsPath.trim().isEmpty()) {
 
             PASTA_FOTOS =
-                    "C:\\GameBoxdUploads\\data\\perfil";
+                    uploadsPath
+                    + File.separator
+                    + "perfil";
 
         } else {
 
-            PASTA_FOTOS =
-                    "/app/data/perfil";
+            String sistema =
+                    System.getProperty("os.name")
+                            .toLowerCase();
+
+            if (sistema.contains("win")) {
+
+                PASTA_FOTOS =
+                        "C:\\GameBoxdUploads\\data\\perfil";
+
+            } else {
+
+                PASTA_FOTOS =
+                        "/app/data/perfil";
+            }
         }
+
+        File pasta =
+                new File(PASTA_FOTOS);
+
+        if (!pasta.exists()) {
+
+            pasta.mkdirs();
+        }
+
+        System.out.println(
+                "PASTA DE UPLOAD:"
+                + PASTA_FOTOS
+        );
     }
 
     // =====================================================
-    // GET - ABRIR PÁGINA
+    // GET
     // =====================================================
 
     @Override
@@ -69,69 +94,53 @@ public class EditarPerfilServlet extends HttpServlet {
                 sessao.getAttribute("usuario") == null) {
 
             response.sendRedirect("login.html");
+
             return;
         }
 
         Usuario usuario =
-                (Usuario) sessao.getAttribute("usuario");
+                (Usuario) sessao.getAttribute(
+                        "usuario"
+                );
+
+        String nome =
+                valor(usuario.getNome());
+
+        String username =
+                valor(usuario.getUsername());
+
+        String email =
+                valor(usuario.getEmail());
+
+        String bio =
+                valor(usuario.getBio());
+
+        String pais =
+                valor(usuario.getPais());
+
+        String plataforma =
+                valor(usuario.getPlataformaFavorita());
+
+        String foto =
+                valor(usuario.getFoto());
+
+        String caminhoFoto =
+                "";
+
+        if (!foto.isEmpty()) {
+
+            caminhoFoto =
+                    request.getContextPath()
+                    + "/foto-perfil?arquivo="
+                    + java.net.URLEncoder.encode(
+                            foto,
+                            "UTF-8"
+                    );
+        }
 
         response.setContentType(
                 "text/html;charset=UTF-8"
         );
-
-        String nome =
-                usuario.getNome();
-
-        String username =
-                usuario.getUsername();
-
-        String email =
-                usuario.getEmail();
-
-        String bio =
-                usuario.getBio();
-
-        String pais =
-                usuario.getPais();
-
-        String plataforma =
-                usuario.getPlataformaFavorita();
-
-        String foto =
-                usuario.getFoto();
-
-        if (nome == null) nome = "";
-        if (username == null) username = "";
-        if (email == null) email = "";
-        if (bio == null) bio = "";
-        if (pais == null) pais = "";
-        if (plataforma == null) plataforma = "";
-        if (foto == null) foto = "";
-
-        String caminhoFoto = "";
-
-        if (!foto.trim().isEmpty()) {
-
-            if (foto.startsWith("http://") ||
-                    foto.startsWith("https://")) {
-
-                caminhoFoto = foto;
-
-            } else {
-
-                caminhoFoto =
-                        request.getContextPath()
-                        + "/foto-perfil?arquivo="
-                        + java.net.URLEncoder.encode(
-                                foto,
-                                "UTF-8"
-                        );
-            }
-        }
-
-        // =====================================================
-        // HTML
-        // =====================================================
 
         StringBuilder html =
                 new StringBuilder();
@@ -147,7 +156,8 @@ public class EditarPerfilServlet extends HttpServlet {
 
         html.append(
                 "<meta name='viewport' "
-                + "content='width=device-width, initial-scale=1.0'>"
+                + "content='width=device-width, "
+                + "initial-scale=1.0'>"
         );
 
         html.append(
@@ -168,7 +178,12 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append(
                 "body{"
                 + "background:"
-                + "radial-gradient(circle at top,#35105f,#17121f 45%,#0d0b11);"
+                + "radial-gradient("
+                + "circle at top,"
+                + "#35105f,"
+                + "#17121f 45%,"
+                + "#0d0b11"
+                + ");"
                 + "min-height:100vh;"
                 + "}"
         );
@@ -183,11 +198,15 @@ public class EditarPerfilServlet extends HttpServlet {
 
         html.append(
                 ".editar-card{"
-                + "background:linear-gradient(145deg,#21142c,#140b1b);"
+                + "background:"
+                + "linear-gradient("
+                + "145deg,#21142c,#140b1b"
+                + ");"
                 + "border:1px solid #54256f;"
                 + "border-radius:22px;"
                 + "padding:40px;"
-                + "box-shadow:0 20px 50px rgba(0,0,0,.4);"
+                + "box-shadow:"
+                + "0 20px 50px rgba(0,0,0,.4);"
                 + "}"
         );
 
@@ -229,7 +248,8 @@ public class EditarPerfilServlet extends HttpServlet {
                 + "object-fit:cover;"
                 + "border-radius:50%;"
                 + "border:5px solid #7c3aed;"
-                + "box-shadow:0 0 30px rgba(124,58,237,.4);"
+                + "box-shadow:"
+                + "0 0 30px rgba(124,58,237,.4);"
                 + "margin-bottom:15px;"
                 + "}"
         );
@@ -259,7 +279,10 @@ public class EditarPerfilServlet extends HttpServlet {
                 ".botao-foto{"
                 + "display:inline-block;"
                 + "padding:11px 20px;"
-                + "background:linear-gradient(135deg,#7c3aed,#9333ea);"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#7c3aed,#9333ea"
+                + ");"
                 + "color:white;"
                 + "border-radius:9px;"
                 + "cursor:pointer;"
@@ -270,7 +293,6 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append(
                 ".botao-foto:hover{"
                 + "transform:translateY(-2px);"
-                + "box-shadow:0 8px 20px rgba(124,58,237,.3);"
                 + "}"
         );
 
@@ -322,7 +344,6 @@ public class EditarPerfilServlet extends HttpServlet {
                 + ".campo textarea:focus,"
                 + ".campo select:focus{"
                 + "border-color:#a855f7;"
-                + "box-shadow:0 0 0 3px rgba(168,85,247,.12);"
                 + "}"
         );
 
@@ -363,7 +384,10 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append(
                 ".botao-salvar{"
                 + "border:none;"
-                + "background:linear-gradient(135deg,#7c3aed,#a855f7);"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#7c3aed,#a855f7"
+                + ");"
                 + "color:white;"
                 + "}"
         );
@@ -378,15 +402,17 @@ public class EditarPerfilServlet extends HttpServlet {
 
         html.append(
                 "@media(max-width:600px){"
-                + ".editar-card{padding:25px 20px;}"
-                + ".botoes{flex-direction:column;}"
+                + ".editar-card{"
+                + "padding:25px 20px;"
+                + "}"
+                + ".botoes{"
+                + "flex-direction:column;"
+                + "}"
                 + "}"
         );
 
         html.append("</style>");
-
         html.append("</head>");
-
         html.append("<body>");
 
         // =====================================================
@@ -395,7 +421,9 @@ public class EditarPerfilServlet extends HttpServlet {
 
         html.append("<header>");
 
-        html.append("<h1>Inventory</h1>");
+        html.append(
+                "<h1>Inventory</h1>"
+        );
 
         html.append("<nav>");
 
@@ -430,7 +458,7 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append("</header>");
 
         // =====================================================
-        // FORMULÁRIO
+        // FORM
         // =====================================================
 
         html.append(
@@ -444,12 +472,13 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append(
                 "<div class='titulo-editar'>"
                 + "<h2>✏️ Editar Perfil</h2>"
-                + "<p>Atualize suas informações no Inventory.</p>"
+                + "<p>Atualize suas informações.</p>"
                 + "</div>"
         );
 
         html.append(
-                "<form action='editar-perfil' "
+                "<form "
+                + "action='editar-perfil' "
                 + "method='POST' "
                 + "enctype='multipart/form-data'>"
         );
@@ -487,7 +516,9 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append("<br>");
 
         html.append(
-                "<label for='foto' class='botao-foto'>"
+                "<label "
+                + "for='foto' "
+                + "class='botao-foto'>"
                 + "📷 Escolher nova foto"
                 + "</label>"
         );
@@ -571,7 +602,7 @@ public class EditarPerfilServlet extends HttpServlet {
                 + "<textarea "
                 + "id='bio' "
                 + "name='bio' "
-                + "placeholder='Fale um pouco sobre você...'>"
+                + "placeholder='Fale sobre você...'>"
                 + escapar(bio)
                 + "</textarea>"
                 + "</div>"
@@ -590,8 +621,7 @@ public class EditarPerfilServlet extends HttpServlet {
                 + "name='pais' "
                 + "value='"
                 + escapar(pais)
-                + "' "
-                + "placeholder='Ex: Brasil'>"
+                + "'>"
                 + "</div>"
         );
 
@@ -601,7 +631,8 @@ public class EditarPerfilServlet extends HttpServlet {
 
         html.append(
                 "<div class='campo'>"
-                + "<label for='plataforma_favorita'>"
+                + "<label "
+                + "for='plataforma_favorita'>"
                 + "Plataforma favorita"
                 + "</label>"
                 + "<select "
@@ -613,19 +644,31 @@ public class EditarPerfilServlet extends HttpServlet {
                 + "</option>"
 
                 + "<option value='PlayStation' "
-                + selecionar(plataforma, "PlayStation")
+                + selecionar(
+                        plataforma,
+                        "PlayStation"
+                  )
                 + ">PlayStation</option>"
 
                 + "<option value='Xbox' "
-                + selecionar(plataforma, "Xbox")
+                + selecionar(
+                        plataforma,
+                        "Xbox"
+                  )
                 + ">Xbox</option>"
 
                 + "<option value='PC' "
-                + selecionar(plataforma, "PC")
+                + selecionar(
+                        plataforma,
+                        "PC"
+                  )
                 + ">PC</option>"
 
                 + "<option value='Nintendo' "
-                + selecionar(plataforma, "Nintendo")
+                + selecionar(
+                        plataforma,
+                        "Nintendo"
+                  )
                 + ">Nintendo</option>"
 
                 + "</select>"
@@ -636,10 +679,13 @@ public class EditarPerfilServlet extends HttpServlet {
         // BOTÕES
         // =====================================================
 
-        html.append("<div class='botoes'>");
+        html.append(
+                "<div class='botoes'>"
+        );
 
         html.append(
-                "<a href='perfil' "
+                "<a "
+                + "href='perfil' "
                 + "class='botao-cancelar'>"
                 + "Cancelar"
                 + "</a>"
@@ -662,44 +708,75 @@ public class EditarPerfilServlet extends HttpServlet {
         html.append("</main>");
 
         // =====================================================
-        // PREVIEW
+        // PREVIEW DA FOTO
         // =====================================================
 
         html.append("<script>");
 
         html.append(
-                "const foto = document.getElementById('foto');"
+                "const foto = "
+                + "document.getElementById('foto');"
         );
 
         html.append(
-                "foto.addEventListener('change', function(){"
+                "foto.addEventListener('change',function(){"
+
                 + "const arquivo=this.files[0];"
+
                 + "if(!arquivo)return;"
+
                 + "if(arquivo.size>5*1024*1024){"
-                + "alert('A foto não pode ter mais de 5 MB.');"
+                + "alert('A foto não pode passar de 5 MB.');"
                 + "this.value='';"
                 + "return;"
                 + "}"
-                + "const tipos=['image/jpeg','image/png','image/webp'];"
+
+                + "const tipos=["
+                + "'image/jpeg',"
+                + "'image/png',"
+                + "'image/webp'"
+                + "];"
+
                 + "if(!tipos.includes(arquivo.type)){"
-                + "alert('Escolha JPG, PNG ou WEBP.');"
+                + "alert('Use JPG, PNG ou WEBP.');"
                 + "this.value='';"
                 + "return;"
                 + "}"
+
                 + "const leitor=new FileReader();"
+
                 + "leitor.onload=function(e){"
-                + "let img=document.getElementById('fotoPreview');"
+
+                + "let img="
+                + "document.getElementById('fotoPreview');"
+
+                + "const padrao="
+                + "document.getElementById('fotoPadrao');"
+
                 + "if(!img){"
-                + "const padrao=document.getElementById('fotoPadrao');"
+
                 + "if(padrao){"
-                + "padrao.outerHTML="
-                + "'<img id=\"fotoPreview\" class=\"foto-preview\" alt=\"Foto de perfil\">';"
+                + "padrao.remove();"
                 + "}"
-                + "img=document.getElementById('fotoPreview');"
+
+                + "img="
+                + "document.createElement('img');"
+
+                + "img.id='fotoPreview';"
+                + "img.className='foto-preview';"
+                + "img.alt='Foto de perfil';"
+
+                + "document.querySelector("
+                + "'.foto-area'"
+                + ").prepend(img);"
+
                 + "}"
-                + "if(img)img.src=e.target.result;"
+
+                + "img.src=e.target.result;"
                 + "};"
+
                 + "leitor.readAsDataURL(arquivo);"
+
                 + "});"
         );
 
@@ -714,7 +791,7 @@ public class EditarPerfilServlet extends HttpServlet {
     }
 
     // =====================================================
-    // POST - SALVAR
+    // POST
     // =====================================================
 
     @Override
@@ -732,11 +809,14 @@ public class EditarPerfilServlet extends HttpServlet {
                 sessao.getAttribute("usuario") == null) {
 
             response.sendRedirect("login.html");
+
             return;
         }
 
         Usuario usuario =
-                (Usuario) sessao.getAttribute("usuario");
+                (Usuario) sessao.getAttribute(
+                        "usuario"
+                );
 
         int idUsuario =
                 usuario.getId();
@@ -747,33 +827,41 @@ public class EditarPerfilServlet extends HttpServlet {
         try {
 
             String nome =
-                    request.getParameter("nome");
-
-            String username =
-                    request.getParameter("username");
-
-            String bio =
-                    request.getParameter("bio");
-
-            String pais =
-                    request.getParameter("pais");
-
-            String plataforma =
-                    request.getParameter(
-                            "plataforma_favorita"
+                    valor(
+                            request.getParameter("nome")
                     );
 
-            if (nome == null) nome = "";
-            if (username == null) username = "";
-            if (bio == null) bio = "";
-            if (pais == null) pais = "";
-            if (plataforma == null) plataforma = "";
+            String username =
+                    valor(
+                            request.getParameter("username")
+                    );
 
-            String caminhoFoto =
-                    usuario.getFoto();
+            String bio =
+                    valor(
+                            request.getParameter("bio")
+                    );
+
+            String pais =
+                    valor(
+                            request.getParameter("pais")
+                    );
+
+            String plataforma =
+                    valor(
+                            request.getParameter(
+                                    "plataforma_favorita"
+                            )
+                    );
 
             // =================================================
-            // RECEBER FOTO
+            // FOTO ATUAL
+            // =================================================
+
+            String fotoAtual =
+                    valor(usuario.getFoto());
+
+            // =================================================
+            // NOVA FOTO
             // =================================================
 
             Part arquivo =
@@ -789,7 +877,7 @@ public class EditarPerfilServlet extends HttpServlet {
                         nomeOriginal.trim().isEmpty()) {
 
                     throw new Exception(
-                            "Nome da imagem inválido."
+                            "Arquivo inválido."
                     );
                 }
 
@@ -810,14 +898,14 @@ public class EditarPerfilServlet extends HttpServlet {
                             .toLowerCase();
                 }
 
-                // =================================================
-                // VALIDAR EXTENSÃO
-                // =================================================
+                // =============================================
+                // VALIDAR
+                // =============================================
 
-                if (!extensao.equals(".jpg") &&
-                    !extensao.equals(".jpeg") &&
-                    !extensao.equals(".png") &&
-                    !extensao.equals(".webp")) {
+                if (!extensao.equals(".jpg")
+                        && !extensao.equals(".jpeg")
+                        && !extensao.equals(".png")
+                        && !extensao.equals(".webp")) {
 
                     response.sendRedirect(
                             "editar-perfil?erro=formato"
@@ -826,9 +914,9 @@ public class EditarPerfilServlet extends HttpServlet {
                     return;
                 }
 
-                // =================================================
-                // CRIAR DIRETÓRIO
-                // =================================================
+                // =============================================
+                // DIRETÓRIO
+                // =============================================
 
                 File diretorio =
                         new File(PASTA_FOTOS);
@@ -838,15 +926,15 @@ public class EditarPerfilServlet extends HttpServlet {
                     if (!diretorio.mkdirs()) {
 
                         throw new Exception(
-                                "Não foi possível criar a pasta:"
-                                + PASTA_FOTOS
+                                "Não foi possível criar "
+                                + "a pasta de fotos."
                         );
                     }
                 }
 
-                // =================================================
-                // NOME DO ARQUIVO
-                // =================================================
+                // =============================================
+                // NOVO NOME
+                // =============================================
 
                 String novoNome =
                         "perfil_"
@@ -861,15 +949,36 @@ public class EditarPerfilServlet extends HttpServlet {
                                 novoNome
                         );
 
-                // =================================================
-                // SALVAR ARQUIVO
-                // =================================================
+                // =============================================
+                // SALVAR
+                // =============================================
 
                 arquivo.write(
                         arquivoFinal.getAbsolutePath()
                 );
 
-                caminhoFoto =
+                // =============================================
+                // APAGAR FOTO ANTIGA
+                // =============================================
+
+                if (!fotoAtual.isEmpty()) {
+
+                    File fotoAntiga =
+                            new File(
+                                    diretorio,
+                                    new File(
+                                            fotoAtual
+                                    ).getName()
+                            );
+
+                    if (fotoAntiga.exists() &&
+                            fotoAntiga.isFile()) {
+
+                        fotoAntiga.delete();
+                    }
+                }
+
+                fotoAtual =
                         novoNome;
 
                 System.out.println(
@@ -877,17 +986,16 @@ public class EditarPerfilServlet extends HttpServlet {
                 );
 
                 System.out.println(
-                        "FOTO SALVA COM SUCESSO!"
+                        "NOVA FOTO SALVA:"
                 );
 
                 System.out.println(
-                        "CAMINHO:"
-                        + arquivoFinal.getAbsolutePath()
+                        arquivoFinal.getAbsolutePath()
                 );
 
                 System.out.println(
-                        "NOME SALVO NO BANCO:"
-                        + caminhoFoto
+                        "NOME:"
+                        + fotoAtual
                 );
 
                 System.out.println(
@@ -896,7 +1004,7 @@ public class EditarPerfilServlet extends HttpServlet {
             }
 
             // =================================================
-            // ATUALIZAR BANCO
+            // BANCO
             // =================================================
 
             conexao =
@@ -905,7 +1013,7 @@ public class EditarPerfilServlet extends HttpServlet {
             if (conexao == null) {
 
                 throw new Exception(
-                        "Não foi possível conectar ao SQLite."
+                        "Erro ao conectar ao banco."
                 );
             }
 
@@ -949,7 +1057,7 @@ public class EditarPerfilServlet extends HttpServlet {
 
             stmt.setString(
                     6,
-                    caminhoFoto
+                    fotoAtual
             );
 
             stmt.setInt(
@@ -976,7 +1084,7 @@ public class EditarPerfilServlet extends HttpServlet {
             );
 
             usuario.setFoto(
-                    caminhoFoto
+                    fotoAtual
             );
 
             sessao.setAttribute(
@@ -985,10 +1093,11 @@ public class EditarPerfilServlet extends HttpServlet {
             );
 
             // =================================================
-            // FINAL
+            // FECHAR
             // =================================================
 
             stmt.close();
+
             conexao.close();
 
             response.sendRedirect(
@@ -1021,6 +1130,20 @@ public class EditarPerfilServlet extends HttpServlet {
     }
 
     // =====================================================
+    // VALOR
+    // =====================================================
+
+    private String valor(
+            String texto) {
+
+        if (texto == null) {
+            return "";
+        }
+
+        return texto.trim();
+    }
+
+    // =====================================================
     // SELECT
     // =====================================================
 
@@ -1038,12 +1161,14 @@ public class EditarPerfilServlet extends HttpServlet {
     }
 
     // =====================================================
-    // ESCAPAR HTML
+    // ESCAPAR
     // =====================================================
 
-    private String escapar(String texto) {
+    private String escapar(
+            String texto) {
 
         if (texto == null) {
+
             return "";
         }
 
@@ -1055,4 +1180,3 @@ public class EditarPerfilServlet extends HttpServlet {
                 .replace("'", "&#39;");
     }
 }
-

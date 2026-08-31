@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.io.File;
@@ -19,20 +18,57 @@ public class FotoPerfilServlet extends HttpServlet {
 
     static {
 
-        String sistema =
-                System.getProperty("os.name")
-                        .toLowerCase();
+        String uploadsPath =
+                System.getenv("UPLOADS_PATH");
 
-        if (sistema.contains("win")) {
+        if (uploadsPath != null &&
+                !uploadsPath.trim().isEmpty()) {
 
             PASTA_FOTOS =
-                    "C:\\GameBoxdUploads\\data\\perfil";
+                    uploadsPath
+                    + File.separator
+                    + "perfil";
 
         } else {
 
-            PASTA_FOTOS =
-                    "/app/data/perfil";
+            String sistema =
+                    System.getProperty("os.name")
+                            .toLowerCase();
+
+            if (sistema.contains("win")) {
+
+                PASTA_FOTOS =
+                        "C:\\GameBoxdUploads\\data\\perfil";
+
+            } else {
+
+                PASTA_FOTOS =
+                        "/app/data/perfil";
+            }
         }
+
+        File pasta =
+                new File(PASTA_FOTOS);
+
+        if (!pasta.exists()) {
+            pasta.mkdirs();
+        }
+
+        System.out.println(
+                "================================="
+        );
+
+        System.out.println(
+                "PASTA DAS FOTOS:"
+        );
+
+        System.out.println(
+                PASTA_FOTOS
+        );
+
+        System.out.println(
+                "================================="
+        );
     }
 
     @Override
@@ -54,7 +90,11 @@ public class FotoPerfilServlet extends HttpServlet {
             return;
         }
 
-        // Impede acesso a caminhos externos
+        /*
+         * Pega apenas o nome do arquivo.
+         * Impede que alguém passe um caminho externo.
+         */
+
         arquivo =
                 new File(arquivo)
                         .getName();
@@ -62,11 +102,14 @@ public class FotoPerfilServlet extends HttpServlet {
         String nomeMinusculo =
                 arquivo.toLowerCase();
 
-        // Aceitar somente imagens
-        if (!nomeMinusculo.endsWith(".jpg") &&
-            !nomeMinusculo.endsWith(".jpeg") &&
-            !nomeMinusculo.endsWith(".png") &&
-            !nomeMinusculo.endsWith(".webp")) {
+        /*
+         * Aceitar somente imagens.
+         */
+
+        if (!nomeMinusculo.endsWith(".jpg")
+                && !nomeMinusculo.endsWith(".jpeg")
+                && !nomeMinusculo.endsWith(".png")
+                && !nomeMinusculo.endsWith(".webp")) {
 
             response.sendError(
                     HttpServletResponse.SC_FORBIDDEN
@@ -81,8 +124,20 @@ public class FotoPerfilServlet extends HttpServlet {
                         arquivo
                 );
 
+        /*
+         * Verificar se existe.
+         */
+
         if (!arquivoFoto.exists() ||
                 !arquivoFoto.isFile()) {
+
+            System.out.println(
+                    "FOTO NÃO ENCONTRADA:"
+            );
+
+            System.out.println(
+                    arquivoFoto.getAbsolutePath()
+            );
 
             response.sendError(
                     HttpServletResponse.SC_NOT_FOUND
@@ -90,6 +145,10 @@ public class FotoPerfilServlet extends HttpServlet {
 
             return;
         }
+
+        /*
+         * MIME.
+         */
 
         String tipo =
                 getServletContext()
@@ -109,6 +168,10 @@ public class FotoPerfilServlet extends HttpServlet {
                 arquivoFoto.length()
         );
 
+        /*
+         * Enviar imagem.
+         */
+
         try (
                 OutputStream saida =
                         response.getOutputStream()
@@ -121,4 +184,3 @@ public class FotoPerfilServlet extends HttpServlet {
         }
     }
 }
-

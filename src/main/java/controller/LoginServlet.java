@@ -1,7 +1,7 @@
 package controller;
 
-import dao.CriarBanco;
 import dao.UsuarioDAO;
+import model.Usuario;
 
 import java.io.IOException;
 
@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.Usuario;
-
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
@@ -23,10 +21,23 @@ public class LoginServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Cria/verifica as tabelas do banco
-        CriarBanco.criarTabela();
-
         request.setCharacterEncoding("UTF-8");
+
+        System.out.println(
+                "=============================="
+        );
+
+        System.out.println(
+                "LOGIN FOI CHAMADO"
+        );
+
+        System.out.println(
+                "=============================="
+        );
+
+        // =====================================================
+        // DADOS
+        // =====================================================
 
         String email =
                 request.getParameter("email");
@@ -34,72 +45,153 @@ public class LoginServlet extends HttpServlet {
         String senha =
                 request.getParameter("senha");
 
-        System.out.println("==============================");
-        System.out.println("LOGIN FOI CHAMADO");
-        System.out.println("E-mail: " + email);
-        System.out.println("==============================");
+        if (email == null) {
+            email = "";
+        }
 
-        UsuarioDAO dao =
-                new UsuarioDAO();
+        if (senha == null) {
+            senha = "";
+        }
 
-        Usuario usuario =
-                dao.login(email, senha);
+        email =
+                email.trim().toLowerCase();
 
-        if (usuario != null) {
+        System.out.println(
+                "E-mail: "
+                + email
+        );
 
-            System.out.println(
-                    "LOGIN REALIZADO COM SUCESSO!"
+        // =====================================================
+        // VALIDAR CAMPOS
+        // =====================================================
+
+        if (email.isEmpty() ||
+                senha.trim().isEmpty()) {
+
+            response.sendRedirect(
+                    "login.html?erro=preencha"
             );
 
-            // Cria a sessão
+            return;
+        }
+
+        try {
+
+            UsuarioDAO usuarioDAO =
+                    new UsuarioDAO();
+
+            // =================================================
+            // LOGIN
+            // =================================================
+
+            Usuario usuario =
+                    usuarioDAO.login(
+                            email,
+                            senha
+                    );
+
+            // =================================================
+            // LOGIN INCORRETO
+            // =================================================
+
+            if (usuario == null) {
+
+                System.out.println(
+                        "E-MAIL OU SENHA INCORRETOS!"
+                );
+
+                /*
+                 * Usuários que ainda não verificaram o e-mail
+                 * não são encontrados na tabela usuario.
+                 *
+                 * Eles permanecem em cadastro_pendente.
+                 */
+
+                if (usuarioDAO.existeCadastroPendente(
+                        email
+                )) {
+
+                    response.sendRedirect(
+                            "login.html?erro=nao_verificado"
+                    );
+
+                } else {
+
+                    response.sendRedirect(
+                            "login.html?erro=login"
+                    );
+                }
+
+                return;
+            }
+
+            // =================================================
+            // CRIAR SESSÃO
+            // =================================================
+
             HttpSession sessao =
                     request.getSession(true);
 
-            // Salva o usuário na sessão
             sessao.setAttribute(
                     "usuario",
                     usuario
             );
 
-            // Vai para a página inicial
-            response.sendRedirect("home");
-
-        } else {
+            System.out.println(
+                    "LOGIN REALIZADO COM SUCESSO!"
+            );
 
             System.out.println(
-                    "E-MAIL OU SENHA INCORRETOS!"
+                    "USUARIO: "
+                    + usuario.getUsername()
             );
 
-            response.setContentType(
-                    "text/html;charset=UTF-8"
+            System.out.println(
+                    "=============================="
             );
 
-            response.getWriter().println(
+            // =================================================
+            // IR PARA HOME
+            // =================================================
 
-                    "<!DOCTYPE html>"
+            response.sendRedirect(
+                    "home"
+            );
 
-                    + "<html lang='pt-BR'>"
+        } catch (Exception e) {
 
-                    + "<head>"
+            System.out.println(
+                    "=============================="
+            );
 
-                    + "<meta charset='UTF-8'>"
+            System.out.println(
+                    "ERRO NO LOGIN:"
+            );
 
-                    + "<title>Erro no Login</title>"
+            e.printStackTrace();
 
-                    + "</head>"
+            System.out.println(
+                    "=============================="
+            );
 
-                    + "<body>"
-
-                    + "<h2>E-mail ou senha incorretos!</h2>"
-
-                    + "<a href='login.html'>"
-                    + "Voltar para o login"
-                    + "</a>"
-
-                    + "</body>"
-
-                    + "</html>"
+            response.sendRedirect(
+                    "login.html?erro=servidor"
             );
         }
+    }
+
+    // =====================================================
+    // GET
+    // =====================================================
+
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.sendRedirect(
+                "login.html"
+        );
     }
 }
