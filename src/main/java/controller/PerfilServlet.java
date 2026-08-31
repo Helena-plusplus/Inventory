@@ -118,7 +118,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // -----------------------------------------------------
-        // CARD PRINCIPAL
+        // CARD
         // -----------------------------------------------------
 
         html.append(
@@ -138,7 +138,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // -----------------------------------------------------
-        // CABEÇALHO DO PERFIL
+        // CAPA SUPERIOR
         // -----------------------------------------------------
 
         html.append(
@@ -182,18 +182,14 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        // -----------------------------------------------------
-        // ÁREA DO PERFIL
-        // -----------------------------------------------------
-
         html.append(
                 ".perfil-conteudo{"
-                + "padding:0 38px 38px;"
+                + "padding:0 38px 40px;"
                 + "}"
         );
 
         // -----------------------------------------------------
-        // TOPO
+        // TOPO DO PERFIL
         // -----------------------------------------------------
 
         html.append(
@@ -208,19 +204,18 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        // -----------------------------------------------------
-        // FOTO
-        // -----------------------------------------------------
-
         html.append(
                 ".foto-area{"
                 + "flex-shrink:0;"
                 + "}"
         );
 
+        // -----------------------------------------------------
+        // FOTO
+        // -----------------------------------------------------
+
         html.append(
-                ".foto-perfil,"
-                + ".sem-foto{"
+                ".foto-perfil,.sem-foto{"
                 + "width:150px;"
                 + "height:150px;"
                 + "border-radius:50%;"
@@ -251,13 +246,22 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // -----------------------------------------------------
-        // NOME
+        // DADOS PRINCIPAIS
         // -----------------------------------------------------
 
         html.append(
                 ".dados-principais{"
                 + "flex:1;"
                 + "padding-bottom:5px;"
+                + "}"
+        );
+
+        html.append(
+                ".nome-com-emblema{"
+                + "display:flex;"
+                + "align-items:center;"
+                + "gap:10px;"
+                + "flex-wrap:wrap;"
                 + "}"
         );
 
@@ -284,6 +288,39 @@ public class PerfilServlet extends HttpServlet {
                 + "color:#c3bac9;"
                 + "line-height:1.6;"
                 + "max-width:650px;"
+                + "}"
+        );
+
+        // =====================================================
+        // EMBLEMA ♡ MY LOVE
+        // =====================================================
+
+        html.append(
+                ".emblema-player1{"
+                + "display:inline-flex;"
+                + "align-items:center;"
+                + "gap:6px;"
+                + "padding:6px 12px;"
+                + "border-radius:20px;"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#3a174d,#6d2b8c"
+                + ");"
+                + "border:1px solid #b56ee0;"
+                + "color:#f1d8fb;"
+                + "font-size:12px;"
+                + "font-weight:700;"
+                + "box-shadow:"
+                + "0 0 16px rgba(181,110,224,.2);"
+                + "white-space:nowrap;"
+                + "}"
+        );
+
+        html.append(
+                ".coracao-player1{"
+                + "font-size:18px;"
+                + "color:#f2b6ff;"
+                + "line-height:1;"
                 + "}"
         );
 
@@ -314,7 +351,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // -----------------------------------------------------
-        // INFORMAÇÕES
+        // DADOS
         // -----------------------------------------------------
 
         html.append(
@@ -453,7 +490,7 @@ public class PerfilServlet extends HttpServlet {
                 + "linear-gradient(135deg,#21152d,#3d2059);"
                 + "border-radius:10px;"
                 + "color:#8f8298;"
-                + "font-size:13px;"
+                + "font-size:12px;"
                 + "}"
         );
 
@@ -652,15 +689,18 @@ public class PerfilServlet extends HttpServlet {
                 + "justify-content:center;"
                 + "}"
 
-                + ".foto-perfil,"
-                + ".sem-foto{"
+                + ".foto-perfil,.sem-foto{"
                 + "width:120px;"
                 + "height:120px;"
                 + "}"
 
+                + ".nome-com-emblema{"
+                + "justify-content:center;"
+                + "margin-top:16px;"
+                + "}"
+
                 + ".nome-perfil{"
                 + "font-size:27px;"
-                + "margin-top:16px;"
                 + "}"
 
                 + ".dados-principais{"
@@ -679,8 +719,7 @@ public class PerfilServlet extends HttpServlet {
                 + "grid-template-columns:repeat(2,1fr);"
                 + "}"
 
-                + ".capa-favorito,"
-                + ".sem-capa-favorito{"
+                + ".capa-favorito,.sem-capa-favorito{"
                 + "height:190px;"
                 + "}"
 
@@ -688,8 +727,7 @@ public class PerfilServlet extends HttpServlet {
                 + "flex-direction:column;"
                 + "}"
 
-                + ".capa-avaliacao,"
-                + ".sem-capa-avaliacao{"
+                + ".capa-avaliacao,.sem-capa-avaliacao{"
                 + "width:120px;"
                 + "height:165px;"
                 + "}"
@@ -757,10 +795,6 @@ public class PerfilServlet extends HttpServlet {
                 "<div class='perfil-box'>"
         );
 
-        // =====================================================
-        // CAPA DO TOPO
-        // =====================================================
-
         html.append(
                 "<div class='perfil-capa'></div>"
         );
@@ -770,7 +804,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         // =====================================================
-        // TOPO DO USUÁRIO
+        // TOPO
         // =====================================================
 
         html.append(
@@ -781,9 +815,9 @@ public class PerfilServlet extends HttpServlet {
                 "<div class='foto-area'>"
         );
 
-        // -----------------------------------------------------
+        // =====================================================
         // FOTO
-        // -----------------------------------------------------
+        // =====================================================
 
         String foto =
                 usuario.getFoto();
@@ -797,11 +831,9 @@ public class PerfilServlet extends HttpServlet {
             String fotoLimpa =
                     foto.trim();
 
-            if (fotoLimpa.startsWith(
-                    "http://")
+            if (fotoLimpa.startsWith("http://")
                     ||
-                    fotoLimpa.startsWith(
-                    "https://")) {
+                    fotoLimpa.startsWith("https://")) {
 
                 caminhoFoto =
                         fotoLimpa;
@@ -815,10 +847,6 @@ public class PerfilServlet extends HttpServlet {
                     fotoLimpa =
                             fotoLimpa.substring(1);
                 }
-
-                /*
-                 * Foto salva pelo FotoPerfilServlet.
-                 */
 
                 caminhoFoto =
                         request.getContextPath()
@@ -860,10 +888,39 @@ public class PerfilServlet extends HttpServlet {
                 "<div class='dados-principais'>"
         );
 
+        String emailUsuario =
+                usuario.getEmail();
+
+        boolean jogadorEspecial =
+                emailUsuario != null
+                &&
+                emailUsuario.trim()
+                        .equalsIgnoreCase(
+                                "rebecarodriguesduarte2@gmail.com"
+                        );
+
+        html.append(
+                "<div class='nome-com-emblema'>"
+        );
+
         html.append(
                 "<h2 class='nome-perfil'>"
                 + escapar(usuario.getNome())
                 + "</h2>"
+        );
+
+        if (jogadorEspecial) {
+
+            html.append(
+                    "<span class='emblema-player1'>"
+                    + "<span class='coracao-player1'>♡</span>"
+                    + " My Love"
+                    + "</span>"
+            );
+        }
+
+        html.append(
+                "</div>"
         );
 
         html.append(
@@ -894,9 +951,7 @@ public class PerfilServlet extends HttpServlet {
                 + "</a>"
         );
 
-        html.append(
-                "</div>"
-        );
+        html.append("</div>");
 
         html.append("</section>");
 
@@ -941,15 +996,12 @@ public class PerfilServlet extends HttpServlet {
                 + "</div>"
         );
 
-        String bioInformacao =
-                usuario.getBio();
-
         html.append(
                 "<div class='dado dado-bio'>"
                 + "<strong>Sobre</strong>"
                 + "<span>"
                 + valorOuPadrao(
-                        bioInformacao,
+                        usuario.getBio(),
                         "Nenhuma biografia adicionada."
                   )
                 + "</span>"
@@ -1019,9 +1071,7 @@ public class PerfilServlet extends HttpServlet {
                 quantidadeFavoritos++;
 
                 int idJogo =
-                        rsFavoritos.getInt(
-                                "id"
-                        );
+                        rsFavoritos.getInt("id");
 
                 String titulo =
                         rsFavoritos.getString(
@@ -1039,8 +1089,7 @@ public class PerfilServlet extends HttpServlet {
                         );
 
                 html.append(
-                        "<article "
-                        + "class='favorito-card'>"
+                        "<article class='favorito-card'>"
                 );
 
                 String caminhoCapa =
@@ -1113,10 +1162,6 @@ public class PerfilServlet extends HttpServlet {
                     );
                 }
 
-                // -------------------------------------------------
-                // REMOVER
-                // -------------------------------------------------
-
                 html.append(
                         "<form "
                         + "method='POST' "
@@ -1156,8 +1201,8 @@ public class PerfilServlet extends HttpServlet {
                 html.append(
                         "<div "
                         + "class='nenhum-favorito'>"
-                        + "Você ainda não escolheu seus "
-                        + "jogos favoritos."
+                        + "Você ainda não escolheu "
+                        + "seus jogos favoritos."
                         + "</div>"
                 );
             }
@@ -1169,7 +1214,8 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     "<div "
                     + "class='nenhum-favorito'>"
-                    + "Não foi possível carregar os favoritos."
+                    + "Não foi possível carregar "
+                    + "os favoritos."
                     + "</div>"
             );
         }
@@ -1300,10 +1346,6 @@ public class PerfilServlet extends HttpServlet {
                         + "</h3>"
                 );
 
-                // -------------------------------------------------
-                // ESTRELAS
-                // -------------------------------------------------
-
                 html.append(
                         "<div "
                         + "class='estrelas-perfil'>"
@@ -1329,7 +1371,9 @@ public class PerfilServlet extends HttpServlet {
                     );
                 }
 
-                html.append("</div>");
+                html.append(
+                        "</div>"
+                );
 
                 html.append(
                         "<div class='nota-texto'>"
@@ -1339,9 +1383,7 @@ public class PerfilServlet extends HttpServlet {
                         + "</div>"
                 );
 
-                html.append(
-                        "<p>"
-                );
+                html.append("<p>");
 
                 if (comentario != null &&
                         !comentario.trim().isEmpty()) {
@@ -1357,9 +1399,7 @@ public class PerfilServlet extends HttpServlet {
                     );
                 }
 
-                html.append(
-                        "</p>"
-                );
+                html.append("</p>");
 
                 html.append(
                         "</div>"
@@ -1375,15 +1415,14 @@ public class PerfilServlet extends HttpServlet {
                 html.append(
                         "<div "
                         + "class='sem-avaliacoes'>"
-                        + "Você ainda não avaliou nenhum jogo."
+                        + "Você ainda não avaliou "
+                        + "nenhum jogo."
                         + "</div>"
                 );
             }
 
             resultado.close();
-
             stmt.close();
-
             conexao.close();
 
         } catch (Exception e) {
@@ -1401,18 +1440,11 @@ public class PerfilServlet extends HttpServlet {
 
         html.append("</section>");
 
-        // =====================================================
-        // FECHAMENTO
-        // =====================================================
-
         html.append("</div>");
-
         html.append("</div>");
-
         html.append("</main>");
 
         html.append("</body>");
-
         html.append("</html>");
 
         response.getWriter().println(
@@ -1421,7 +1453,7 @@ public class PerfilServlet extends HttpServlet {
     }
 
     // =====================================================
-    // MONTAR CAPA
+    // MONTAR CAMINHO DA CAPA
     // =====================================================
 
     private String montarCaminhoCapa(
@@ -1437,9 +1469,9 @@ public class PerfilServlet extends HttpServlet {
         String caminho =
                 capa.trim();
 
-        // -----------------------------------------------------
-        // Steam App ID
-        // -----------------------------------------------------
+        // =================================================
+        // STEAM APP ID
+        // =================================================
 
         Pattern pattern =
                 Pattern.compile(
@@ -1461,9 +1493,9 @@ public class PerfilServlet extends HttpServlet {
                     + "/library_600x900_2x.jpg";
         }
 
-        // -----------------------------------------------------
-        // Somente número
-        // -----------------------------------------------------
+        // =================================================
+        // SOMENTE NÚMERO
+        // =================================================
 
         if (caminho.matches("\\d+")) {
 
@@ -1474,9 +1506,9 @@ public class PerfilServlet extends HttpServlet {
                     + "/library_600x900_2x.jpg";
         }
 
-        // -----------------------------------------------------
+        // =================================================
         // URL
-        // -----------------------------------------------------
+        // =================================================
 
         if (caminho.startsWith(
                 "http://")
@@ -1487,9 +1519,9 @@ public class PerfilServlet extends HttpServlet {
             return caminho;
         }
 
-        // -----------------------------------------------------
-        // Arquivo local
-        // -----------------------------------------------------
+        // =================================================
+        // ARQUIVO LOCAL
+        // =================================================
 
         while (
                 caminho.startsWith("/")
@@ -1506,7 +1538,7 @@ public class PerfilServlet extends HttpServlet {
     }
 
     // =====================================================
-    // VALOR OU PADRÃO
+    // VALOR PADRÃO
     // =====================================================
 
     private String valorOuPadrao(
@@ -1516,14 +1548,14 @@ public class PerfilServlet extends HttpServlet {
         if (valor == null ||
                 valor.trim().isEmpty()) {
 
-            return padrao;
+            return escapar(padrao);
         }
 
         return escapar(valor);
     }
 
     // =====================================================
-    // ESCAPAR
+    // ESCAPAR HTML
     // =====================================================
 
     private String escapar(
@@ -1535,25 +1567,10 @@ public class PerfilServlet extends HttpServlet {
         }
 
         return texto
-                .replace(
-                        "&",
-                        "&amp;"
-                )
-                .replace(
-                        "<",
-                        "&lt;"
-                )
-                .replace(
-                        ">",
-                        "&gt;"
-                )
-                .replace(
-                        "\"",
-                        "&quot;"
-                )
-                .replace(
-                        "'",
-                        "&#39;"
-                );
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 }
