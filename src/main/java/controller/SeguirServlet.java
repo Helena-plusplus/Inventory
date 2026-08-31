@@ -1,6 +1,6 @@
 package controller;
 
-import dao.SeguidorDAO;
+import dao.UsuarioDAO;
 import model.Usuario;
 
 import java.io.IOException;
@@ -16,15 +16,16 @@ import javax.servlet.http.HttpSession;
 public class SeguirServlet extends HttpServlet {
 
     @Override
-    protected void doGet(
+    protected void doPost(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         HttpSession sessao =
                 request.getSession(false);
 
-        // Verificar login
         if (sessao == null ||
                 sessao.getAttribute("usuario") == null) {
 
@@ -32,28 +33,40 @@ public class SeguirServlet extends HttpServlet {
             return;
         }
 
-        // Usuário que está logado
-        Usuario usuarioLogado =
-                (Usuario) sessao.getAttribute("usuario");
-
-        // ID da pessoa que será seguida
-        String idTexto =
-                request.getParameter("id");
-
-        if (idTexto == null ||
-                idTexto.trim().isEmpty()) {
-
-            response.sendRedirect("index.html");
-            return;
-        }
-
         try {
+
+            Usuario usuarioLogado =
+                    (Usuario) sessao.getAttribute(
+                            "usuario"
+                    );
+
+            int idSeguidor =
+                    usuarioLogado.getId();
+
+            String idTexto =
+                    request.getParameter("idUsuario");
+
+            String acao =
+                    request.getParameter("acao");
+
+            if (idTexto == null ||
+                    idTexto.trim().isEmpty()) {
+
+                response.sendRedirect(
+                        "buscar-usuarios.html"
+                );
+
+                return;
+            }
 
             int idSeguido =
                     Integer.parseInt(idTexto);
 
-            // Não pode seguir a si mesmo
-            if (usuarioLogado.getId() == idSeguido) {
+            // =============================================
+            // NÃO PODE SEGUIR A SI MESMO
+            // =============================================
+
+            if (idSeguidor == idSeguido) {
 
                 response.sendRedirect(
                         "perfil-usuario?id="
@@ -63,47 +76,36 @@ public class SeguirServlet extends HttpServlet {
                 return;
             }
 
-            SeguidorDAO dao =
-                    new SeguidorDAO();
+            UsuarioDAO dao =
+                    new UsuarioDAO();
 
-            // Verifica se já segue
-            boolean jaSegue =
-                    dao.seguindo(
-                            usuarioLogado.getId(),
-                            idSeguido
-                    );
+            if ("deixar".equalsIgnoreCase(acao)) {
 
-            if (!jaSegue) {
-
-                dao.seguir(
-                        usuarioLogado.getId(),
+                dao.deixarDeSeguir(
+                        idSeguidor,
                         idSeguido
                 );
 
             } else {
 
-                // Se já segue, deixa de seguir
-                dao.deixarDeSeguir(
-                        usuarioLogado.getId(),
+                dao.seguir(
+                        idSeguidor,
                         idSeguido
                 );
             }
 
-            // Voltar para o perfil
             response.sendRedirect(
                     "perfil-usuario?id="
                     + idSeguido
             );
 
-        } catch (NumberFormatException e) {
-
-            response.sendRedirect("index.html");
-
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            response.sendRedirect("index.html");
+            response.sendRedirect(
+                    "buscar-usuarios.html"
+            );
         }
     }
 }

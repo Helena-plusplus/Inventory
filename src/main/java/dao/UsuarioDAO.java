@@ -161,6 +161,10 @@ public class UsuarioDAO {
             Connection conexao =
                     Conexao.conectar();
 
+            if (conexao == null) {
+                return null;
+            }
+
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
 
@@ -234,6 +238,10 @@ public class UsuarioDAO {
             Connection conexao =
                     Conexao.conectar();
 
+            if (conexao == null) {
+                return null;
+            }
+
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
 
@@ -291,6 +299,10 @@ public class UsuarioDAO {
             Connection conexao =
                     Conexao.conectar();
 
+            if (conexao == null) {
+                return null;
+            }
+
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
 
@@ -322,6 +334,10 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO BUSCAR USERNAME:"
+            );
+
             e.printStackTrace();
         }
 
@@ -343,6 +359,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return null;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -375,6 +395,10 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO BUSCAR EMAIL:"
+            );
+
             e.printStackTrace();
         }
 
@@ -401,6 +425,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return usuarios;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -431,6 +459,10 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO BUSCAR USERNAMES:"
+            );
+
             e.printStackTrace();
         }
 
@@ -457,6 +489,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return usuarios;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -487,6 +523,10 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO BUSCAR NOMES:"
+            );
+
             e.printStackTrace();
         }
 
@@ -509,6 +549,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return usuarios;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -533,6 +577,10 @@ public class UsuarioDAO {
             conexao.close();
 
         } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO LISTAR USUARIOS:"
+            );
 
             e.printStackTrace();
         }
@@ -560,12 +608,19 @@ public class UsuarioDAO {
                 + "plataforma_favorita = ? "
                 + "WHERE id = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
-            PreparedStatement stmt =
+            if (conexao == null) {
+                return false;
+            }
+
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -621,16 +676,39 @@ public class UsuarioDAO {
             int resultado =
                     stmt.executeUpdate();
 
-            stmt.close();
-            conexao.close();
-
             return resultado > 0;
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO ATUALIZAR USUARIO:"
+            );
+
             e.printStackTrace();
 
             return false;
+
+        } finally {
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -649,6 +727,10 @@ public class UsuarioDAO {
             Connection conexao =
                     Conexao.conectar();
 
+            if (conexao == null) {
+                return false;
+            }
+
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
 
@@ -666,6 +748,10 @@ public class UsuarioDAO {
             return resultado > 0;
 
         } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO EXCLUIR USUARIO:"
+            );
 
             e.printStackTrace();
 
@@ -704,6 +790,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return false;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -773,6 +863,10 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO SALVAR CADASTRO PENDENTE:"
+            );
+
             e.printStackTrace();
 
             return false;
@@ -780,7 +874,7 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // VERIFICAR PENDENTE
+    // VERIFICAR CADASTRO PENDENTE
     // =====================================================
 
     public boolean existeCadastroPendente(
@@ -795,6 +889,10 @@ public class UsuarioDAO {
 
             Connection conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+                return false;
+            }
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -840,16 +938,20 @@ public class UsuarioDAO {
                 + "AND expira_em > CURRENT_TIMESTAMP";
 
         Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try {
 
             conexao =
                     Conexao.conectar();
 
-            PreparedStatement stmt =
-                    conexao.prepareStatement(
-                            sql
-                    );
+            if (conexao == null) {
+                return null;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
 
             stmt.setString(
                     1,
@@ -861,14 +963,10 @@ public class UsuarioDAO {
                     codigo
             );
 
-            ResultSet rs =
+            rs =
                     stmt.executeQuery();
 
             if (!rs.next()) {
-
-                rs.close();
-                stmt.close();
-                conexao.close();
 
                 return null;
             }
@@ -993,7 +1091,7 @@ public class UsuarioDAO {
             stmtInserir.close();
 
             // =============================================
-            // APAGAR PENDENTE
+            // APAGAR CADASTRO PENDENTE
             // =============================================
 
             String apagar =
@@ -1014,15 +1112,39 @@ public class UsuarioDAO {
 
             stmtApagar.close();
 
-            rs.close();
-            stmt.close();
-            conexao.close();
-
             return usuario;
 
         } catch (Exception e) {
 
+            System.out.println(
+                    "ERRO AO CONFIRMAR EMAIL:"
+            );
+
             e.printStackTrace();
+
+            return null;
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             try {
 
@@ -1030,17 +1152,372 @@ public class UsuarioDAO {
                     conexao.close();
                 }
 
-            } catch (Exception erro) {
-
-                erro.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            return null;
         }
     }
 
     // =====================================================
-    // CRIAR USUARIO
+    // SEGUIR USUARIO
+    // =====================================================
+
+    public boolean seguir(
+            int idSeguidor,
+            int idSeguido) {
+
+        if (idSeguidor == idSeguido) {
+
+            return false;
+        }
+
+        String sql =
+                "INSERT OR IGNORE INTO seguidor "
+                + "(id_seguidor, id_seguido) "
+                + "VALUES (?, ?)";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return false;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idSeguidor
+            );
+
+            stmt.setInt(
+                    2,
+                    idSeguido
+            );
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO SEGUIR USUARIO:"
+            );
+
+            e.printStackTrace();
+
+            return false;
+
+        } finally {
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // =====================================================
+    // PARAR DE SEGUIR
+    // =====================================================
+
+    public boolean deixarDeSeguir(
+            int idSeguidor,
+            int idSeguido) {
+
+        String sql =
+                "DELETE FROM seguidor "
+                + "WHERE id_seguidor = ? "
+                + "AND id_seguido = ?";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return false;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idSeguidor
+            );
+
+            stmt.setInt(
+                    2,
+                    idSeguido
+            );
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO DEIXAR DE SEGUIR:"
+            );
+
+            e.printStackTrace();
+
+            return false;
+
+        } finally {
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // =====================================================
+    // VERIFICAR SE ESTÁ SEGUINDO
+    // =====================================================
+
+    public boolean seguindo(
+            int idSeguidor,
+            int idSeguido) {
+
+        String sql =
+                "SELECT id "
+                + "FROM seguidor "
+                + "WHERE id_seguidor = ? "
+                + "AND id_seguido = ?";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return false;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idSeguidor
+            );
+
+            stmt.setInt(
+                    2,
+                    idSeguido
+            );
+
+            rs =
+                    stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO VERIFICAR SEGUIMENTO:"
+            );
+
+            e.printStackTrace();
+
+            return false;
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // =====================================================
+    // CONTAR SEGUIDORES
+    // =====================================================
+
+    public int contarSeguidores(
+            int idUsuario) {
+
+        String sql =
+                "SELECT COUNT(*) "
+                + "FROM seguidor "
+                + "WHERE id_seguido = ?";
+
+        try {
+
+            Connection conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return 0;
+            }
+
+            PreparedStatement stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            int total = 0;
+
+            if (rs.next()) {
+
+                total =
+                        rs.getInt(1);
+            }
+
+            rs.close();
+            stmt.close();
+            conexao.close();
+
+            return total;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO CONTAR SEGUIDORES:"
+            );
+
+            e.printStackTrace();
+
+            return 0;
+        }
+    }
+
+    // =====================================================
+    // CONTAR QUANTOS SEGUE
+    // =====================================================
+
+    public int contarSeguindo(
+            int idUsuario) {
+
+        String sql =
+                "SELECT COUNT(*) "
+                + "FROM seguidor "
+                + "WHERE id_seguidor = ?";
+
+        try {
+
+            Connection conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return 0;
+            }
+
+            PreparedStatement stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            int total = 0;
+
+            if (rs.next()) {
+
+                total =
+                        rs.getInt(1);
+            }
+
+            rs.close();
+            stmt.close();
+            conexao.close();
+
+            return total;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO CONTAR SEGUINDO:"
+            );
+
+            e.printStackTrace();
+
+            return 0;
+        }
+    }
+
+    // =====================================================
+    // CRIAR OBJETO USUARIO
     // =====================================================
 
     private Usuario criarUsuario(
