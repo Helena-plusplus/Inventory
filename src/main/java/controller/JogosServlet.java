@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.Conexao;
@@ -7,6 +6,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +37,8 @@ public class JogosServlet extends HttpServlet {
         html.append("<meta charset='UTF-8'>");
 
         html.append(
-                "<meta name='viewport' " +
-                "content='width=device-width, initial-scale=1.0'>"
+                "<meta name='viewport' "
+                + "content='width=device-width, initial-scale=1.0'>"
         );
 
         html.append(
@@ -45,18 +46,20 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                "<link rel='stylesheet' href='style.css'>"
+                "<link rel='stylesheet' "
+                + "href='style.css'>"
         );
 
         // =====================================================
-        // CSS DA PÁGINA
+        // CSS
         // =====================================================
 
         html.append("<style>");
 
         html.append(
                 "body {"
-                + "background:linear-gradient(135deg,#0d0714,#160b24,#0d0714);"
+                + "background:linear-gradient("
+                + "135deg,#0d0714,#160b24,#0d0714);"
                 + "}"
         );
 
@@ -74,7 +77,8 @@ public class JogosServlet extends HttpServlet {
                 + "margin-bottom:10px;"
                 + "font-size:38px;"
                 + "font-weight:bold;"
-                + "background:linear-gradient(90deg,#a855f7,#7c3aed,#c084fc);"
+                + "background:linear-gradient("
+                + "90deg,#a855f7,#7c3aed,#c084fc);"
                 + "-webkit-background-clip:text;"
                 + "-webkit-text-fill-color:transparent;"
                 + "}"
@@ -89,10 +93,6 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // GRID
-        // =====================================================
-
         html.append(
                 ".catalogo-jogos {"
                 + "display:grid;"
@@ -102,21 +102,19 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // CARD
-        // =====================================================
-
         html.append(
                 ".card-jogo {"
                 + "position:relative;"
-                + "background:linear-gradient(145deg,#21152d,#17101f);"
+                + "background:linear-gradient("
+                + "145deg,#21152d,#17101f);"
                 + "border:1px solid #38204d;"
                 + "padding:12px;"
                 + "border-radius:16px;"
                 + "text-align:center;"
                 + "overflow:hidden;"
-                + "transition:all .3s ease;"
-                + "box-shadow:0 8px 25px rgba(0,0,0,.35);"
+                + "transition:.3s;"
+                + "box-shadow:"
+                + "0 8px 25px rgba(0,0,0,.35);"
                 + "}"
         );
 
@@ -124,13 +122,10 @@ public class JogosServlet extends HttpServlet {
                 ".card-jogo:hover {"
                 + "transform:translateY(-8px);"
                 + "border-color:#8b5cf6;"
-                + "box-shadow:0 15px 35px rgba(124,58,237,.35);"
+                + "box-shadow:"
+                + "0 15px 35px rgba(124,58,237,.35);"
                 + "}"
         );
-
-        // =====================================================
-        // CAPA
-        // =====================================================
 
         html.append(
                 ".capa-jogo {"
@@ -139,13 +134,7 @@ public class JogosServlet extends HttpServlet {
                 + "object-fit:cover;"
                 + "border-radius:12px;"
                 + "display:block;"
-                + "transition:transform .3s ease;"
-                + "}"
-        );
-
-        html.append(
-                ".card-jogo:hover .capa-jogo {"
-                + "transform:scale(1.03);"
+                + "background:#120d18;"
                 + "}"
         );
 
@@ -153,18 +142,27 @@ public class JogosServlet extends HttpServlet {
                 ".sem-capa {"
                 + "width:100%;"
                 + "height:285px;"
-                + "display:flex;"
+                + "display:none;"
                 + "align-items:center;"
                 + "justify-content:center;"
-                + "background:#120d18;"
+                + "text-align:center;"
+                + "padding:20px;"
+                + "box-sizing:border-box;"
+                + "background:linear-gradient("
+                + "135deg,#21152d,#54227d);"
                 + "border-radius:12px;"
-                + "color:#777;"
+                + "color:#fff;"
+                + "font-size:18px;"
+                + "font-weight:bold;"
                 + "}"
         );
 
-        // =====================================================
-        // TÍTULO
-        // =====================================================
+        html.append(
+                ".sem-capa span {"
+                + "max-width:180px;"
+                + "line-height:1.4;"
+                + "}"
+        );
 
         html.append(
                 ".card-jogo h3 {"
@@ -174,10 +172,6 @@ public class JogosServlet extends HttpServlet {
                 + "min-height:44px;"
                 + "}"
         );
-
-        // =====================================================
-        // INFORMAÇÕES
-        // =====================================================
 
         html.append(
                 ".info-jogo {"
@@ -200,35 +194,19 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // BOTÃO
-        // =====================================================
-
         html.append(
                 ".botao-biblioteca {"
                 + "display:block;"
                 + "margin-top:12px;"
                 + "padding:12px;"
-                + "background:linear-gradient(135deg,#7c3aed,#9333ea);"
+                + "background:linear-gradient("
+                + "135deg,#7c3aed,#9333ea);"
                 + "color:white;"
                 + "text-decoration:none;"
                 + "border-radius:9px;"
                 + "font-weight:bold;"
-                + "transition:.25s;"
-                + "box-shadow:0 5px 15px rgba(124,58,237,.25);"
                 + "}"
         );
-
-        html.append(
-                ".botao-biblioteca:hover {"
-                + "background:linear-gradient(135deg,#9333ea,#a855f7);"
-                + "transform:scale(1.03);"
-                + "}"
-        );
-
-        // =====================================================
-        // EFEITO ROXO
-        // =====================================================
 
         html.append(
                 ".brilho-card {"
@@ -244,37 +222,20 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // RESPONSIVO
-        // =====================================================
-
         html.append(
                 "@media(max-width:600px){"
-                + ".jogos-container{"
-                + "margin:20px auto;"
-                + "padding:12px;"
-                + "}"
-                + ".titulo-jogos{"
-                + "font-size:30px;"
-                + "}"
+                + ".jogos-container{padding:12px;}"
+                + ".titulo-jogos{font-size:30px;}"
                 + ".catalogo-jogos{"
-                + "grid-template-columns:"
-                + "repeat(2,1fr);"
+                + "grid-template-columns:repeat(2,1fr);"
                 + "gap:15px;"
                 + "}"
-                + ".capa-jogo,.sem-capa{"
-                + "height:220px;"
-                + "}"
-                + ".card-jogo{"
-                + "padding:9px;"
-                + "}"
+                + ".capa-jogo,.sem-capa{height:220px;}"
                 + "}"
         );
 
         html.append("</style>");
-
         html.append("</head>");
-
         html.append("<body>");
 
         // =====================================================
@@ -314,7 +275,6 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append("</nav>");
-
         html.append("</header>");
 
         // =====================================================
@@ -360,9 +320,8 @@ public class JogosServlet extends HttpServlet {
             } else {
 
                 String sql =
-                        "SELECT id, titulo, descricao, "
-                        + "genero, plataforma, "
-                        + "ano_lancamento, capa "
+                        "SELECT id, titulo, genero, "
+                        + "plataforma, ano_lancamento, capa "
                         + "FROM jogo "
                         + "ORDER BY titulo";
 
@@ -394,6 +353,13 @@ public class JogosServlet extends HttpServlet {
                     String capa =
                             resultado.getString("capa");
 
+                    // =================================================
+                    // RECONSTRUIR CAPA
+                    // =================================================
+
+                    String caminhoCapa =
+                            obterCapaSteam(capa);
+
                     html.append(
                             "<article class='card-jogo'>"
                     );
@@ -402,36 +368,7 @@ public class JogosServlet extends HttpServlet {
                             "<div class='brilho-card'></div>"
                     );
 
-                    // =================================================
-                    // CAPA
-                    // =================================================
-
-                    if (capa != null &&
-                            !capa.trim().isEmpty()) {
-
-                        String caminhoCapa =
-                                capa.trim();
-
-                        if (!caminhoCapa.startsWith(
-                                "http://")
-                                &&
-                                !caminhoCapa.startsWith(
-                                "https://")) {
-
-                            if (caminhoCapa.startsWith("/")) {
-
-                                caminhoCapa =
-                                        request.getContextPath()
-                                        + caminhoCapa;
-
-                            } else {
-
-                                caminhoCapa =
-                                        request.getContextPath()
-                                        + "/"
-                                        + caminhoCapa;
-                            }
-                        }
+                    if (caminhoCapa != null) {
 
                         html.append(
                                 "<img "
@@ -441,14 +378,30 @@ public class JogosServlet extends HttpServlet {
                                 + "' "
                                 + "alt='Capa de "
                                 + escapar(titulo)
-                                + "'>"
+                                + "' "
+                                + "onerror=\""
+                                + "this.style.display='none';"
+                                + "this.nextElementSibling"
+                                + ".style.display='flex';"
+                                + "\">"
+                        );
+
+                        html.append(
+                                "<div class='sem-capa'>"
+                                + "<span>🎮<br>"
+                                + escapar(titulo)
+                                + "</span>"
+                                + "</div>"
                         );
 
                     } else {
 
                         html.append(
-                                "<div class='sem-capa'>"
-                                + "🎮 Sem capa"
+                                "<div class='sem-capa' "
+                                + "style='display:flex;'>"
+                                + "<span>🎮<br>"
+                                + escapar(titulo)
+                                + "</span>"
                                 + "</div>"
                         );
                     }
@@ -464,7 +417,7 @@ public class JogosServlet extends HttpServlet {
                     );
 
                     // =================================================
-                    // TAGS
+                    // INFORMAÇÕES
                     // =================================================
 
                     html.append(
@@ -538,11 +491,8 @@ public class JogosServlet extends HttpServlet {
         }
 
         html.append("</div>");
-
         html.append("</main>");
-
         html.append("</body>");
-
         html.append("</html>");
 
         response.getWriter().println(
@@ -551,12 +501,71 @@ public class JogosServlet extends HttpServlet {
     }
 
     // =====================================================
+    // PEGAR CAPA STEAM
+    // =====================================================
+
+    private String obterCapaSteam(
+            String capaOriginal) {
+
+        if (capaOriginal == null ||
+                capaOriginal.trim().isEmpty()) {
+
+            return null;
+        }
+
+        String capa =
+                capaOriginal.trim();
+
+        /*
+         * Procura qualquer número de 2 ou mais dígitos
+         * depois de /apps/
+         */
+
+        Pattern pattern =
+                Pattern.compile(
+                        "/apps/(\\d+)"
+                );
+
+        Matcher matcher =
+                pattern.matcher(capa);
+
+        if (matcher.find()) {
+
+            String appId =
+                    matcher.group(1);
+
+            return
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + appId
+                    + "/library_600x900_2x.jpg";
+        }
+
+        /*
+         * Caso o banco tenha armazenado apenas o número.
+         */
+
+        if (capa.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + capa
+                    + "/library_600x900_2x.jpg";
+        }
+
+        return capa;
+    }
+
+    // =====================================================
     // ESCAPAR HTML
     // =====================================================
 
-    private String escapar(String texto) {
+    private String escapar(
+            String texto) {
 
         if (texto == null) {
+
             return "";
         }
 
@@ -568,4 +577,3 @@ public class JogosServlet extends HttpServlet {
                 .replace("'", "&#39;");
     }
 }
-
