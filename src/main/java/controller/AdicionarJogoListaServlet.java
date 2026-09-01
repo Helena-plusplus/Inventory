@@ -36,6 +36,15 @@ public class AdicionarJogoListaServlet extends HttpServlet {
             return;
         }
 
+        Connection conexao = null;
+        PreparedStatement criarTabela = null;
+        PreparedStatement verificarLista = null;
+        PreparedStatement verificarJogo = null;
+        PreparedStatement inserir = null;
+
+        ResultSet rsLista = null;
+        ResultSet rsJogo = null;
+
         try {
 
             Usuario usuario =
@@ -46,56 +55,99 @@ public class AdicionarJogoListaServlet extends HttpServlet {
             int idUsuario =
                     usuario.getId();
 
+            String idListaTexto =
+                    request.getParameter(
+                            "idLista"
+                    );
+
+            String idJogoTexto =
+                    request.getParameter(
+                            "idJogo"
+                    );
+
+            if (idListaTexto == null ||
+                    idJogoTexto == null) {
+
+                response.sendRedirect("listas");
+                return;
+            }
+
             int idLista =
                     Integer.parseInt(
-                            request.getParameter(
-                                    "idLista"
-                            )
+                            idListaTexto
                     );
 
             int idJogo =
                     Integer.parseInt(
-                            request.getParameter(
-                                    "idJogo"
-                            )
+                            idJogoTexto
                     );
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
+
+            if (conexao == null) {
+
+                response.sendRedirect("listas");
+                return;
+            }
+
+            // =================================================
+            // GARANTIR LISTA_JOGO
+            // =================================================
+
+            String sqlTabela =
+                    "CREATE TABLE IF NOT EXISTS lista_jogo ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "id_lista INTEGER NOT NULL,"
+                    + "id_jogo INTEGER NOT NULL,"
+                    + "data_adicionado TEXT "
+                    + "DEFAULT CURRENT_TIMESTAMP,"
+                    + "UNIQUE(id_lista,id_jogo)"
+                    + ")";
+
+            criarTabela =
+                    conexao.prepareStatement(
+                            sqlTabela
+                    );
+
+            criarTabela.executeUpdate();
+
+            criarTabela.close();
+            criarTabela = null;
 
             // =================================================
             // VERIFICAR DONO DA LISTA
             // =================================================
 
-            String verificar =
+            String sqlLista =
                     "SELECT id "
                     + "FROM lista "
                     + "WHERE id = ? "
                     + "AND id_usuario = ?";
 
-            PreparedStatement stmtVerificar =
+            verificarLista =
                     conexao.prepareStatement(
-                            verificar
+                            sqlLista
                     );
 
-            stmtVerificar.setInt(
+            verificarLista.setInt(
                     1,
                     idLista
             );
 
-            stmtVerificar.setInt(
+            verificarLista.setInt(
                     2,
                     idUsuario
             );
 
-            ResultSet rs =
-                    stmtVerificar.executeQuery();
+            rsLista =
+                    verificarLista.executeQuery();
 
-            if (!rs.next()) {
+            if (!rsLista.next()) {
 
-                rs.close();
-                stmtVerificar.close();
-                conexao.close();
+                System.out.println(
+                        "LISTA NAO PERTENCE AO USUARIO"
+                );
 
                 response.sendRedirect(
                         "listas"
@@ -104,37 +156,112 @@ public class AdicionarJogoListaServlet extends HttpServlet {
                 return;
             }
 
-            rs.close();
-            stmtVerificar.close();
+            rsLista.close();
+            rsLista = null;
+
+            verificarLista.close();
+            verificarLista = null;
+
+            // =================================================
+            // VERIFICAR SE JOGO EXISTE
+            // =================================================
+
+            String sqlJogo =
+                    "SELECT id "
+                    + "FROM jogo "
+                    + "WHERE id = ?";
+
+            verificarJogo =
+                    conexao.prepareStatement(
+                            sqlJogo
+                    );
+
+            verificarJogo.setInt(
+                    1,
+                    idJogo
+            );
+
+            rsJogo =
+                    verificarJogo.executeQuery();
+
+            if (!rsJogo.next()) {
+
+                System.out.println(
+                        "JOGO NAO EXISTE: "
+                        + idJogo
+                );
+
+                response.sendRedirect(
+                        "listas"
+                );
+
+                return;
+            }
+
+            rsJogo.close();
+            rsJogo = null;
+
+            verificarJogo.close();
+            verificarJogo = null;
 
             // =================================================
             // ADICIONAR
             // =================================================
 
-            String inserir =
+            String sqlInserir =
                     "INSERT OR IGNORE INTO lista_jogo "
-                    + "(id_lista, id_jogo) "
-                    + "VALUES (?, ?)";
+                    + "(id_lista,id_jogo) "
+                    + "VALUES (?,?)";
 
-            PreparedStatement stmt =
+            inserir =
                     conexao.prepareStatement(
-                            inserir
+                            sqlInserir
                     );
 
-            stmt.setInt(
+            inserir.setInt(
                     1,
                     idLista
             );
 
-            stmt.setInt(
+            inserir.setInt(
                     2,
                     idJogo
             );
 
-            stmt.executeUpdate();
+            int resultado =
+                    inserir.executeUpdate();
 
-            stmt.close();
-            conexao.close();
+            System.out.println(
+                    "================================"
+            );
+
+            System.out.println(
+                    "ADICIONAR JOGO NA LISTA"
+            );
+
+            System.out.println(
+                    "USUARIO: "
+                    + idUsuario
+            );
+
+            System.out.println(
+                    "LISTA: "
+                    + idLista
+            );
+
+            System.out.println(
+                    "JOGO: "
+                    + idJogo
+            );
+
+            System.out.println(
+                    "RESULTADO: "
+                    + resultado
+            );
+
+            System.out.println(
+                    "================================"
+            );
 
             response.sendRedirect(
                     "listas"
@@ -147,6 +274,64 @@ public class AdicionarJogoListaServlet extends HttpServlet {
             response.sendRedirect(
                     "listas"
             );
+
+        } finally {
+
+            try {
+                if (rsLista != null) {
+                    rsLista.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (rsJogo != null) {
+                    rsJogo.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (criarTabela != null) {
+                    criarTabela.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (verificarLista != null) {
+                    verificarLista.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (verificarJogo != null) {
+                    verificarJogo.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (inserir != null) {
+                    inserir.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

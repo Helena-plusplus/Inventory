@@ -34,6 +34,13 @@ public class ExcluirListaServlet extends HttpServlet {
             return;
         }
 
+        Connection conexao = null;
+        PreparedStatement verificar = null;
+        PreparedStatement apagarJogos = null;
+        PreparedStatement apagarLista = null;
+
+        ResultSet rs = null;
+
         try {
 
             Usuario usuario =
@@ -44,49 +51,54 @@ public class ExcluirListaServlet extends HttpServlet {
             int idUsuario =
                     usuario.getId();
 
-            int idLista =
-                    Integer.parseInt(
-                            request.getParameter(
-                                    "idLista"
-                            )
+            String idListaTexto =
+                    request.getParameter(
+                            "idLista"
                     );
 
-            Connection conexao =
+            if (idListaTexto == null) {
+
+                response.sendRedirect("listas");
+                return;
+            }
+
+            int idLista =
+                    Integer.parseInt(
+                            idListaTexto
+                    );
+
+            conexao =
                     Conexao.conectar();
 
             // =================================================
             // VERIFICAR DONO
             // =================================================
 
-            String verificar =
+            String sqlVerificar =
                     "SELECT id "
                     + "FROM lista "
                     + "WHERE id = ? "
                     + "AND id_usuario = ?";
 
-            PreparedStatement stmtVerificar =
+            verificar =
                     conexao.prepareStatement(
-                            verificar
+                            sqlVerificar
                     );
 
-            stmtVerificar.setInt(
+            verificar.setInt(
                     1,
                     idLista
             );
 
-            stmtVerificar.setInt(
+            verificar.setInt(
                     2,
                     idUsuario
             );
 
-            ResultSet rs =
-                    stmtVerificar.executeQuery();
+            rs =
+                    verificar.executeQuery();
 
             if (!rs.next()) {
-
-                rs.close();
-                stmtVerificar.close();
-                conexao.close();
 
                 response.sendRedirect(
                         "listas"
@@ -96,58 +108,59 @@ public class ExcluirListaServlet extends HttpServlet {
             }
 
             rs.close();
-            stmtVerificar.close();
+            rs = null;
+
+            verificar.close();
+            verificar = null;
 
             // =================================================
-            // APAGAR JOGOS DA LISTA
+            // APAGAR JOGOS
             // =================================================
 
-            String apagarJogos =
+            String sqlApagarJogos =
                     "DELETE FROM lista_jogo "
                     + "WHERE id_lista = ?";
 
-            PreparedStatement stmtJogos =
+            apagarJogos =
                     conexao.prepareStatement(
-                            apagarJogos
+                            sqlApagarJogos
                     );
 
-            stmtJogos.setInt(
+            apagarJogos.setInt(
                     1,
                     idLista
             );
 
-            stmtJogos.executeUpdate();
+            apagarJogos.executeUpdate();
 
-            stmtJogos.close();
+            apagarJogos.close();
+            apagarJogos = null;
 
             // =================================================
             // APAGAR LISTA
             // =================================================
 
-            String apagarLista =
+            String sqlApagarLista =
                     "DELETE FROM lista "
                     + "WHERE id = ? "
                     + "AND id_usuario = ?";
 
-            PreparedStatement stmtLista =
+            apagarLista =
                     conexao.prepareStatement(
-                            apagarLista
+                            sqlApagarLista
                     );
 
-            stmtLista.setInt(
+            apagarLista.setInt(
                     1,
                     idLista
             );
 
-            stmtLista.setInt(
+            apagarLista.setInt(
                     2,
                     idUsuario
             );
 
-            stmtLista.executeUpdate();
-
-            stmtLista.close();
-            conexao.close();
+            apagarLista.executeUpdate();
 
             response.sendRedirect(
                     "listas"
@@ -160,6 +173,48 @@ public class ExcluirListaServlet extends HttpServlet {
             response.sendRedirect(
                     "listas"
             );
+
+        } finally {
+
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (verificar != null) {
+                    verificar.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (apagarJogos != null) {
+                    apagarJogos.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (apagarLista != null) {
+                    apagarLista.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

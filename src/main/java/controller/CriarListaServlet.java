@@ -25,10 +25,6 @@ public class CriarListaServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // =====================================================
-        // VERIFICAR LOGIN
-        // =====================================================
-
         HttpSession sessao =
                 request.getSession(false);
 
@@ -39,49 +35,27 @@ public class CriarListaServlet extends HttpServlet {
             return;
         }
 
-        // =====================================================
-        // USUARIO LOGADO
-        // =====================================================
-
         Usuario usuario =
-                (Usuario) sessao.getAttribute("usuario");
+                (Usuario) sessao.getAttribute(
+                        "usuario"
+                );
 
         int idUsuario =
                 usuario.getId();
 
-        // =====================================================
-        // NOME DA LISTA
-        // =====================================================
-
         String nome =
                 request.getParameter("nome");
 
-        if (nome == null) {
+        if (nome == null ||
+                nome.trim().isEmpty()) {
 
-            response.sendRedirect(
-                    "listas"
-            );
-
+            response.sendRedirect("listas");
             return;
         }
 
         nome =
                 nome.trim();
 
-        // =====================================================
-        // VALIDAR NOME
-        // =====================================================
-
-        if (nome.isEmpty()) {
-
-            response.sendRedirect(
-                    "listas"
-            );
-
-            return;
-        }
-
-        // Limite de segurança
         if (nome.length() > 80) {
 
             nome =
@@ -92,52 +66,45 @@ public class CriarListaServlet extends HttpServlet {
         }
 
         Connection conexao = null;
+        PreparedStatement tabela = null;
         PreparedStatement stmt = null;
 
         try {
-
-            // =================================================
-            // CONECTAR AO SQLITE
-            // =================================================
 
             conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
 
-                response.sendRedirect(
-                        "listas"
-                );
-
+                response.sendRedirect("listas");
                 return;
             }
 
             // =================================================
-            // GARANTIR TABELA LISTA
+            // GARANTIR TABELA
             // =================================================
 
-            String criarTabela =
+            String sqlTabela =
                     "CREATE TABLE IF NOT EXISTS lista ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "id_usuario INTEGER NOT NULL,"
                     + "nome TEXT NOT NULL,"
                     + "data_criacao TEXT "
-                    + "DEFAULT CURRENT_TIMESTAMP,"
-                    + "FOREIGN KEY(id_usuario) "
-                    + "REFERENCES usuario(id)"
+                    + "DEFAULT CURRENT_TIMESTAMP"
                     + ")";
 
-            PreparedStatement stmtTabela =
+            tabela =
                     conexao.prepareStatement(
-                            criarTabela
+                            sqlTabela
                     );
 
-            stmtTabela.executeUpdate();
+            tabela.executeUpdate();
 
-            stmtTabela.close();
+            tabela.close();
+            tabela = null;
 
             // =================================================
-            // CRIAR LISTA
+            // INSERIR LISTA
             // =================================================
 
             String sql =
@@ -160,53 +127,14 @@ public class CriarListaServlet extends HttpServlet {
                     nome
             );
 
-            int resultado =
-                    stmt.executeUpdate();
+            stmt.executeUpdate();
 
             System.out.println(
-                    "================================="
+                    "LISTA CRIADA: "
+                    + nome
+                    + " | USUARIO: "
+                    + idUsuario
             );
-
-            if (resultado > 0) {
-
-                System.out.println(
-                        "LISTA CRIADA COM SUCESSO!"
-                );
-
-                System.out.println(
-                        "USUARIO: "
-                        + idUsuario
-                );
-
-                System.out.println(
-                        "NOME: "
-                        + nome
-                );
-
-            } else {
-
-                System.out.println(
-                        "ERRO AO CRIAR LISTA!"
-                );
-            }
-
-            System.out.println(
-                    "================================="
-            );
-
-            // =================================================
-            // FECHAR
-            // =================================================
-
-            stmt.close();
-            stmt = null;
-
-            conexao.close();
-            conexao = null;
-
-            // =================================================
-            // VOLTAR PARA LISTAS
-            // =================================================
 
             response.sendRedirect(
                     "listas"
@@ -214,19 +142,7 @@ public class CriarListaServlet extends HttpServlet {
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "================================="
-            );
-
-            System.out.println(
-                    "ERRO AO CRIAR LISTA:"
-            );
-
             e.printStackTrace();
-
-            System.out.println(
-                    "================================="
-            );
 
             response.sendRedirect(
                     "listas"
@@ -235,24 +151,26 @@ public class CriarListaServlet extends HttpServlet {
         } finally {
 
             try {
-
                 if (stmt != null) {
                     stmt.close();
                 }
-
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
 
             try {
+                if (tabela != null) {
+                    tabela.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            try {
                 if (conexao != null) {
                     conexao.close();
                 }
-
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
         }
