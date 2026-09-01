@@ -815,11 +815,11 @@ public class PerfilServlet extends HttpServlet {
                 "<a href='biblioteca'>Biblioteca</a>"
         );
 
-        html.append(
-                "<a href='buscar-usuarios.html'>"
-                + "Buscar usuários"
-                + "</a>"
-        );
+     html.append(
+        "<a href='buscar-usuarios'>"
+        + "Buscar usuários"
+        + "</a>"
+);
 
         html.append(
                 "<a href='perfil'>Meu Perfil</a>"

@@ -474,10 +474,10 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                "<a href='buscar-usuarios.html'>"
-                + "Buscar usuários"
-                + "</a>"
-        );
+        "<a href='buscar-usuarios'>"
+        + "Buscar usuários"
+        + "</a>"
+);
 
         html.append(
                 "<a href='perfil'>Meu Perfil</a>"

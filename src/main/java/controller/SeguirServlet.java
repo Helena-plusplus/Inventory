@@ -21,8 +21,6 @@ public class SeguirServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-
         HttpSession sessao =
                 request.getSession(false);
 
@@ -35,51 +33,37 @@ public class SeguirServlet extends HttpServlet {
 
         try {
 
-            Usuario usuarioLogado =
+            Usuario logado =
                     (Usuario) sessao.getAttribute(
                             "usuario"
                     );
 
             int idSeguidor =
-                    usuarioLogado.getId();
+                    logado.getId();
 
-            String idTexto =
-                    request.getParameter("idUsuario");
+            int idSeguido =
+                    Integer.parseInt(
+                            request.getParameter(
+                                    "idUsuario"
+                            )
+                    );
 
             String acao =
                     request.getParameter("acao");
 
-            if (idTexto == null ||
-                    idTexto.trim().isEmpty()) {
-
-                response.sendRedirect(
-                        "buscar-usuarios.html"
-                );
-
-                return;
-            }
-
-            int idSeguido =
-                    Integer.parseInt(idTexto);
-
-            // =============================================
-            // NÃO PODE SEGUIR A SI MESMO
-            // =============================================
+            UsuarioDAO dao =
+                    new UsuarioDAO();
 
             if (idSeguidor == idSeguido) {
 
                 response.sendRedirect(
-                        "perfil-usuario?id="
-                        + idSeguido
+                        "perfil"
                 );
 
                 return;
             }
 
-            UsuarioDAO dao =
-                    new UsuarioDAO();
-
-            if ("deixar".equalsIgnoreCase(acao)) {
+            if ("deixar".equals(acao)) {
 
                 dao.deixarDeSeguir(
                         idSeguidor,
@@ -104,7 +88,7 @@ public class SeguirServlet extends HttpServlet {
             e.printStackTrace();
 
             response.sendRedirect(
-                    "buscar-usuarios.html"
+                    "buscar-usuarios"
             );
         }
     }

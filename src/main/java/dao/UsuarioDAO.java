@@ -1,3 +1,4 @@
+
 package dao;
 
 import model.Usuario;
@@ -156,16 +157,20 @@ public class UsuarioDAO {
                 + "WHERE email = ? "
                 + "AND senha = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return null;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -178,26 +183,15 @@ public class UsuarioDAO {
                     senha
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             if (resultado.next()) {
 
-                Usuario usuario =
-                        criarUsuario(
-                                resultado
-                        );
-
-                resultado.close();
-                stmt.close();
-                conexao.close();
-
-                return usuario;
+                return criarUsuario(
+                        resultado
+                );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -218,6 +212,38 @@ public class UsuarioDAO {
             System.out.println(
                     "=============================="
             );
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -227,22 +253,28 @@ public class UsuarioDAO {
     // BUSCAR POR ID
     // =====================================================
 
-    public Usuario buscarPorId(int id) {
+    public Usuario buscarPorId(
+            int id) {
 
         String sql =
-                "SELECT * FROM usuario "
+                "SELECT * "
+                + "FROM usuario "
                 + "WHERE id = ?";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
 
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return null;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setInt(
@@ -250,26 +282,15 @@ public class UsuarioDAO {
                     id
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             if (resultado.next()) {
 
-                Usuario usuario =
-                        criarUsuario(
-                                resultado
-                        );
-
-                resultado.close();
-                stmt.close();
-                conexao.close();
-
-                return usuario;
+                return criarUsuario(
+                        resultado
+                );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -278,6 +299,38 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -291,19 +344,24 @@ public class UsuarioDAO {
             String username) {
 
         String sql =
-                "SELECT * FROM usuario "
+                "SELECT * "
+                + "FROM usuario "
                 + "WHERE username = ?";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
 
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return null;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -311,26 +369,15 @@ public class UsuarioDAO {
                     username
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             if (resultado.next()) {
 
-                Usuario usuario =
-                        criarUsuario(
-                                resultado
-                        );
-
-                resultado.close();
-                stmt.close();
-                conexao.close();
-
-                return usuario;
+                return criarUsuario(
+                        resultado
+                );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -339,6 +386,38 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -352,19 +431,24 @@ public class UsuarioDAO {
             String email) {
 
         String sql =
-                "SELECT * FROM usuario "
+                "SELECT * "
+                + "FROM usuario "
                 + "WHERE email = ?";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
 
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return null;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -372,26 +456,15 @@ public class UsuarioDAO {
                     email
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             if (resultado.next()) {
 
-                Usuario usuario =
-                        criarUsuario(
-                                resultado
-                        );
-
-                resultado.close();
-                stmt.close();
-                conexao.close();
-
-                return usuario;
+                return criarUsuario(
+                        resultado
+                );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -400,13 +473,45 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
     }
 
     // =====================================================
-    // BUSCAR USERNAMES PARCIAL
+    // BUSCAR USERNAME PARCIAL
     // =====================================================
 
     public ArrayList<Usuario>
@@ -417,20 +522,25 @@ public class UsuarioDAO {
                 new ArrayList<Usuario>();
 
         String sql =
-                "SELECT * FROM usuario "
+                "SELECT * "
+                + "FROM usuario "
                 + "WHERE username LIKE ? "
                 + "ORDER BY username";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return usuarios;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -438,24 +548,17 @@ public class UsuarioDAO {
                     "%" + username + "%"
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             while (resultado.next()) {
 
-                Usuario usuario =
+                usuarios.add(
                         criarUsuario(
                                 resultado
-                        );
-
-                usuarios.add(
-                        usuario
+                        )
                 );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -464,6 +567,38 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return usuarios;
@@ -481,20 +616,25 @@ public class UsuarioDAO {
                 new ArrayList<Usuario>();
 
         String sql =
-                "SELECT * FROM usuario "
+                "SELECT * "
+                + "FROM usuario "
                 + "WHERE nome LIKE ? "
                 + "ORDER BY nome";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return usuarios;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -502,24 +642,17 @@ public class UsuarioDAO {
                     "%" + nome + "%"
             );
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             while (resultado.next()) {
 
-                Usuario usuario =
+                usuarios.add(
                         criarUsuario(
                                 resultado
-                        );
-
-                usuarios.add(
-                        usuario
+                        )
                 );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -528,13 +661,45 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return usuarios;
     }
 
     // =====================================================
-    // LISTAR
+    // LISTAR USUARIOS
     // =====================================================
 
     public ArrayList<Usuario> listar() {
@@ -545,36 +710,33 @@ public class UsuarioDAO {
         String sql =
                 "SELECT * FROM usuario";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet resultado = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return usuarios;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
-            ResultSet resultado =
+            resultado =
                     stmt.executeQuery();
 
             while (resultado.next()) {
 
-                Usuario usuario =
+                usuarios.add(
                         criarUsuario(
                                 resultado
-                        );
-
-                usuarios.add(
-                        usuario
+                        )
                 );
             }
-
-            resultado.close();
-            stmt.close();
-            conexao.close();
 
         } catch (Exception e) {
 
@@ -583,13 +745,45 @@ public class UsuarioDAO {
             );
 
             e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (resultado != null) {
+                    resultado.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return usuarios;
     }
 
     // =====================================================
-    // ATUALIZAR
+    // ATUALIZAR USUARIO
     // =====================================================
 
     public boolean atualizar(
@@ -673,10 +867,7 @@ public class UsuarioDAO {
                     usuario.getId()
             );
 
-            int resultado =
-                    stmt.executeUpdate();
-
-            return resultado > 0;
+            return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {
 
@@ -713,25 +904,29 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // EXCLUIR
+    // EXCLUIR USUARIO
     // =====================================================
 
-    public boolean excluir(int id) {
+    public boolean excluir(
+            int id) {
 
         String sql =
                 "DELETE FROM usuario "
                 + "WHERE id = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return false;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setInt(
@@ -739,13 +934,7 @@ public class UsuarioDAO {
                     id
             );
 
-            int resultado =
-                    stmt.executeUpdate();
-
-            stmt.close();
-            conexao.close();
-
-            return resultado > 0;
+            return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {
 
@@ -756,6 +945,28 @@ public class UsuarioDAO {
             e.printStackTrace();
 
             return false;
+
+        } finally {
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -786,16 +997,19 @@ public class UsuarioDAO {
                 + "codigo = excluded.codigo, "
                 + "expira_em = excluded.expira_em";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return false;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -853,13 +1067,7 @@ public class UsuarioDAO {
                     expiraEm
             );
 
-            int resultado =
-                    stmt.executeUpdate();
-
-            stmt.close();
-            conexao.close();
-
-            return resultado > 0;
+            return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {
 
@@ -870,6 +1078,28 @@ public class UsuarioDAO {
             e.printStackTrace();
 
             return false;
+
+        } finally {
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -885,16 +1115,20 @@ public class UsuarioDAO {
                 + "FROM cadastro_pendente "
                 + "WHERE email = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return false;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setString(
@@ -902,23 +1136,48 @@ public class UsuarioDAO {
                     email
             );
 
-            ResultSet rs =
+            rs =
                     stmt.executeQuery();
 
-            boolean existe =
-                    rs.next();
-
-            rs.close();
-            stmt.close();
-            conexao.close();
-
-            return existe;
+            return rs.next();
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
             return false;
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -939,7 +1198,10 @@ public class UsuarioDAO {
 
         Connection conexao = null;
         PreparedStatement stmt = null;
+        PreparedStatement stmtInserir = null;
+        PreparedStatement stmtApagar = null;
         ResultSet rs = null;
+        ResultSet chaves = null;
 
         try {
 
@@ -1024,7 +1286,7 @@ public class UsuarioDAO {
                     + "data_nascimento, pais, plataforma_favorita) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            PreparedStatement stmtInserir =
+            stmtInserir =
                     conexao.prepareStatement(
                             inserir,
                             java.sql.Statement.RETURN_GENERATED_KEYS
@@ -1077,7 +1339,7 @@ public class UsuarioDAO {
 
             stmtInserir.executeUpdate();
 
-            ResultSet chaves =
+            chaves =
                     stmtInserir.getGeneratedKeys();
 
             if (chaves.next()) {
@@ -1087,18 +1349,15 @@ public class UsuarioDAO {
                 );
             }
 
-            chaves.close();
-            stmtInserir.close();
-
             // =============================================
-            // APAGAR CADASTRO PENDENTE
+            // APAGAR PENDENTE
             // =============================================
 
             String apagar =
                     "DELETE FROM cadastro_pendente "
                     + "WHERE email = ?";
 
-            PreparedStatement stmtApagar =
+            stmtApagar =
                     conexao.prepareStatement(
                             apagar
                     );
@@ -1109,8 +1368,6 @@ public class UsuarioDAO {
             );
 
             stmtApagar.executeUpdate();
-
-            stmtApagar.close();
 
             return usuario;
 
@@ -1128,8 +1385,38 @@ public class UsuarioDAO {
 
             try {
 
+                if (chaves != null) {
+                    chaves.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
                 if (rs != null) {
                     rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmtApagar != null) {
+                    stmtApagar.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmtInserir != null) {
+                    stmtInserir.close();
                 }
 
             } catch (Exception e) {
@@ -1238,7 +1525,7 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // PARAR DE SEGUIR
+    // DEIXAR DE SEGUIR
     // =====================================================
 
     public boolean deixarDeSeguir(
@@ -1312,7 +1599,7 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // VERIFICAR SE ESTÁ SEGUINDO
+    // VERIFICAR SE SEGUE
     // =====================================================
 
     public boolean seguindo(
@@ -1412,16 +1699,20 @@ public class UsuarioDAO {
                 + "FROM seguidor "
                 + "WHERE id_seguido = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return 0;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setInt(
@@ -1429,22 +1720,13 @@ public class UsuarioDAO {
                     idUsuario
             );
 
-            ResultSet rs =
+            rs =
                     stmt.executeQuery();
-
-            int total = 0;
 
             if (rs.next()) {
 
-                total =
-                        rs.getInt(1);
+                return rs.getInt(1);
             }
-
-            rs.close();
-            stmt.close();
-            conexao.close();
-
-            return total;
 
         } catch (Exception e) {
 
@@ -1454,8 +1736,40 @@ public class UsuarioDAO {
 
             e.printStackTrace();
 
-            return 0;
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        return 0;
     }
 
     // =====================================================
@@ -1470,16 +1784,20 @@ public class UsuarioDAO {
                 + "FROM seguidor "
                 + "WHERE id_seguidor = ?";
 
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
         try {
 
-            Connection conexao =
+            conexao =
                     Conexao.conectar();
 
             if (conexao == null) {
                 return 0;
             }
 
-            PreparedStatement stmt =
+            stmt =
                     conexao.prepareStatement(sql);
 
             stmt.setInt(
@@ -1487,22 +1805,13 @@ public class UsuarioDAO {
                     idUsuario
             );
 
-            ResultSet rs =
+            rs =
                     stmt.executeQuery();
-
-            int total = 0;
 
             if (rs.next()) {
 
-                total =
-                        rs.getInt(1);
+                return rs.getInt(1);
             }
-
-            rs.close();
-            stmt.close();
-            conexao.close();
-
-            return total;
 
         } catch (Exception e) {
 
@@ -1512,8 +1821,228 @@ public class UsuarioDAO {
 
             e.printStackTrace();
 
-            return 0;
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        return 0;
+    }
+
+    // =====================================================
+    // LISTAR SEGUIDORES
+    // =====================================================
+
+    public ArrayList<Usuario>
+            listarSeguidores(
+                    int idUsuario) {
+
+        ArrayList<Usuario> usuarios =
+                new ArrayList<Usuario>();
+
+        String sql =
+                "SELECT u.* "
+                + "FROM usuario u "
+                + "INNER JOIN seguidor s "
+                + "ON u.id = s.id_seguidor "
+                + "WHERE s.id_seguido = ? "
+                + "ORDER BY u.username";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return usuarios;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                usuarios.add(
+                        criarUsuario(rs)
+                );
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO LISTAR SEGUIDORES:"
+            );
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return usuarios;
+    }
+
+    // =====================================================
+    // LISTAR QUEM O USUARIO SEGUE
+    // =====================================================
+
+    public ArrayList<Usuario>
+            listarSeguindo(
+                    int idUsuario) {
+
+        ArrayList<Usuario> usuarios =
+                new ArrayList<Usuario>();
+
+        String sql =
+                "SELECT u.* "
+                + "FROM usuario u "
+                + "INNER JOIN seguidor s "
+                + "ON u.id = s.id_seguido "
+                + "WHERE s.id_seguidor = ? "
+                + "ORDER BY u.username";
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            if (conexao == null) {
+                return usuarios;
+            }
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                usuarios.add(
+                        criarUsuario(rs)
+                );
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ERRO AO LISTAR SEGUINDO:"
+            );
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return usuarios;
     }
 
     // =====================================================

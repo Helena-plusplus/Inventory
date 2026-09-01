@@ -1,14 +1,11 @@
 package controller;
 
-import dao.Conexao;
 import dao.UsuarioDAO;
 import model.Usuario;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +23,10 @@ public class PerfilUsuarioServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        // =====================================================
+        // VERIFICAR LOGIN
+        // =====================================================
+
         HttpSession sessao =
                 request.getSession(false);
 
@@ -36,6 +37,10 @@ public class PerfilUsuarioServlet extends HttpServlet {
             return;
         }
 
+        // =====================================================
+        // PEGAR ID DO PERFIL
+        // =====================================================
+
         String idTexto =
                 request.getParameter("id");
 
@@ -43,7 +48,7 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 idTexto.trim().isEmpty()) {
 
             response.sendRedirect(
-                    "buscar-usuarios.html"
+                    "buscar-usuarios"
             );
 
             return;
@@ -59,55 +64,85 @@ public class PerfilUsuarioServlet extends HttpServlet {
         } catch (NumberFormatException e) {
 
             response.sendRedirect(
-                    "buscar-usuarios.html"
+                    "buscar-usuarios"
             );
 
             return;
         }
+
+        // =====================================================
+        // USUÁRIOS
+        // =====================================================
 
         Usuario usuarioLogado =
                 (Usuario) sessao.getAttribute(
                         "usuario"
                 );
 
-        UsuarioDAO usuarioDAO =
+        int idLogado =
+                usuarioLogado.getId();
+
+        UsuarioDAO dao =
                 new UsuarioDAO();
 
         Usuario perfil =
-                usuarioDAO.buscarPorId(
-                        idPerfil
-                );
+                dao.buscarPorId(idPerfil);
 
         if (perfil == null) {
 
             response.sendRedirect(
-                    "buscar-usuarios.html"
+                    "buscar-usuarios"
             );
 
             return;
         }
 
-        int idLogado =
-                usuarioLogado.getId();
+        // =====================================================
+        // SEGUIMENTO
+        // =====================================================
 
         boolean mesmoUsuario =
                 idLogado == idPerfil;
 
         boolean seguindo =
-                usuarioDAO.seguindo(
-                        idLogado,
+                false;
+
+        if (!mesmoUsuario) {
+
+            seguindo =
+                    dao.seguindo(
+                            idLogado,
+                            idPerfil
+                    );
+        }
+
+        int quantidadeSeguidores =
+                dao.contarSeguidores(
                         idPerfil
                 );
 
-        int seguidores =
-                usuarioDAO.contarSeguidores(
+        int quantidadeSeguindo =
+                dao.contarSeguindo(
                         idPerfil
                 );
 
-        int seguindoQuantidade =
-                usuarioDAO.contarSeguindo(
+        // =====================================================
+        // LISTAS
+        // =====================================================
+
+        ArrayList<Usuario> seguidores =
+                dao.listarSeguidores(
                         idPerfil
                 );
+
+        ArrayList<Usuario> seguindoLista =
+                dao.listarSeguindo(
+                        idPerfil
+                );
+
+        // =====================================================
+        // RESPOSTA
+        // =====================================================
 
         response.setContentType(
                 "text/html;charset=UTF-8"
@@ -127,8 +162,8 @@ public class PerfilUsuarioServlet extends HttpServlet {
 
         html.append(
                 "<meta name='viewport' "
-                + "content='width=device-width,"
-                + " initial-scale=1.0'>"
+                + "content='width=device-width, "
+                + "initial-scale=1.0'>"
         );
 
         html.append(
@@ -153,15 +188,18 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 + "margin:0;"
                 + "background:"
                 + "radial-gradient("
-                + "circle at top,#35135a,"
-                + "#160b22 40%,#0b0710 80%);"
+                + "circle at top,"
+                + "#35105f,"
+                + "#140b1d 45%,"
+                + "#09060d"
+                + ");"
                 + "min-height:100vh;"
                 + "color:white;"
                 + "}"
         );
 
         html.append(
-                ".usuario-container{"
+                ".perfil-usuario-container{"
                 + "max-width:1000px;"
                 + "margin:45px auto;"
                 + "padding:20px;"
@@ -169,31 +207,35 @@ public class PerfilUsuarioServlet extends HttpServlet {
         );
 
         html.append(
-                ".usuario-box{"
+                ".perfil-usuario-box{"
                 + "background:"
                 + "linear-gradient("
                 + "145deg,#21142c,#140b1b"
                 + ");"
-                + "border:1px solid #47225f;"
+                + "border:1px solid #4c2465;"
                 + "border-radius:24px;"
-                + "padding:40px;"
+                + "padding:35px;"
                 + "box-shadow:"
                 + "0 25px 60px rgba(0,0,0,.4);"
                 + "}"
         );
 
+        // =====================================================
+        // TOPO
+        // =====================================================
+
         html.append(
-                ".usuario-topo{"
+                ".topo-usuario{"
                 + "text-align:center;"
-                + "border-bottom:1px solid #382043;"
                 + "padding-bottom:30px;"
+                + "border-bottom:1px solid #382043;"
                 + "}"
         );
 
         html.append(
                 ".foto-usuario{"
-                + "width:160px;"
-                + "height:160px;"
+                + "width:150px;"
+                + "height:150px;"
                 + "border-radius:50%;"
                 + "object-fit:cover;"
                 + "border:5px solid #7c3aed;"
@@ -204,8 +246,8 @@ public class PerfilUsuarioServlet extends HttpServlet {
 
         html.append(
                 ".sem-foto{"
-                + "width:160px;"
-                + "height:160px;"
+                + "width:150px;"
+                + "height:150px;"
                 + "margin:auto;"
                 + "border-radius:50%;"
                 + "background:#251532;"
@@ -220,13 +262,13 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append(
                 ".nome-usuario{"
                 + "font-size:32px;"
-                + "margin:18px 0 4px;"
+                + "margin:18px 0 5px;"
                 + "}"
         );
 
         html.append(
                 ".username-usuario{"
-                + "color:#a855f7;"
+                + "color:#b98be8;"
                 + "font-size:16px;"
                 + "}"
         );
@@ -256,19 +298,19 @@ public class PerfilUsuarioServlet extends HttpServlet {
 
         html.append(
                 ".estatistica{"
+                + "min-width:120px;"
+                + "padding:16px 22px;"
                 + "background:#160d1e;"
-                + "border:1px solid #392347;"
-                + "border-radius:12px;"
-                + "padding:14px 25px;"
-                + "min-width:100px;"
+                + "border:1px solid #382045;"
+                + "border-radius:13px;"
                 + "}"
         );
 
         html.append(
                 ".estatistica strong{"
                 + "display:block;"
+                + "font-size:23px;"
                 + "color:#c084fc;"
-                + "font-size:22px;"
                 + "}"
         );
 
@@ -280,85 +322,155 @@ public class PerfilUsuarioServlet extends HttpServlet {
         );
 
         // =====================================================
-        // SEGUIR
+        // BOTÃO SEGUIR
         // =====================================================
 
         html.append(
                 ".botao-seguir{"
-                + "display:inline-block;"
                 + "margin-top:22px;"
                 + "padding:13px 35px;"
-                + "border-radius:10px;"
                 + "border:none;"
+                + "border-radius:10px;"
                 + "background:"
                 + "linear-gradient("
                 + "135deg,#7c3aed,#a855f7"
                 + ");"
                 + "color:white;"
                 + "font-weight:bold;"
-                + "cursor:pointer;"
                 + "font-size:15px;"
+                + "cursor:pointer;"
                 + "}"
         );
 
         html.append(
                 ".botao-seguindo{"
-                + "background:#261832;"
+                + "background:#29173a;"
                 + "border:1px solid #8b5cf6;"
                 + "}"
         );
 
         // =====================================================
-        // INFORMAÇÕES
+        // SEÇÕES
         // =====================================================
 
         html.append(
-                ".informacoes{"
-                + "display:grid;"
-                + "grid-template-columns:"
-                + "repeat(2,1fr);"
-                + "gap:15px;"
-                + "margin-top:30px;"
+                ".secao-seguidores{"
+                + "margin-top:35px;"
                 + "}"
         );
 
         html.append(
-                ".info-card{"
-                + "background:#160d1e;"
-                + "border:1px solid #352044;"
-                + "border-radius:12px;"
-                + "padding:17px;"
-                + "}"
-        );
-
-        html.append(
-                ".info-card strong{"
-                + "display:block;"
-                + "color:#a855f7;"
-                + "font-size:12px;"
+                ".titulo-secao{"
+                + "font-size:23px;"
                 + "margin-bottom:6px;"
                 + "}"
         );
 
         html.append(
-                ".info-card span{"
-                + "color:#ddd;"
+                ".linha{"
+                + "width:45px;"
+                + "height:3px;"
+                + "background:#8b5cf6;"
+                + "border-radius:10px;"
+                + "margin-bottom:20px;"
+                + "}"
+        );
+
+        html.append(
+                ".lista-usuarios{"
+                + "display:grid;"
+                + "grid-template-columns:"
+                + "repeat(auto-fill,minmax(220px,1fr));"
+                + "gap:12px;"
+                + "}"
+        );
+
+        html.append(
+                ".card-seguidor{"
+                + "display:flex;"
+                + "align-items:center;"
+                + "gap:12px;"
+                + "padding:13px;"
+                + "background:#160d1e;"
+                + "border:1px solid #33203d;"
+                + "border-radius:13px;"
+                + "text-decoration:none;"
+                + "color:white;"
+                + "transition:.2s;"
+                + "}"
+        );
+
+        html.append(
+                ".card-seguidor:hover{"
+                + "border-color:#8b5cf6;"
+                + "transform:translateY(-2px);"
+                + "}"
+        );
+
+        html.append(
+                ".mini-foto{"
+                + "width:52px;"
+                + "height:52px;"
+                + "border-radius:50%;"
+                + "object-fit:cover;"
+                + "border:2px solid #7c3aed;"
+                + "flex-shrink:0;"
+                + "}"
+        );
+
+        html.append(
+                ".mini-sem-foto{"
+                + "width:52px;"
+                + "height:52px;"
+                + "border-radius:50%;"
+                + "display:flex;"
+                + "align-items:center;"
+                + "justify-content:center;"
+                + "background:#281733;"
+                + "color:#888;"
+                + "font-size:10px;"
+                + "flex-shrink:0;"
+                + "}"
+        );
+
+        html.append(
+                ".info-seguidor strong{"
+                + "display:block;"
+                + "font-size:15px;"
+                + "}"
+        );
+
+        html.append(
+                ".info-seguidor span{"
+                + "color:#a855f7;"
+                + "font-size:12px;"
+                + "}"
+        );
+
+        html.append(
+                ".vazio{"
+                + "padding:25px;"
+                + "background:#160d1e;"
+                + "border:1px dashed #493254;"
+                + "border-radius:13px;"
+                + "color:#8d8194;"
+                + "text-align:center;"
                 + "}"
         );
 
         html.append(
                 "@media(max-width:600px){"
-                + ".usuario-container{"
+                + ".perfil-usuario-container{"
                 + "padding:10px;"
                 + "}"
-                + ".usuario-box{"
+                + ".perfil-usuario-box{"
                 + "padding:25px 18px;"
-                + "}"
-                + ".informacoes{"
-                + "grid-template-columns:1fr;"
                 + "}"
                 + ".nome-usuario{"
                 + "font-size:27px;"
+                + "}"
+                + ".lista-usuarios{"
+                + "grid-template-columns:1fr;"
                 + "}"
                 + "}"
         );
@@ -394,7 +506,7 @@ public class PerfilUsuarioServlet extends HttpServlet {
         );
 
         html.append(
-                "<a href='buscar-usuarios.html'>"
+                "<a href='buscar-usuarios'>"
                 + "Buscar usuários"
                 + "</a>"
         );
@@ -412,19 +524,19 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append("</header>");
 
         // =====================================================
-        // PERFIL
+        // CONTEÚDO
         // =====================================================
 
         html.append(
-                "<main class='usuario-container'>"
+                "<main class='perfil-usuario-container'>"
         );
 
         html.append(
-                "<div class='usuario-box'>"
+                "<div class='perfil-usuario-box'>"
         );
 
         html.append(
-                "<section class='usuario-topo'>"
+                "<section class='topo-usuario'>"
         );
 
         // =====================================================
@@ -440,19 +552,9 @@ public class PerfilUsuarioServlet extends HttpServlet {
             String caminhoFoto =
                     foto.trim();
 
-            if (!caminhoFoto.startsWith(
-                    "http://")
+            if (!caminhoFoto.startsWith("http://")
                     &&
-                    !caminhoFoto.startsWith(
-                    "https://")) {
-
-                while (
-                        caminhoFoto.startsWith("/")
-                ) {
-
-                    caminhoFoto =
-                            caminhoFoto.substring(1);
-                }
+                    !caminhoFoto.startsWith("https://")) {
 
                 caminhoFoto =
                         request.getContextPath()
@@ -470,9 +572,7 @@ public class PerfilUsuarioServlet extends HttpServlet {
                     + escapar(caminhoFoto)
                     + "' "
                     + "alt='Foto de "
-                    + escapar(
-                            perfil.getNome()
-                      )
+                    + escapar(perfil.getNome())
                     + "'>"
             );
 
@@ -527,7 +627,7 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append(
                 "<div class='estatistica'>"
                 + "<strong>"
-                + seguidores
+                + quantidadeSeguidores
                 + "</strong>"
                 + "<span>Seguidores</span>"
                 + "</div>"
@@ -536,15 +636,13 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append(
                 "<div class='estatistica'>"
                 + "<strong>"
-                + seguindoQuantidade
+                + quantidadeSeguindo
                 + "</strong>"
                 + "<span>Seguindo</span>"
                 + "</div>"
         );
 
-        html.append(
-                "</div>"
-        );
+        html.append("</div>");
 
         // =====================================================
         // BOTÃO
@@ -611,36 +709,104 @@ public class PerfilUsuarioServlet extends HttpServlet {
         );
 
         // =====================================================
-        // INFORMAÇÕES
+        // SEGUIDORES
         // =====================================================
 
         html.append(
-                "<section class='informacoes'>"
+                "<section class='secao-seguidores'>"
         );
 
         html.append(
-                "<div class='info-card'>"
-                + "<strong>País</strong>"
-                + "<span>"
-                + valor(
-                        perfil.getPais(),
-                        "Não informado"
-                  )
-                + "</span>"
-                + "</div>"
+                "<h2 class='titulo-secao'>"
+                + "Seguidores"
+                + "</h2>"
         );
 
         html.append(
-                "<div class='info-card'>"
-                + "<strong>Plataforma favorita</strong>"
-                + "<span>"
-                + valor(
-                        perfil.getPlataformaFavorita(),
-                        "Não informado"
-                  )
-                + "</span>"
-                + "</div>"
+                "<div class='linha'></div>"
         );
+
+        if (seguidores.isEmpty()) {
+
+            html.append(
+                    "<div class='vazio'>"
+                    + "Este usuário ainda não possui seguidores."
+                    + "</div>"
+            );
+
+        } else {
+
+            html.append(
+                    "<div class='lista-usuarios'>"
+            );
+
+            for (Usuario seguidor :
+                    seguidores) {
+
+                html.append(
+                        criarCardUsuario(
+                                request,
+                                seguidor
+                        )
+                );
+            }
+
+            html.append(
+                    "</div>"
+            );
+        }
+
+        html.append(
+                "</section>"
+        );
+
+        // =====================================================
+        // SEGUINDO
+        // =====================================================
+
+        html.append(
+                "<section class='secao-seguidores'>"
+        );
+
+        html.append(
+                "<h2 class='titulo-secao'>"
+                + "Seguindo"
+                + "</h2>"
+        );
+
+        html.append(
+                "<div class='linha'></div>"
+        );
+
+        if (seguindoLista.isEmpty()) {
+
+            html.append(
+                    "<div class='vazio'>"
+                    + "Este usuário ainda não segue ninguém."
+                    + "</div>"
+            );
+
+        } else {
+
+            html.append(
+                    "<div class='lista-usuarios'>"
+            );
+
+            for (Usuario seguido :
+                    seguindoLista) {
+
+                html.append(
+                        criarCardUsuario(
+                                request,
+                                seguido
+                        )
+                );
+            }
+
+            html.append(
+                    "</div>"
+            );
+        }
 
         html.append(
                 "</section>"
@@ -654,8 +820,13 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 "</main>"
         );
 
-        html.append("</body>");
-        html.append("</html>");
+        html.append(
+                "</body>"
+        );
+
+        html.append(
+                "</html>"
+        );
 
         response.getWriter().println(
                 html.toString()
@@ -663,20 +834,93 @@ public class PerfilUsuarioServlet extends HttpServlet {
     }
 
     // =====================================================
-    // VALOR
+    // CARD DE USUARIO
     // =====================================================
 
-    private String valor(
-            String texto,
-            String padrao) {
+    private String criarCardUsuario(
+            HttpServletRequest request,
+            Usuario usuario) throws IOException {
 
-        if (texto == null ||
-                texto.trim().isEmpty()) {
+        StringBuilder card =
+                new StringBuilder();
 
-            return padrao;
+        card.append(
+                "<a "
+                + "class='card-seguidor' "
+                + "href='perfil-usuario?id="
+                + usuario.getId()
+                + "'>"
+        );
+
+        String foto =
+                usuario.getFoto();
+
+        if (foto != null &&
+                !foto.trim().isEmpty()) {
+
+            String caminhoFoto =
+                    foto.trim();
+
+            if (!caminhoFoto.startsWith(
+                    "http://")
+                    &&
+                    !caminhoFoto.startsWith(
+                    "https://")) {
+
+                caminhoFoto =
+                        request.getContextPath()
+                        + "/foto-perfil?arquivo="
+                        + URLEncoder.encode(
+                                caminhoFoto,
+                                "UTF-8"
+                        );
+            }
+
+            card.append(
+                    "<img "
+                    + "class='mini-foto' "
+                    + "src='"
+                    + escapar(caminhoFoto)
+                    + "' "
+                    + "alt='Foto'>"
+            );
+
+        } else {
+
+            card.append(
+                    "<div class='mini-sem-foto'>"
+                    + "Sem foto"
+                    + "</div>"
+            );
         }
 
-        return escapar(texto);
+        card.append(
+                "<div class='info-seguidor'>"
+        );
+
+        card.append(
+                "<strong>"
+                + escapar(
+                        usuario.getNome()
+                  )
+                + "</strong>"
+        );
+
+        card.append(
+                "<span>@"
+                + escapar(
+                        usuario.getUsername()
+                  )
+                + "</span>"
+        );
+
+        card.append(
+                "</div>"
+        );
+
+        card.append("</a>");
+
+        return card.toString();
     }
 
     // =====================================================
