@@ -50,6 +50,10 @@ public class ListasServlet extends HttpServlet {
         StringBuilder html =
                 new StringBuilder();
 
+        // =====================================================
+        // HTML
+        // =====================================================
+
         html.append("<!DOCTYPE html>");
         html.append("<html lang='pt-BR'>");
 
@@ -74,6 +78,10 @@ public class ListasServlet extends HttpServlet {
                 + "href='style.css'>"
         );
 
+        // =====================================================
+        // CSS
+        // =====================================================
+
         html.append("<style>");
 
         html.append(
@@ -81,8 +89,11 @@ public class ListasServlet extends HttpServlet {
                 + "margin:0;"
                 + "background:"
                 + "radial-gradient("
-                + "circle at top,#35105f,"
-                + "#12091b 50%,#09050d);"
+                + "circle at top,"
+                + "#35105f,"
+                + "#12091b 50%,"
+                + "#09050d"
+                + ");"
                 + "min-height:100vh;"
                 + "color:white;"
                 + "}"
@@ -100,11 +111,14 @@ public class ListasServlet extends HttpServlet {
                 ".listas-header{"
                 + "background:"
                 + "linear-gradient("
-                + "135deg,#291044,#4b1680);"
+                + "135deg,#291044,#4b1680"
+                + ");"
                 + "border:1px solid #54256f;"
                 + "border-radius:22px;"
                 + "padding:35px;"
                 + "margin-bottom:30px;"
+                + "box-shadow:"
+                + "0 18px 50px rgba(0,0,0,.35);"
                 + "}"
         );
 
@@ -118,6 +132,7 @@ public class ListasServlet extends HttpServlet {
         html.append(
                 ".listas-header p{"
                 + "color:#cfc4d8;"
+                + "margin:0;"
                 + "}"
         );
 
@@ -138,6 +153,13 @@ public class ListasServlet extends HttpServlet {
                 + "border-radius:9px;"
                 + "color:white;"
                 + "font-size:15px;"
+                + "outline:none;"
+                + "}"
+        );
+
+        html.append(
+                ".form-criar-lista input:focus{"
+                + "border-color:#a855f7;"
                 + "}"
         );
 
@@ -148,7 +170,8 @@ public class ListasServlet extends HttpServlet {
                 + "border-radius:9px;"
                 + "background:"
                 + "linear-gradient("
-                + "135deg,#7c3aed,#a855f7);"
+                + "135deg,#7c3aed,#a855f7"
+                + ");"
                 + "color:white;"
                 + "font-weight:bold;"
                 + "cursor:pointer;"
@@ -159,11 +182,14 @@ public class ListasServlet extends HttpServlet {
                 ".lista{"
                 + "background:"
                 + "linear-gradient("
-                + "145deg,#21142c,#140b1b);"
+                + "145deg,#21142c,#140b1b"
+                + ");"
                 + "border:1px solid #442252;"
                 + "border-radius:20px;"
                 + "padding:25px;"
                 + "margin-bottom:25px;"
+                + "box-shadow:"
+                + "0 10px 30px rgba(0,0,0,.2);"
                 + "}"
         );
 
@@ -196,6 +222,12 @@ public class ListasServlet extends HttpServlet {
         );
 
         html.append(
+                ".botao-excluir:hover{"
+                + "background:#381722;"
+                + "}"
+        );
+
+        html.append(
                 ".jogos-lista{"
                 + "display:grid;"
                 + "grid-template-columns:"
@@ -211,6 +243,14 @@ public class ListasServlet extends HttpServlet {
                 + "border-radius:13px;"
                 + "padding:9px;"
                 + "overflow:hidden;"
+                + "transition:.25s;"
+                + "}"
+        );
+
+        html.append(
+                ".jogo-lista:hover{"
+                + "transform:translateY(-4px);"
+                + "border-color:#7c3aed;"
                 + "}"
         );
 
@@ -232,7 +272,10 @@ public class ListasServlet extends HttpServlet {
                 + "display:flex;"
                 + "align-items:center;"
                 + "justify-content:center;"
-                + "background:#24152f;"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#24152e,#110b16"
+                + ");"
                 + "border-radius:9px;"
                 + "color:#777;"
                 + "text-align:center;"
@@ -264,6 +307,7 @@ public class ListasServlet extends HttpServlet {
                 + "border:1px solid #47305a;"
                 + "border-radius:9px;"
                 + "color:white;"
+                + "outline:none;"
                 + "}"
         );
 
@@ -280,30 +324,55 @@ public class ListasServlet extends HttpServlet {
         );
 
         html.append(
+                ".botao-adicionar:hover{"
+                + "background:#7c3aed;"
+                + "}"
+        );
+
+        html.append(
                 ".vazio{"
                 + "padding:30px;"
                 + "border:1px dashed #4a3158;"
                 + "border-radius:15px;"
                 + "text-align:center;"
                 + "color:#8e8295;"
+                + "background:rgba(20,11,27,.5);"
                 + "}"
         );
 
         html.append(
                 "@media(max-width:650px){"
-                + ".listas-container{padding:10px;}"
+                + ".listas-container{"
+                + "padding:10px;"
+                + "margin:25px auto;"
+                + "}"
+                + ".listas-header{"
+                + "padding:25px 18px;"
+                + "}"
+                + ".listas-header h2{"
+                + "font-size:27px;"
+                + "}"
                 + ".form-criar-lista,"
                 + ".form-adicionar-jogo{"
                 + "flex-direction:column;"
                 + "}"
-                + ".lista{padding:18px 14px;}"
+                + ".lista{"
+                + "padding:18px 14px;"
+                + "}"
                 + ".jogos-lista{"
-                + "grid-template-columns:repeat(2,1fr);"
+                + "grid-template-columns:"
+                + "repeat(2,1fr);"
+                + "gap:10px;"
+                + "}"
+                + ".capa-lista,"
+                + ".sem-capa{"
+                + "height:190px;"
                 + "}"
                 + "}"
         );
 
         html.append("</style>");
+
         html.append("</head>");
         html.append("<body>");
 
@@ -338,18 +407,25 @@ public class ListasServlet extends HttpServlet {
         );
 
         html.append(
-                "<a href='listas'>Listas</a>"
+                "<a href='listas'>"
+                + "Listas"
+                + "</a>"
         );
 
         html.append(
-                "<a href='perfil'>Meu Perfil</a>"
+                "<a href='perfil'>"
+                + "Meu Perfil"
+                + "</a>"
         );
 
         html.append(
-                "<a href='logout'>Sair</a>"
+                "<a href='logout'>"
+                + "Sair"
+                + "</a>"
         );
 
         html.append("</nav>");
+
         html.append("</header>");
 
         // =====================================================
@@ -373,6 +449,10 @@ public class ListasServlet extends HttpServlet {
                 + "Crie coleções personalizadas com seus jogos."
                 + "</p>"
         );
+
+        // =====================================================
+        // CRIAR LISTA
+        // =====================================================
 
         html.append(
                 "<form "
@@ -403,7 +483,7 @@ public class ListasServlet extends HttpServlet {
         html.append("</section>");
 
         // =====================================================
-        // BANCO
+        // CONEXÃO
         // =====================================================
 
         Connection conexao = null;
@@ -431,7 +511,7 @@ public class ListasServlet extends HttpServlet {
             } else {
 
                 // =================================================
-                // CRIAR TABELA LISTA
+                // GARANTIR TABELA LISTA
                 // =================================================
 
                 String criarLista =
@@ -443,16 +523,16 @@ public class ListasServlet extends HttpServlet {
                         + "DEFAULT CURRENT_TIMESTAMP"
                         + ")";
 
-                PreparedStatement tabela1 =
+                PreparedStatement tabelaLista =
                         conexao.prepareStatement(
                                 criarLista
                         );
 
-                tabela1.executeUpdate();
-                tabela1.close();
+                tabelaLista.executeUpdate();
+                tabelaLista.close();
 
                 // =================================================
-                // CRIAR TABELA LISTA_JOGO
+                // GARANTIR TABELA LISTA_JOGO
                 // =================================================
 
                 String criarListaJogo =
@@ -465,20 +545,20 @@ public class ListasServlet extends HttpServlet {
                         + "UNIQUE(id_lista,id_jogo)"
                         + ")";
 
-                PreparedStatement tabela2 =
+                PreparedStatement tabelaListaJogo =
                         conexao.prepareStatement(
                                 criarListaJogo
                         );
 
-                tabela2.executeUpdate();
-                tabela2.close();
+                tabelaListaJogo.executeUpdate();
+                tabelaListaJogo.close();
 
                 // =================================================
-                // JOGOS DO SELECT
+                // JOGOS DISPONÍVEIS
                 // =================================================
 
                 String sqlJogos =
-                        "SELECT id, titulo "
+                        "SELECT id,titulo "
                         + "FROM jogo "
                         + "ORDER BY titulo";
 
@@ -493,30 +573,33 @@ public class ListasServlet extends HttpServlet {
                 StringBuilder opcoes =
                         new StringBuilder();
 
-                while (rsJogos.next()) {
+                while (
+                        rsJogos.next()
+                ) {
 
                     opcoes.append(
                             "<option value='"
                             + rsJogos.getInt("id")
                             + "'>"
                             + escapar(
-                                    rsJogos.getString(
-                                            "titulo"
-                                    )
+                                    rsJogos.getString("titulo")
                               )
                             + "</option>"
                     );
                 }
 
                 rsJogos.close();
+                rsJogos = null;
+
                 stmtJogos.close();
+                stmtJogos = null;
 
                 // =================================================
-                // LISTAS
+                // BUSCAR LISTAS
                 // =================================================
 
                 String sqlListas =
-                        "SELECT id, nome "
+                        "SELECT id,nome "
                         + "FROM lista "
                         + "WHERE id_usuario = ? "
                         + "ORDER BY id DESC";
@@ -537,7 +620,9 @@ public class ListasServlet extends HttpServlet {
                 boolean possuiLista =
                         false;
 
-                while (rsListas.next()) {
+                while (
+                        rsListas.next()
+                ) {
 
                     possuiLista =
                             true;
@@ -562,6 +647,10 @@ public class ListasServlet extends HttpServlet {
                             + "</div>"
                     );
 
+                    // =================================================
+                    // EXCLUIR LISTA
+                    // =================================================
+
                     html.append(
                             "<form "
                             + "method='POST' "
@@ -582,14 +671,14 @@ public class ListasServlet extends HttpServlet {
                             + "class='botao-excluir' "
                             + "type='submit' "
                             + "onclick=\""
-                            + "return confirm("
-                            + "'Excluir esta lista?'"
-                            + ");\">"
+                            + "return confirm('Excluir esta lista?');"
+                            + "\">"
                             + "Excluir"
                             + "</button>"
                     );
 
                     html.append("</form>");
+
                     html.append("</div>");
 
                     // =================================================
@@ -598,8 +687,8 @@ public class ListasServlet extends HttpServlet {
 
                     String sqlItens =
                             "SELECT "
-                            + "j.id, "
-                            + "j.titulo, "
+                            + "j.id,"
+                            + "j.titulo,"
                             + "j.capa "
                             + "FROM lista_jogo lj "
                             + "INNER JOIN jogo j "
@@ -627,15 +716,12 @@ public class ListasServlet extends HttpServlet {
                             "<div class='jogos-lista'>"
                     );
 
-                    while (rsItens.next()) {
+                    while (
+                            rsItens.next()
+                    ) {
 
                         possuiJogos =
                                 true;
-
-                        int idJogo =
-                                rsItens.getInt(
-                                        "id"
-                                );
 
                         String titulo =
                                 rsItens.getString(
@@ -673,11 +759,7 @@ public class ListasServlet extends HttpServlet {
                                     + "this.style.display='none';"
                                     + "this.nextElementSibling"
                                     + ".style.display='flex';"
-                                    + "\""
-                            );
-
-                            html.append(
-                                    ">"
+                                    + "\">"
                             );
 
                             html.append(
@@ -705,10 +787,14 @@ public class ListasServlet extends HttpServlet {
                                 + "</div>"
                         );
 
-                        html.append("</article>");
+                        html.append(
+                                "</article>"
+                        );
                     }
 
-                    html.append("</div>");
+                    html.append(
+                            "</div>"
+                    );
 
                     if (!possuiJogos) {
 
@@ -717,6 +803,16 @@ public class ListasServlet extends HttpServlet {
                                 + "Esta lista ainda não possui jogos."
                                 + "</div>"
                         );
+                    }
+
+                    if (rsItens != null) {
+                        rsItens.close();
+                        rsItens = null;
+                    }
+
+                    if (stmtItens != null) {
+                        stmtItens.close();
+                        stmtItens = null;
                     }
 
                     // =================================================
@@ -765,13 +861,9 @@ public class ListasServlet extends HttpServlet {
                             + "</button>"
                     );
 
-                    html.append(
-                            "</form>"
-                    );
+                    html.append("</form>");
 
-                    html.append(
-                            "</section>"
-                    );
+                    html.append("</section>");
                 }
 
                 if (!possuiLista) {
@@ -879,7 +971,23 @@ public class ListasServlet extends HttpServlet {
         String caminho =
                 capa.trim();
 
-        // [nome](url)
+        // =================================================
+        // URL COMPLETA
+        // NÃO MODIFICAR
+        // =================================================
+
+        if (caminho.startsWith("http://")
+                ||
+                caminho.startsWith("https://")) {
+
+            return caminho;
+        }
+
+        // =================================================
+        // MARKDOWN
+        // [texto](URL)
+        // =================================================
+
         if (caminho.startsWith("[")
                 &&
                 caminho.contains("](")
@@ -894,48 +1002,55 @@ public class ListasServlet extends HttpServlet {
                             posicao + 2,
                             caminho.length() - 1
                     );
+
+            if (caminho.startsWith("http://")
+                    ||
+                    caminho.startsWith("https://")) {
+
+                return caminho;
+            }
         }
 
-        // Somente App ID
+        // =================================================
+        // SOMENTE ID STEAM
+        // =================================================
+
         if (caminho.matches("\\d+")) {
 
             return
-                    "https://shared.cloudflare.steamstatic.com/"
-                    + "store_item_assets/steam/apps/"
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
                     + caminho
                     + "/library_600x900_2x.jpg";
         }
 
-        // Steam /apps/ID
+        // =================================================
+        // URL STEAM COM /apps/ID
+        // =================================================
+
         Pattern pattern =
                 Pattern.compile(
                         "/apps/(\\d+)"
                 );
 
         Matcher matcher =
-                pattern.matcher(caminho);
+                pattern.matcher(
+                        caminho
+                );
 
         if (matcher.find()) {
 
-            String appId =
-                    matcher.group(1);
-
             return
-                    "https://shared.cloudflare.steamstatic.com/"
-                    + "store_item_assets/steam/apps/"
-                    + appId
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + matcher.group(1)
                     + "/library_600x900_2x.jpg";
         }
 
-        // URL
-        if (caminho.startsWith("http://")
-                ||
-                caminho.startsWith("https://")) {
+        // =================================================
+        // CAMINHO LOCAL
+        // =================================================
 
-            return caminho;
-        }
-
-        // Local
         while (
                 caminho.startsWith("/")
         ) {
@@ -951,7 +1066,7 @@ public class ListasServlet extends HttpServlet {
     }
 
     // =====================================================
-    // ESCAPAR
+    // ESCAPAR HTML
     // =====================================================
 
     private String escapar(
