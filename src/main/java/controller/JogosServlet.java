@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,13 +78,8 @@ public class JogosServlet extends HttpServlet {
         StringBuilder html =
                 new StringBuilder();
 
-        html.append(
-                "<!DOCTYPE html>"
-        );
-
-        html.append(
-                "<html lang='pt-BR'>"
-        );
+        html.append("<!DOCTYPE html>");
+        html.append("<html lang='pt-BR'>");
 
         html.append("<head>");
 
@@ -113,48 +109,35 @@ public class JogosServlet extends HttpServlet {
         html.append("<style>");
 
         html.append(
-                "body {"
-                + "background:linear-gradient("
-                + "135deg,#0d0714,#160b24,#0d0714);"
+                "body{"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#0d0714,#160b24,#0d0714"
+                + ");"
                 + "min-height:100vh;"
                 + "}"
         );
 
-        // =====================================================
-        // CONTAINER
-        // =====================================================
-
         html.append(
-                ".jogos-container {"
+                ".jogos-container{"
                 + "max-width:1200px;"
                 + "margin:45px auto;"
                 + "padding:20px;"
                 + "}"
         );
 
-        // =====================================================
-        // TITULO
-        // =====================================================
-
         html.append(
-                ".titulo-jogos {"
+                ".titulo-jogos{"
                 + "text-align:center;"
                 + "margin-bottom:10px;"
                 + "font-size:38px;"
                 + "font-weight:bold;"
-                + "background:linear-gradient("
-                + "90deg,#a855f7,#7c3aed,#c084fc);"
-                + "-webkit-background-clip:text;"
-                + "-webkit-text-fill-color:transparent;"
+                + "color:#c084fc;"
                 + "}"
         );
 
-        // =====================================================
-        // SUBTITULO
-        // =====================================================
-
         html.append(
-                ".subtitulo-jogos {"
+                ".subtitulo-jogos{"
                 + "text-align:center;"
                 + "color:#aaa;"
                 + "font-size:16px;"
@@ -162,12 +145,8 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // FILTRO
-        // =====================================================
-
         html.append(
-                ".filtro-genero {"
+                ".filtro-genero{"
                 + "display:flex;"
                 + "justify-content:center;"
                 + "align-items:center;"
@@ -178,7 +157,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".filtro-genero label {"
+                ".filtro-genero label{"
                 + "color:#ddd;"
                 + "font-weight:bold;"
                 + "font-size:16px;"
@@ -186,7 +165,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".filtro-genero select {"
+                ".filtro-genero select{"
                 + "background:#21152d;"
                 + "color:#fff;"
                 + "border:1px solid #7c3aed;"
@@ -203,7 +182,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".catalogo-jogos {"
+                ".catalogo-jogos{"
                 + "display:grid;"
                 + "grid-template-columns:"
                 + "repeat(auto-fill,minmax(210px,1fr));"
@@ -216,23 +195,25 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".card-jogo {"
+                ".card-jogo{"
                 + "position:relative;"
-                + "background:linear-gradient("
-                + "145deg,#21152d,#17101f);"
+                + "background:"
+                + "linear-gradient("
+                + "145deg,#21152d,#17101f"
+                + ");"
                 + "border:1px solid #38204d;"
                 + "padding:12px;"
                 + "border-radius:16px;"
                 + "text-align:center;"
                 + "overflow:hidden;"
-                + "transition:all .3s ease;"
+                + "transition:.3s;"
                 + "box-shadow:"
                 + "0 8px 25px rgba(0,0,0,.35);"
                 + "}"
         );
 
         html.append(
-                ".card-jogo:hover {"
+                ".card-jogo:hover{"
                 + "transform:translateY(-8px);"
                 + "border-color:#8b5cf6;"
                 + "box-shadow:"
@@ -245,7 +226,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".capa-jogo {"
+                ".capa-jogo{"
                 + "width:100%;"
                 + "height:285px;"
                 + "object-fit:cover;"
@@ -255,22 +236,20 @@ public class JogosServlet extends HttpServlet {
                 + "}"
         );
 
-        // =====================================================
-        // SEM CAPA
-        // =====================================================
-
         html.append(
-                ".sem-capa {"
+                ".sem-capa{"
                 + "width:100%;"
                 + "height:285px;"
-                + "display:none;"
+                + "display:flex;"
                 + "align-items:center;"
                 + "justify-content:center;"
                 + "text-align:center;"
                 + "padding:20px;"
                 + "box-sizing:border-box;"
-                + "background:linear-gradient("
-                + "135deg,#21152d,#54227d);"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#21152d,#54227d"
+                + ");"
                 + "border-radius:12px;"
                 + "color:#fff;"
                 + "font-size:18px;"
@@ -279,18 +258,18 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".sem-capa span {"
+                ".sem-capa span{"
                 + "max-width:180px;"
                 + "line-height:1.4;"
                 + "}"
         );
 
         // =====================================================
-        // TITULO DO JOGO
+        // TITULO
         // =====================================================
 
         html.append(
-                ".card-jogo h3 {"
+                ".card-jogo h3{"
                 + "font-size:18px;"
                 + "margin:15px 5px 8px;"
                 + "color:#fff;"
@@ -303,7 +282,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".info-jogo {"
+                ".info-jogo{"
                 + "display:flex;"
                 + "justify-content:center;"
                 + "flex-wrap:wrap;"
@@ -313,7 +292,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".tag-jogo {"
+                ".tag-jogo{"
                 + "background:#2d183e;"
                 + "border:1px solid #4c2670;"
                 + "color:#c084fc;"
@@ -328,7 +307,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".botao-favorito {"
+                ".botao-favorito{"
                 + "width:100%;"
                 + "padding:11px;"
                 + "margin-top:10px;"
@@ -344,16 +323,18 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".botao-favorito:hover {"
+                ".botao-favorito:hover{"
                 + "background:#6d28d9;"
                 + "transform:scale(1.02);"
                 + "}"
         );
 
         html.append(
-                ".botao-favorito.ativo {"
-                + "background:linear-gradient("
-                + "135deg,#7c3aed,#a855f7);"
+                ".botao-favorito.ativo{"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#7c3aed,#a855f7"
+                + ");"
                 + "color:#fff;"
                 + "}"
         );
@@ -363,12 +344,14 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".botao-biblioteca {"
+                ".botao-biblioteca{"
                 + "display:block;"
                 + "margin-top:10px;"
                 + "padding:12px;"
-                + "background:linear-gradient("
-                + "135deg,#7c3aed,#9333ea);"
+                + "background:"
+                + "linear-gradient("
+                + "135deg,#7c3aed,#9333ea"
+                + ");"
                 + "color:white;"
                 + "text-decoration:none;"
                 + "border-radius:9px;"
@@ -378,7 +361,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append(
-                ".botao-biblioteca:hover {"
+                ".botao-biblioteca:hover{"
                 + "transform:scale(1.03);"
                 + "}"
         );
@@ -388,7 +371,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".brilho-card {"
+                ".brilho-card{"
                 + "position:absolute;"
                 + "width:100px;"
                 + "height:100px;"
@@ -406,7 +389,7 @@ public class JogosServlet extends HttpServlet {
         // =====================================================
 
         html.append(
-                ".nenhum-jogo {"
+                ".nenhum-jogo{"
                 + "grid-column:1/-1;"
                 + "text-align:center;"
                 + "padding:50px;"
@@ -446,7 +429,6 @@ public class JogosServlet extends HttpServlet {
         html.append("</style>");
 
         html.append("</head>");
-
         html.append("<body>");
 
         // =====================================================
@@ -472,17 +454,18 @@ public class JogosServlet extends HttpServlet {
         html.append(
                 "<a href='biblioteca'>Biblioteca</a>"
         );
-        html.append(
-        "<a href='listas'>"
-        + "Listas"
-        + "</a>"
-);
 
         html.append(
-        "<a href='buscar-usuarios'>"
-        + "Buscar usuários"
-        + "</a>"
-);
+                "<a href='buscar-usuarios'>"
+                + "Buscar usuários"
+                + "</a>"
+        );
+
+        html.append(
+                "<a href='listas'>"
+                + "Listas"
+                + "</a>"
+        );
 
         html.append(
                 "<a href='perfil'>Meu Perfil</a>"
@@ -493,7 +476,6 @@ public class JogosServlet extends HttpServlet {
         );
 
         html.append("</nav>");
-
         html.append("</header>");
 
         // =====================================================
@@ -506,7 +488,7 @@ public class JogosServlet extends HttpServlet {
 
         html.append(
                 "<h2 class='titulo-jogos'>"
-                + "🎮 Explore os Jogos"
+                + "Explore os Jogos"
                 + "</h2>"
         );
 
@@ -545,10 +527,6 @@ public class JogosServlet extends HttpServlet {
                 + "</option>"
         );
 
-        // =====================================================
-        // 10 GENEROS
-        // =====================================================
-
         String[] generos = {
 
             "Ação",
@@ -585,10 +563,6 @@ public class JogosServlet extends HttpServlet {
         }
 
         html.append("</select>");
-
-        // =====================================================
-        // LIMPAR FILTRO
-        // =====================================================
 
         if (!generoFiltro.isEmpty()) {
 
@@ -641,8 +615,13 @@ public class JogosServlet extends HttpServlet {
                 if (!generoFiltro.isEmpty()) {
 
                     sql =
-                            "SELECT id, titulo, genero, "
-                            + "plataforma, ano_lancamento, capa "
+                            "SELECT "
+                            + "id, "
+                            + "titulo, "
+                            + "genero, "
+                            + "plataforma, "
+                            + "ano_lancamento, "
+                            + "capa "
                             + "FROM jogo "
                             + "WHERE genero LIKE ? "
                             + "ORDER BY titulo";
@@ -650,8 +629,13 @@ public class JogosServlet extends HttpServlet {
                 } else {
 
                     sql =
-                            "SELECT id, titulo, genero, "
-                            + "plataforma, ano_lancamento, capa "
+                            "SELECT "
+                            + "id, "
+                            + "titulo, "
+                            + "genero, "
+                            + "plataforma, "
+                            + "ano_lancamento, "
+                            + "capa "
                             + "FROM jogo "
                             + "ORDER BY titulo";
                 }
@@ -681,24 +665,16 @@ public class JogosServlet extends HttpServlet {
                     quantidadeJogos++;
 
                     int id =
-                            resultado.getInt(
-                                    "id"
-                            );
+                            resultado.getInt("id");
 
                     String titulo =
-                            resultado.getString(
-                                    "titulo"
-                            );
+                            resultado.getString("titulo");
 
                     String genero =
-                            resultado.getString(
-                                    "genero"
-                            );
+                            resultado.getString("genero");
 
                     String plataforma =
-                            resultado.getString(
-                                    "plataforma"
-                            );
+                            resultado.getString("plataforma");
 
                     String ano =
                             resultado.getString(
@@ -706,9 +682,7 @@ public class JogosServlet extends HttpServlet {
                             );
 
                     String capa =
-                            resultado.getString(
-                                    "capa"
-                            );
+                            resultado.getString("capa");
 
                     // =================================================
                     // FAVORITO
@@ -718,33 +692,39 @@ public class JogosServlet extends HttpServlet {
 
                     if (idUsuario != -1) {
 
-                        PreparedStatement stmtFavorito =
-                                conexao.prepareStatement(
-                                        "SELECT id "
-                                        + "FROM favorito "
-                                        + "WHERE id_usuario = ? "
-                                        + "AND id_jogo = ?"
-                                );
+                        try {
 
-                        stmtFavorito.setInt(
-                                1,
-                                idUsuario
-                        );
+                            PreparedStatement stmtFavorito =
+                                    conexao.prepareStatement(
+                                            "SELECT id "
+                                            + "FROM favorito "
+                                            + "WHERE id_usuario = ? "
+                                            + "AND id_jogo = ?"
+                                    );
 
-                        stmtFavorito.setInt(
-                                2,
-                                id
-                        );
+                            stmtFavorito.setInt(
+                                    1,
+                                    idUsuario
+                            );
 
-                        ResultSet rsFavorito =
-                                stmtFavorito.executeQuery();
+                            stmtFavorito.setInt(
+                                    2,
+                                    id
+                            );
 
-                        favorito =
-                                rsFavorito.next();
+                            ResultSet rsFavorito =
+                                    stmtFavorito.executeQuery();
 
-                        rsFavorito.close();
+                            favorito =
+                                    rsFavorito.next();
 
-                        stmtFavorito.close();
+                            rsFavorito.close();
+                            stmtFavorito.close();
+
+                        } catch (Exception erroFavorito) {
+
+                            favorito = false;
+                        }
                     }
 
                     // =================================================
@@ -767,7 +747,8 @@ public class JogosServlet extends HttpServlet {
                     // =================================================
 
                     String caminhoCapa =
-                            obterCapaSteam(
+                            prepararCapa(
+                                    request,
                                     capa
                             );
 
@@ -777,14 +758,10 @@ public class JogosServlet extends HttpServlet {
                                 "<img "
                                 + "class='capa-jogo' "
                                 + "src='"
-                                + escapar(
-                                        caminhoCapa
-                                )
+                                + escapar(caminhoCapa)
                                 + "' "
                                 + "alt='Capa de "
-                                + escapar(
-                                        titulo
-                                )
+                                + escapar(titulo)
                                 + "' "
                                 + "onerror=\""
                                 + "this.style.display='none';"
@@ -796,7 +773,8 @@ public class JogosServlet extends HttpServlet {
 
                         html.append(
                                 "<div "
-                                + "class='sem-capa'>"
+                                + "class='sem-capa' "
+                                + "style='display:none;'>"
                                 + "<span>"
                                 + escapar(titulo)
                                 + "</span>"
@@ -807,8 +785,7 @@ public class JogosServlet extends HttpServlet {
 
                         html.append(
                                 "<div "
-                                + "class='sem-capa' "
-                                + "style='display:flex;'>"
+                                + "class='sem-capa'>"
                                 + "<span>"
                                 + escapar(titulo)
                                 + "</span>"
@@ -827,20 +804,18 @@ public class JogosServlet extends HttpServlet {
                     );
 
                     // =================================================
-                    // INFO
+                    // INFORMACOES
                     // =================================================
 
                     html.append(
-                            "<div "
-                            + "class='info-jogo'>"
+                            "<div class='info-jogo'>"
                     );
 
                     if (genero != null &&
                             !genero.trim().isEmpty()) {
 
                         html.append(
-                                "<span "
-                                + "class='tag-jogo'>"
+                                "<span class='tag-jogo'>"
                                 + escapar(genero)
                                 + "</span>"
                         );
@@ -850,8 +825,7 @@ public class JogosServlet extends HttpServlet {
                             !plataforma.trim().isEmpty()) {
 
                         html.append(
-                                "<span "
-                                + "class='tag-jogo'>"
+                                "<span class='tag-jogo'>"
                                 + escapar(plataforma)
                                 + "</span>"
                         );
@@ -861,14 +835,15 @@ public class JogosServlet extends HttpServlet {
                             !ano.trim().isEmpty()) {
 
                         html.append(
-                                "<span "
-                                + "class='tag-jogo'>"
+                                "<span class='tag-jogo'>"
                                 + escapar(ano)
                                 + "</span>"
                         );
                     }
 
-                    html.append("</div>");
+                    html.append(
+                            "</div>"
+                    );
 
                     // =================================================
                     // FAVORITO
@@ -876,12 +851,12 @@ public class JogosServlet extends HttpServlet {
 
                     if (idUsuario != -1) {
 
-                        String classeFavorito =
+                        String classe =
                                 favorito
                                 ? "botao-favorito ativo"
                                 : "botao-favorito";
 
-                        String textoFavorito =
+                        String texto =
                                 favorito
                                 ? "★ Favorito"
                                 : "☆ Favoritar";
@@ -905,9 +880,9 @@ public class JogosServlet extends HttpServlet {
                                 "<button "
                                 + "type='submit' "
                                 + "class='"
-                                + classeFavorito
+                                + classe
                                 + "'>"
-                                + textoFavorito
+                                + texto
                                 + "</button>"
                         );
 
@@ -930,15 +905,28 @@ public class JogosServlet extends HttpServlet {
                     // BIBLIOTECA
                     // =================================================
 
-                    html.append(
-                            "<a "
-                            + "class='botao-biblioteca' "
-                            + "href='adicionar-biblioteca?id="
-                            + id
-                            + "'>"
-                            + "＋ Minha biblioteca"
-                            + "</a>"
-                    );
+                    if (idUsuario != -1) {
+
+                        html.append(
+                                "<a "
+                                + "class='botao-biblioteca' "
+                                + "href='adicionar-biblioteca?id="
+                                + id
+                                + "'>"
+                                + "+ Minha biblioteca"
+                                + "</a>"
+                        );
+
+                    } else {
+
+                        html.append(
+                                "<a "
+                                + "class='botao-biblioteca' "
+                                + "href='login.html'>"
+                                + "+ Minha biblioteca"
+                                + "</a>"
+                        );
+                    }
 
                     html.append(
                             "</article>"
@@ -956,9 +944,7 @@ public class JogosServlet extends HttpServlet {
                 }
 
                 resultado.close();
-
                 stmt.close();
-
                 conexao.close();
             }
 
@@ -974,13 +960,21 @@ public class JogosServlet extends HttpServlet {
             );
         }
 
-        html.append("</div>");
+        html.append(
+                "</div>"
+        );
 
-        html.append("</main>");
+        html.append(
+                "</main>"
+        );
 
-        html.append("</body>");
+        html.append(
+                "</body>"
+        );
 
-        html.append("</html>");
+        html.append(
+                "</html>"
+        );
 
         response.getWriter().println(
                 html.toString()
@@ -988,20 +982,58 @@ public class JogosServlet extends HttpServlet {
     }
 
     // =====================================================
-    // CAPA STEAM
+    // PREPARAR CAPA
     // =====================================================
 
-    private String obterCapaSteam(
-            String capaOriginal) {
+    private String prepararCapa(
+            HttpServletRequest request,
+            String capa) {
 
-        if (capaOriginal == null ||
-                capaOriginal.trim().isEmpty()) {
+        if (capa == null ||
+                capa.trim().isEmpty()) {
 
             return null;
         }
 
-        String capa =
-                capaOriginal.trim();
+        String caminho =
+                capa.trim();
+
+        // =================================================
+        // MARKDOWN
+        // =================================================
+
+        if (caminho.startsWith("[")
+                &&
+                caminho.contains("](")
+                &&
+                caminho.endsWith(")")) {
+
+            int inicio =
+                    caminho.indexOf("](");
+
+            caminho =
+                    caminho.substring(
+                            inicio + 2,
+                            caminho.length() - 1
+                    );
+        }
+
+        // =================================================
+        // STEAM APP ID
+        // =================================================
+
+        if (caminho.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + caminho
+                    + "/library_600x900_2x.jpg";
+        }
+
+        // =================================================
+        // /apps/ID
+        // =================================================
 
         Pattern pattern =
                 Pattern.compile(
@@ -1009,7 +1041,9 @@ public class JogosServlet extends HttpServlet {
                 );
 
         Matcher matcher =
-                pattern.matcher(capa);
+                pattern.matcher(
+                        caminho
+                );
 
         if (matcher.find()) {
 
@@ -1023,16 +1057,33 @@ public class JogosServlet extends HttpServlet {
                     + "/library_600x900_2x.jpg";
         }
 
-        if (capa.matches("\\d+")) {
+        // =================================================
+        // URL
+        // =================================================
 
-            return
-                    "https://cdn.akamai.steamstatic.com/"
-                    + "steam/apps/"
-                    + capa
-                    + "/library_600x900_2x.jpg";
+        if (caminho.startsWith("http://")
+                ||
+                caminho.startsWith("https://")) {
+
+            return caminho;
         }
 
-        return capa;
+        // =================================================
+        // LOCAL
+        // =================================================
+
+        while (
+                caminho.startsWith("/")
+        ) {
+
+            caminho =
+                    caminho.substring(1);
+        }
+
+        return
+                request.getContextPath()
+                + "/"
+                + caminho;
     }
 
     // =====================================================
@@ -1047,10 +1098,25 @@ public class JogosServlet extends HttpServlet {
         }
 
         return texto
-                .replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
+                .replace(
+                        "&",
+                        "&amp;"
+                )
+                .replace(
+                        "<",
+                        "&lt;"
+                )
+                .replace(
+                        ">",
+                        "&gt;"
+                )
+                .replace(
+                        "\"",
+                        "&quot;"
+                )
+                .replace(
+                        "'",
+                        "&#39;"
+                );
     }
 }
