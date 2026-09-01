@@ -208,6 +208,37 @@ String tabelaCadastroPendente =
         + "expira_em TEXT NOT NULL,"
         + "criado_em TEXT DEFAULT CURRENT_TIMESTAMP"
         + ")";
+// =====================================================
+// TABELA LISTA
+// =====================================================
+
+String tabelaLista =
+        "CREATE TABLE IF NOT EXISTS lista ("
+        + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        + "id_usuario INTEGER NOT NULL,"
+        + "nome TEXT NOT NULL,"
+        + "data_criacao TEXT DEFAULT CURRENT_TIMESTAMP,"
+        + "FOREIGN KEY(id_usuario) REFERENCES usuario(id)"
+        + ")";
+
+stmt.execute(tabelaLista);
+
+// =====================================================
+// TABELA LISTA_JOGO
+// =====================================================
+
+String tabelaListaJogo =
+        "CREATE TABLE IF NOT EXISTS lista_jogo ("
+        + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        + "id_lista INTEGER NOT NULL,"
+        + "id_jogo INTEGER NOT NULL,"
+        + "data_adicionado TEXT DEFAULT CURRENT_TIMESTAMP,"
+        + "UNIQUE(id_lista, id_jogo),"
+        + "FOREIGN KEY(id_lista) REFERENCES lista(id),"
+        + "FOREIGN KEY(id_jogo) REFERENCES jogo(id)"
+        + ")";
+
+stmt.execute(tabelaListaJogo);
 
 stmt.execute(tabelaCadastroPendente);
 

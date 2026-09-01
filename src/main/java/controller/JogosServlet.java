@@ -472,6 +472,11 @@ public class JogosServlet extends HttpServlet {
         html.append(
                 "<a href='biblioteca'>Biblioteca</a>"
         );
+        html.append(
+        "<a href='listas'>"
+        + "Listas"
+        + "</a>"
+);
 
         html.append(
         "<a href='buscar-usuarios'>"

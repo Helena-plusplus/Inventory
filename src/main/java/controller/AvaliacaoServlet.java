@@ -391,6 +391,11 @@ public class AvaliacaoServlet extends HttpServlet {
         + "Buscar usuários"
         + "</a>"
 );
+        html.append(
+        "<a href='listas'>"
+        + "Listas"
+        + "</a>"
+);
 
         html.append(
                 "<a href='perfil'>Meu Perfil</a>"
