@@ -83,10 +83,55 @@
 
         .busca-form input {
             flex: 1;
+
+            padding: 13px 15px;
+
+            background: #0f0b15;
+            color: white;
+
+            border: 1px solid #7c3aed;
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            box-sizing: border-box;
         }
 
-        #resultadoBusca {
-            margin-top: 15px;
+        .busca-form input::placeholder {
+            color: #888;
+        }
+
+        .busca-form button {
+            padding: 13px 22px;
+
+            border: none;
+            border-radius: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #a855f7
+                );
+
+            color: white;
+
+            font-weight: bold;
+            font-size: 14px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .busca-form button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(124, 58, 237, 0.35);
         }
 
         /* =====================================================
@@ -213,7 +258,7 @@
         }
 
         /* =====================================================
-           BOTÃO
+           BOTÃO BIBLIOTECA
            ===================================================== */
 
         .botao-biblioteca {
@@ -243,6 +288,8 @@
             font-weight: bold;
 
             transition: 0.2s;
+
+            box-sizing: border-box;
         }
 
         .botao-biblioteca:hover {
@@ -280,6 +327,15 @@
 
             .busca-form {
                 flex-direction: column;
+            }
+
+            .busca-form input {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .busca-form button {
+                width: 100%;
             }
 
             .catalogo-jogos {
@@ -334,7 +390,7 @@
             Início
         </a>
 
-        <a href="buscar-usuarios.html">
+        <a href="buscar-usuarios">
             Buscar usuários
         </a>
 
@@ -349,11 +405,10 @@
         <a href="biblioteca">
             Biblioteca
         </a>
-                
-        <a href='listas'>
-        Listas
+
+        <a href="listas">
+            Listas
         </a>
-);
 
         <a href="logout">
             Sair
@@ -394,21 +449,24 @@
             🔎 Buscar jogo
         </h2>
 
-        <div class="busca-form">
+        <form
+            class="busca-form"
+            method="GET"
+            action="jogos"
+        >
 
             <input
                 type="text"
-                id="campoBusca"
+                name="busca"
                 placeholder="Digite o nome do jogo..."
+                required
             >
 
-            <button onclick="buscarJogo()">
+            <button type="submit">
                 Buscar
             </button>
 
-        </div>
-
-        <div id="resultadoBusca"></div>
+        </form>
 
     </section>
 
@@ -435,7 +493,9 @@
         <div class="catalogo-jogos">
 
 
-            <!-- RESIDENT EVIL 4 -->
+            <!-- =================================================
+                 RESIDENT EVIL 4
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -470,7 +530,9 @@
             </article>
 
 
-            <!-- THE LAST OF US -->
+            <!-- =================================================
+                 THE LAST OF US
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -505,7 +567,9 @@
             </article>
 
 
-            <!-- GOD OF WAR -->
+            <!-- =================================================
+                 GOD OF WAR
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -540,7 +604,9 @@
             </article>
 
 
-            <!-- MINECRAFT -->
+            <!-- =================================================
+                 MINECRAFT
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -575,7 +641,9 @@
             </article>
 
 
-            <!-- RED DEAD REDEMPTION 2 -->
+            <!-- =================================================
+                 RED DEAD REDEMPTION 2
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -610,7 +678,9 @@
             </article>
 
 
-            <!-- GTA V -->
+            <!-- =================================================
+                 GTA V
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -645,7 +715,9 @@
             </article>
 
 
-            <!-- SILENT HILL 2 -->
+            <!-- =================================================
+                 SILENT HILL 2
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -680,7 +752,9 @@
             </article>
 
 
-            <!-- ELDEN RING -->
+            <!-- =================================================
+                 ELDEN RING
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -715,7 +789,9 @@
             </article>
 
 
-            <!-- RESIDENT EVIL VILLAGE -->
+            <!-- =================================================
+                 RESIDENT EVIL VILLAGE
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -750,7 +826,9 @@
             </article>
 
 
-            <!-- THE WITCHER 3 -->
+            <!-- =================================================
+                 THE WITCHER 3
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -785,7 +863,9 @@
             </article>
 
 
-            <!-- CYBERPUNK 2077 -->
+            <!-- =================================================
+                 CYBERPUNK 2077
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -820,7 +900,9 @@
             </article>
 
 
-            <!-- SPIDER-MAN 2 -->
+            <!-- =================================================
+                 SPIDER-MAN 2
+                 ================================================= -->
 
             <article class="card-jogo">
 
@@ -870,10 +952,6 @@
 
 </footer>
 
-
-<script src="script.js"></script>
-
 </body>
 
 </html>
-
