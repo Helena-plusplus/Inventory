@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/listas")
 public class ListasServlet extends HttpServlet {
@@ -60,6 +62,10 @@ public class ListasServlet extends HttpServlet {
             StringBuilder html =
                     new StringBuilder();
 
+            // =====================================================
+            // HTML
+            // =====================================================
+
             html.append("<!DOCTYPE html>");
             html.append("<html lang='pt-BR'>");
 
@@ -73,7 +79,7 @@ public class ListasServlet extends HttpServlet {
             );
 
             html.append(
-                    "<title>Listas - GameBoxd</title>"
+                    "<title>Listas - Inventory</title>"
             );
 
             html.append(
@@ -81,12 +87,19 @@ public class ListasServlet extends HttpServlet {
                     "href='style.css'>"
             );
 
+            // =====================================================
+            // CSS
+            // =====================================================
+
             html.append("<style>");
 
             html.append(
                     "body{" +
                     "margin:0;" +
-                    "background:#140d1b;" +
+                    "background:linear-gradient(" +
+                    "135deg,#0d0714,#160b24,#0d0714" +
+                    ");" +
+                    "min-height:100vh;" +
                     "color:#fff;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
@@ -100,9 +113,15 @@ public class ListasServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // CRIAR LISTA
+            // =====================================================
+
             html.append(
                     ".create-box{" +
-                    "background:linear-gradient(135deg,#30114b,#21172a);" +
+                    "background:linear-gradient(" +
+                    "135deg,#30114b,#21172a" +
+                    ");" +
                     "border:1px solid #54206f;" +
                     "border-radius:17px;" +
                     "padding:25px;" +
@@ -162,6 +181,10 @@ public class ListasServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // LISTA
+            // =====================================================
+
             html.append(
                     ".list-box{" +
                     "background:#201628;" +
@@ -206,6 +229,10 @@ public class ListasServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // JOGOS DA LISTA
+            // =====================================================
+
             html.append(
                     ".list-games{" +
                     "display:grid;" +
@@ -229,8 +256,23 @@ public class ListasServlet extends HttpServlet {
                     "width:100%;" +
                     "height:180px;" +
                     "object-fit:cover;" +
-                    "background:#241b2b;" +
                     "display:block;" +
+                    "background:transparent;" +
+                    "}"
+            );
+
+            html.append(
+                    ".list-cover-placeholder{" +
+                    "width:100%;" +
+                    "height:180px;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "text-align:center;" +
+                    "padding:10px;" +
+                    "background:#17111c;" +
+                    "color:#777;" +
+                    "font-size:12px;" +
                     "}"
             );
 
@@ -242,6 +284,10 @@ public class ListasServlet extends HttpServlet {
                     "line-height:1.3;" +
                     "}"
             );
+
+            // =====================================================
+            // ADICIONAR JOGO
+            // =====================================================
 
             html.append(
                     ".add-game-form{" +
@@ -280,6 +326,10 @@ public class ListasServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // VAZIO
+            // =====================================================
+
             html.append(
                     ".empty{" +
                     "text-align:center;" +
@@ -288,12 +338,18 @@ public class ListasServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // RESPONSIVO
+            // =====================================================
+
             html.append(
                     "@media(max-width:650px){" +
-                    ".create-form,.add-game-form{" +
+                    ".create-form," +
+                    ".add-game-form{" +
                     "flex-direction:column;" +
                     "}" +
-                    ".create-button,.add-button{" +
+                    ".create-button," +
+                    ".add-button{" +
                     "height:44px;" +
                     "}" +
                     "}"
@@ -304,28 +360,63 @@ public class ListasServlet extends HttpServlet {
             html.append("</head>");
             html.append("<body>");
 
+            // =====================================================
             // HEADER
+            // =====================================================
 
             html.append("<header>");
-            html.append("<h1>GameBoxd</h1>");
+
+            html.append(
+                    "<h1>Inventory</h1>"
+            );
+
             html.append("<nav>");
 
-            html.append("<a href='index.html'>Início</a>");
-            html.append("<a href='jogos'>Jogos</a>");
-            html.append("<a href='biblioteca'>Biblioteca</a>");
-            html.append("<a href='buscar-usuarios.html'>Buscar usuários</a>");
-            html.append("<a href='listas'>Listas</a>");
-            html.append("<a href='perfil'>Meu Perfil</a>");
-            html.append("<a href='logout'>Sair</a>");
+            html.append(
+                    "<a href='index.html'>Início</a>"
+            );
+
+            html.append(
+                    "<a href='jogos'>Jogos</a>"
+            );
+
+            html.append(
+                    "<a href='biblioteca'>Biblioteca</a>"
+            );
+
+            html.append(
+                    "<a href='buscar-usuarios'>Buscar usuários</a>"
+            );
+
+            // IMPORTANTE:
+            // Aqui não existe ')' depois de Listas.
+            html.append(
+                    "<a href='listas'>Listas</a>"
+            );
+
+            html.append(
+                    "<a href='perfil'>Meu Perfil</a>"
+            );
+
+            html.append(
+                    "<a href='logout'>Sair</a>"
+            );
 
             html.append("</nav>");
+
             html.append("</header>");
+
+            // =====================================================
+            // MAIN
+            // =====================================================
 
             html.append(
                     "<main class='lists-page'>"
             );
 
+            // =====================================================
             // CRIAR LISTA
+            // =====================================================
 
             html.append(
                     "<section class='create-box'>"
@@ -365,9 +456,12 @@ public class ListasServlet extends HttpServlet {
             );
 
             html.append("</form>");
+
             html.append("</section>");
 
+            // =====================================================
             // LISTAS
+            // =====================================================
 
             if (listas.isEmpty()) {
 
@@ -423,6 +517,10 @@ public class ListasServlet extends HttpServlet {
 
                     html.append("</div>");
 
+                    // =====================================================
+                    // JOGOS
+                    // =====================================================
+
                     if (lista.jogos.isEmpty()) {
 
                         html.append(
@@ -458,18 +556,29 @@ public class ListasServlet extends HttpServlet {
                                         "src='" +
                                         escaparHtml(capa) +
                                         "' " +
-                                        "alt='Capa'>"
+                                        "alt='Capa de " +
+                                        escaparHtml(jogo.titulo) +
+                                        "' " +
+                                        "onerror=\"" +
+                                        "this.style.display='none';" +
+                                        "this.nextElementSibling.style.display='flex';" +
+                                        "\">"
+                                );
+
+                                html.append(
+                                        "<div " +
+                                        "class='list-cover-placeholder' " +
+                                        "style='display:none;'>" +
+                                        escaparHtml(jogo.titulo) +
+                                        "</div>"
                                 );
 
                             } else {
 
                                 html.append(
-                                        "<div class='list-cover' " +
-                                        "style='display:flex;" +
-                                        "align-items:center;" +
-                                        "justify-content:center;" +
-                                        "color:#777;'>" +
-                                        "Capa indisponível" +
+                                        "<div " +
+                                        "class='list-cover-placeholder'>" +
+                                        escaparHtml(jogo.titulo) +
                                         "</div>"
                                 );
                             }
@@ -486,7 +595,9 @@ public class ListasServlet extends HttpServlet {
                         html.append("</div>");
                     }
 
+                    // =====================================================
                     // ADICIONAR JOGO
+                    // =====================================================
 
                     html.append(
                             "<form class='add-game-form' " +
@@ -567,6 +678,12 @@ public class ListasServlet extends HttpServlet {
         Connection conexao =
                 Conexao.conectar();
 
+        if (conexao == null) {
+            throw new Exception(
+                    "Não foi possível conectar ao banco."
+            );
+        }
+
         PreparedStatement stmt =
                 conexao.prepareStatement(
                         "CREATE TABLE IF NOT EXISTS lista (" +
@@ -598,7 +715,7 @@ public class ListasServlet extends HttpServlet {
     }
 
     // =====================================================
-    // JOGOS
+    // TODOS OS JOGOS
     // =====================================================
 
     private List<Jogo> carregarTodosJogos()
@@ -609,6 +726,12 @@ public class ListasServlet extends HttpServlet {
 
         Connection conexao =
                 Conexao.conectar();
+
+        if (conexao == null) {
+            throw new Exception(
+                    "Não foi possível conectar ao banco."
+            );
+        }
 
         PreparedStatement stmt =
                 conexao.prepareStatement(
@@ -658,6 +781,12 @@ public class ListasServlet extends HttpServlet {
         Connection conexao =
                 Conexao.conectar();
 
+        if (conexao == null) {
+            throw new Exception(
+                    "Não foi possível conectar ao banco."
+            );
+        }
+
         PreparedStatement stmt =
                 conexao.prepareStatement(
                         "SELECT id,nome " +
@@ -666,7 +795,10 @@ public class ListasServlet extends HttpServlet {
                         "ORDER BY id DESC"
                 );
 
-        stmt.setInt(1, idUsuario);
+        stmt.setInt(
+                1,
+                idUsuario
+        );
 
         ResultSet rs =
                 stmt.executeQuery();
@@ -711,9 +843,18 @@ public class ListasServlet extends HttpServlet {
         Connection conexao =
                 Conexao.conectar();
 
+        if (conexao == null) {
+            throw new Exception(
+                    "Não foi possível conectar ao banco."
+            );
+        }
+
         PreparedStatement stmt =
                 conexao.prepareStatement(
-                        "SELECT j.id,j.titulo,j.capa " +
+                        "SELECT " +
+                        "j.id," +
+                        "j.titulo," +
+                        "j.capa " +
                         "FROM lista_jogo lj " +
                         "INNER JOIN jogo j " +
                         "ON j.id=lj.id_jogo " +
@@ -721,7 +862,10 @@ public class ListasServlet extends HttpServlet {
                         "ORDER BY lj.id ASC"
                 );
 
-        stmt.setInt(1, idLista);
+        stmt.setInt(
+                1,
+                idLista
+        );
 
         ResultSet rs =
                 stmt.executeQuery();
@@ -751,50 +895,106 @@ public class ListasServlet extends HttpServlet {
     }
 
     // =====================================================
-    // CAPA
+    // PREPARAR CAPA
     // =====================================================
 
-  private String prepararCapa(
-        String caminho,
-        HttpServletRequest request) {
+    private String prepararCapa(
+            String caminho,
+            HttpServletRequest request) {
 
-    if (caminho == null ||
-            caminho.trim().isEmpty()) {
+        if (caminho == null ||
+                caminho.trim().isEmpty()) {
 
-        return "";
-    }
+            return "";
+        }
 
-    caminho = caminho.trim();
+        caminho =
+                caminho.trim();
 
-    // URL já pronta
-    if (caminho.startsWith("http://") ||
-            caminho.startsWith("https://")) {
+        // =================================================
+        // MARKDOWN
+        // =================================================
 
-        return caminho;
-    }
+        if (caminho.startsWith("[") &&
+                caminho.contains("](") &&
+                caminho.endsWith(")")) {
 
-    // Se o banco tiver somente o App ID
-    if (caminho.matches("\\d+")) {
+            int posicao =
+                    caminho.indexOf("](");
+
+            caminho =
+                    caminho.substring(
+                            posicao + 2,
+                            caminho.length() - 1
+                    );
+        }
+
+        // =================================================
+        // URL COMPLETA
+        // =================================================
+
+        if (caminho.startsWith("http://") ||
+                caminho.startsWith("https://")) {
+
+            // Verifica se existe App ID na URL
+            Pattern pattern =
+                    Pattern.compile(
+                            "/apps/(\\d+)"
+                    );
+
+            Matcher matcher =
+                    pattern.matcher(
+                            caminho
+                    );
+
+            if (matcher.find()) {
+
+                String appId =
+                        matcher.group(1);
+
+                return
+                        "https://cdn.akamai.steamstatic.com/" +
+                        "steam/apps/" +
+                        appId +
+                        "/library_600x900_2x.jpg";
+            }
+
+            return caminho;
+        }
+
+        // =================================================
+        // SOMENTE APP ID
+        // =================================================
+
+        if (caminho.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    caminho +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =================================================
+        // CAMINHO LOCAL
+        // =================================================
+
+        while (
+                caminho.startsWith("/")
+        ) {
+
+            caminho =
+                    caminho.substring(1);
+        }
 
         return
-                "https://shared.fastly.steamstatic.com/" +
-                "store_item_assets/steam/apps/" +
-                caminho +
-                "/library_600x900.jpg";
+                request.getContextPath() +
+                "/" +
+                caminho;
     }
-
-    while (caminho.startsWith("/")) {
-        caminho = caminho.substring(1);
-    }
-
-    return
-            request.getContextPath()
-            + "/"
-            + caminho;
-}
 
     // =====================================================
-    // ESCAPAR
+    // ESCAPAR HTML
     // =====================================================
 
     private String escaparHtml(
@@ -805,28 +1005,36 @@ public class ListasServlet extends HttpServlet {
         }
 
         return texto
-                .replace("&","&amp;")
-                .replace("<","&lt;")
-                .replace(">","&gt;")
-                .replace("\"","&quot;")
-                .replace("'","&#39;");
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 
     // =====================================================
-    // CLASSES
+    // CLASSE JOGO
     // =====================================================
 
     private static class Jogo {
 
         int id;
+
         String titulo;
+
         String capa;
     }
+
+    // =====================================================
+    // CLASSE LISTA
+    // =====================================================
 
     private static class Lista {
 
         int id;
+
         String nome;
+
         List<Jogo> jogos =
                 new ArrayList<>();
     }
