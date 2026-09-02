@@ -18,6 +18,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @WebServlet("/biblioteca")
 public class BibliotecaServlet extends HttpServlet {
 
@@ -87,7 +90,7 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    "<title>Biblioteca - GameBoxd</title>"
+                    "<title>Biblioteca - Inventory</title>"
             );
 
             html.append(
@@ -110,7 +113,8 @@ public class BibliotecaServlet extends HttpServlet {
             html.append(
                     "body {" +
                     "margin:0;" +
-                    "background:#14101b;" +
+                    "background:linear-gradient(135deg,#0d0714,#160b24,#0d0714);" +
+                    "min-height:100vh;" +
                     "color:#ffffff;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
@@ -158,10 +162,9 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append(
                     ".biblioteca-secao {" +
-                    "background:#202830;" +
-                    "border:1px solid #303942;" +
-                    "border-radius:15px;" +
-                    "padding:24px;" +
+                    "background:transparent;" +
+                    "border:none;" +
+                    "padding:15px 0;" +
                     "margin-bottom:25px;" +
                     "}"
             );
@@ -246,17 +249,18 @@ public class BibliotecaServlet extends HttpServlet {
                     "object-fit:cover;" +
                     "display:block;" +
                     "background:transparent;" +
+                    "border-radius:10px 10px 0 0;" +
                     "}"
             );
 
             // =====================================================
-            // INFO
+            // INFORMAÇÕES
             // =====================================================
 
             html.append(
                     ".jogo-info {" +
                     "padding:12px;" +
-                    "background:#171b20;" +
+                    "background:transparent;" +
                     "}"
             );
 
@@ -278,7 +282,7 @@ public class BibliotecaServlet extends HttpServlet {
                     "display:block;" +
                     "margin-top:11px;" +
                     "padding:9px;" +
-                    "background:#6500c7;" +
+                    "background:linear-gradient(135deg,#7c3aed,#9333ea);" +
                     "color:#ffffff;" +
                     "text-decoration:none;" +
                     "text-align:center;" +
@@ -346,7 +350,7 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("<header>");
 
-            html.append("<h1>GameBoxd</h1>");
+            html.append("<h1>Inventory</h1>");
 
             html.append("<nav>");
 
@@ -363,9 +367,7 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    "<a href='buscar-usuarios.html'>" +
-                    "Buscar usuários" +
-                    "</a>"
+                    "<a href='buscar-usuarios'>Buscar usuários</a>"
             );
 
             html.append(
@@ -401,9 +403,7 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    "<p>" +
-                    "Seus jogos organizados por status." +
-                    "</p>"
+                    "<p>Seus jogos organizados por status.</p>"
             );
 
             html.append("</section>");
@@ -448,12 +448,12 @@ public class BibliotecaServlet extends HttpServlet {
                         "<div class='jogos-grid'>"
                 );
 
-                for (Jogo jogo :
-                        jogando) {
+                for (Jogo jogo : jogando) {
 
                     html.append(
                             montarCard(
-                                    jogo
+                                    jogo,
+                                    request
                             )
                     );
                 }
@@ -503,12 +503,12 @@ public class BibliotecaServlet extends HttpServlet {
                         "<div class='jogos-grid'>"
                 );
 
-                for (Jogo jogo :
-                        zerados) {
+                for (Jogo jogo : zerados) {
 
                     html.append(
                             montarCard(
-                                    jogo
+                                    jogo,
+                                    request
                             )
                     );
                 }
@@ -558,12 +558,12 @@ public class BibliotecaServlet extends HttpServlet {
                         "<div class='jogos-grid'>"
                 );
 
-                for (Jogo jogo :
-                        queroJogar) {
+                for (Jogo jogo : queroJogar) {
 
                     html.append(
                             montarCard(
-                                    jogo
+                                    jogo,
+                                    request
                             )
                     );
                 }
@@ -591,9 +591,9 @@ public class BibliotecaServlet extends HttpServlet {
         }
     }
 
-    // =========================================================
+    // =====================================================
     // CARREGAR JOGOS
-    // =========================================================
+    // =====================================================
 
     private List<Jogo> carregarJogos(
             int idUsuario,
@@ -654,19 +654,25 @@ public class BibliotecaServlet extends HttpServlet {
         return jogos;
     }
 
-    // =========================================================
+    // =====================================================
     // CARD
-    // =========================================================
+    // =====================================================
 
     private String montarCard(
-            Jogo jogo) {
+            Jogo jogo,
+            HttpServletRequest request) {
 
         StringBuilder html =
                 new StringBuilder();
 
-        // Usa exatamente o valor salvo no banco
-        String capa =
-                jogo.capa;
+        // AQUI está a correção:
+        // usa a mesma função da página Jogos
+
+        String caminhoCapa =
+                prepararCapa(
+                        request,
+                        jogo.capa
+                );
 
         html.append(
                 "<div class='jogo-card'>"
@@ -676,18 +682,36 @@ public class BibliotecaServlet extends HttpServlet {
                 "<div class='capa-container'>"
         );
 
-        if (capa != null &&
-                !capa.trim().isEmpty()) {
+        if (caminhoCapa != null) {
 
             html.append(
                     "<img " +
                     "class='jogo-capa' " +
                     "src='" +
-                    escaparHtml(capa.trim()) +
+                    escaparHtml(caminhoCapa) +
                     "' " +
                     "alt='Capa de " +
                     escaparHtml(jogo.titulo) +
                     "'>"
+            );
+
+        } else {
+
+            // Não coloca fundo cinza
+            html.append(
+                    "<div style='" +
+                    "width:100%;" +
+                    "height:100%;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "color:#888;" +
+                    "font-size:13px;" +
+                    "text-align:center;" +
+                    "padding:15px;" +
+                    "'>" +
+                    escaparHtml(jogo.titulo) +
+                    "</div>"
             );
         }
 
@@ -719,9 +743,112 @@ public class BibliotecaServlet extends HttpServlet {
         return html.toString();
     }
 
-    // =========================================================
+    // =====================================================
+    // PREPARAR CAPA
+    // MESMA LÓGICA DO JOGOSSERVLET
+    // =====================================================
+
+    private String prepararCapa(
+            HttpServletRequest request,
+            String capa) {
+
+        if (capa == null ||
+                capa.trim().isEmpty()) {
+
+            return null;
+        }
+
+        String caminho =
+                capa.trim();
+
+        // =================================================
+        // MARKDOWN
+        // =================================================
+
+        if (caminho.startsWith("[") &&
+                caminho.contains("](") &&
+                caminho.endsWith(")")) {
+
+            int inicio =
+                    caminho.indexOf("](");
+
+            caminho =
+                    caminho.substring(
+                            inicio + 2,
+                            caminho.length() - 1
+                    );
+        }
+
+        // =================================================
+        // STEAM APP ID
+        // =================================================
+
+        if (caminho.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    caminho +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =================================================
+        // /apps/ID
+        // =================================================
+
+        Pattern pattern =
+                Pattern.compile(
+                        "/apps/(\\d+)"
+                );
+
+        Matcher matcher =
+                pattern.matcher(
+                        caminho
+                );
+
+        if (matcher.find()) {
+
+            String appId =
+                    matcher.group(1);
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    appId +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =================================================
+        // URL
+        // =================================================
+
+        if (caminho.startsWith("http://") ||
+                caminho.startsWith("https://")) {
+
+            return caminho;
+        }
+
+        // =================================================
+        // LOCAL
+        // =================================================
+
+        while (
+                caminho.startsWith("/")
+        ) {
+
+            caminho =
+                    caminho.substring(1);
+        }
+
+        return
+                request.getContextPath()
+                + "/"
+                + caminho;
+    }
+
+    // =====================================================
     // ESCAPAR HTML
-    // =========================================================
+    // =====================================================
 
     private String escaparHtml(
             String texto) {
@@ -738,9 +865,9 @@ public class BibliotecaServlet extends HttpServlet {
                 .replace("'", "&#39;");
     }
 
-    // =========================================================
+    // =====================================================
     // CLASSE JOGO
-    // =========================================================
+    // =====================================================
 
     private static class Jogo {
 
