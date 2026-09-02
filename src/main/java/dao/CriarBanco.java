@@ -2205,12 +2205,11 @@ stmt.execute(tabelaCadastroPendente);
 
             String titulo =
                     jogo[0];
-
-            String capa =
-                    "https://cdn.akamai.steamstatic.com/"
-                    + "steam/apps/"
-                    + jogo[5]
-                    + "/library_600x900_2x.jpg";
+String capa =
+        "https://shared.fastly.steamstatic.com/"
+        + "store_item_assets/steam/apps/"
+        + jogo[5]
+        + "/library_600x900.jpg";
 
             // =================================================
             // VERIFICAR SE JÁ EXISTE

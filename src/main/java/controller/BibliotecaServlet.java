@@ -60,7 +60,7 @@ public class BibliotecaServlet extends HttpServlet {
             List<Jogo> queroJogar =
                     carregarJogos(
                             idUsuario,
-                            "quero_jogar"
+                            "quero jogar"
                     );
 
             response.setContentType(
@@ -83,199 +83,220 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    "<title>Minha Biblioteca - GameBoxd</title>"
+                    "<title>Biblioteca - GameBoxd</title>"
             );
 
             html.append(
-                    "<link rel='stylesheet' href='style.css'>"
+                    "<link rel='stylesheet' " +
+                    "href='style.css'>"
             );
 
             html.append("<style>");
 
             html.append(
-                    ".biblioteca-container {" +
-                    "max-width:1100px;" +
-                    "margin:40px auto;" +
-                    "padding:20px;" +
+                    "body{" +
+                    "margin:0;" +
+                    "background:#14181c;" +
+                    "color:#fff;" +
+                    "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
             );
 
             html.append(
-                    ".biblioteca-titulo {" +
-                    "text-align:center;" +
-                    "margin-bottom:35px;" +
+                    ".library-page{" +
+                    "max-width:1200px;" +
+                    "margin:auto;" +
+                    "padding:30px 20px 60px;" +
                     "}"
             );
 
             html.append(
-                    ".biblioteca-secao {" +
+                    ".library-hero{" +
+                    "background:linear-gradient(135deg,#251436,#202830);" +
+                    "border:1px solid #3a2946;" +
+                    "border-radius:18px;" +
+                    "padding:30px;" +
+                    "margin-bottom:25px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".library-hero h2{" +
+                    "font-size:32px;" +
+                    "margin:0 0 8px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".library-hero p{" +
+                    "margin:0;" +
+                    "color:#9299a2;" +
+                    "}"
+            );
+
+            html.append(
+                    ".section{" +
                     "background:#202830;" +
-                    "padding:25px;" +
-                    "border-radius:14px;" +
-                    "margin-bottom:30px;" +
+                    "border:1px solid #2f373e;" +
+                    "border-radius:15px;" +
+                    "padding:24px;" +
+                    "margin-bottom:25px;" +
                     "}"
             );
 
             html.append(
-                    ".biblioteca-secao h2 {" +
-                    "margin-top:0;" +
+                    ".section-header{" +
+                    "display:flex;" +
+                    "justify-content:space-between;" +
+                    "align-items:center;" +
                     "margin-bottom:20px;" +
                     "}"
             );
 
             html.append(
-                    ".jogos-grid {" +
+                    ".section-title{" +
+                    "margin:0;" +
+                    "font-size:23px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".count{" +
+                    "background:#171b20;" +
+                    "border:1px solid #343c43;" +
+                    "border-radius:20px;" +
+                    "padding:6px 11px;" +
+                    "font-size:13px;" +
+                    "color:#a3aab1;" +
+                    "}"
+            );
+
+            html.append(
+                    ".games-grid{" +
                     "display:grid;" +
                     "grid-template-columns:" +
-                    "repeat(auto-fill,minmax(160px,1fr));" +
-                    "gap:20px;" +
+                    "repeat(auto-fill,minmax(165px,1fr));" +
+                    "gap:18px;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-card {" +
-                    "background:#14181c;" +
-                    "padding:12px;" +
-                    "border-radius:10px;" +
-                    "text-align:center;" +
-                    "transition:0.2s;" +
+                    ".game-card{" +
+                    "background:#171b20;" +
+                    "border:1px solid #2f363d;" +
+                    "border-radius:11px;" +
+                    "overflow:hidden;" +
+                    "transition:.2s;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-card:hover {" +
-                    "transform:translateY(-3px);" +
+                    ".game-card:hover{" +
+                    "transform:translateY(-4px);" +
+                    "border-color:#7300d1;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-capa {" +
+                    ".cover-area{" +
+                    "height:245px;" +
+                    "background:#292f35;" +
+                    "}"
+            );
+
+            html.append(
+                    ".game-cover{" +
                     "width:100%;" +
-                    "height:220px;" +
+                    "height:245px;" +
                     "object-fit:cover;" +
-                    "border-radius:8px;" +
                     "display:block;" +
                     "}"
             );
 
             html.append(
-                    ".sem-capa {" +
-                    "width:100%;" +
-                    "height:220px;" +
-                    "background:#2a3036;" +
-                    "border-radius:8px;" +
-                    "display:flex;" +
-                    "align-items:center;" +
-                    "justify-content:center;" +
-                    "color:#777;" +
+                    ".game-info{" +
+                    "padding:12px;" +
                     "}"
             );
 
             html.append(
-                    ".nome-jogo {" +
-                    "margin-top:12px;" +
+                    ".game-title{" +
+                    "font-size:14px;" +
                     "font-weight:bold;" +
-                    "color:white;" +
+                    "line-height:1.35;" +
+                    "min-height:38px;" +
                     "}"
             );
 
             html.append(
-                    ".acoes-jogo {" +
-                    "display:flex;" +
-                    "justify-content:center;" +
-                    "gap:8px;" +
-                    "margin-top:12px;" +
-                    "flex-wrap:wrap;" +
-                    "}"
-            );
-
-            html.append(
-                    ".botao {" +
-                    "display:inline-block;" +
-                    "padding:8px 12px;" +
+                    ".rate-btn{" +
+                    "display:block;" +
                     "background:#6300c0;" +
                     "color:white;" +
+                    "text-align:center;" +
+                    "padding:9px;" +
+                    "margin-top:10px;" +
+                    "border-radius:7px;" +
                     "text-decoration:none;" +
-                    "border-radius:6px;" +
                     "font-size:13px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
             html.append(
-                    ".botao:hover {" +
-                    "background:#7d00ef;" +
+                    ".rate-btn:hover{" +
+                    "background:#8300ed;" +
                     "}"
             );
 
             html.append(
-                    ".vazio {" +
+                    ".empty{" +
                     "text-align:center;" +
-                    "color:#999;" +
-                    "padding:20px;" +
+                    "padding:30px;" +
+                    "color:#7f8790;" +
+                    "}"
+            );
+
+            html.append(
+                    "@media(max-width:600px){" +
+                    ".games-grid{" +
+                    "grid-template-columns:repeat(2,1fr);" +
+                    "gap:12px;" +
+                    "}" +
+                    ".cover-area,.game-cover{" +
+                    "height:210px;" +
+                    "}" +
                     "}"
             );
 
             html.append("</style>");
 
             html.append("</head>");
-
             html.append("<body>");
 
-            // =========================================
             // HEADER
-            // =========================================
 
             html.append("<header>");
-
             html.append("<h1>GameBoxd</h1>");
-
             html.append("<nav>");
 
-            html.append(
-                    "<a href='index.html'>Início</a>"
-            );
-
-            html.append(
-                    "<a href='jogos'>Jogos</a>"
-            );
-
-            html.append(
-                    "<a href='biblioteca'>Biblioteca</a>"
-            );
-
-            html.append(
-                    "<a href='buscar-usuarios.html'>"
-                    + "Buscar usuários"
-                    + "</a>"
-            );
-
-            html.append(
-                    "<a href='listas'>Listas</a>"
-            );
-
-            html.append(
-                    "<a href='perfil'>Meu Perfil</a>"
-            );
-
-            html.append(
-                    "<a href='logout'>Sair</a>"
-            );
+            html.append("<a href='index.html'>Início</a>");
+            html.append("<a href='jogos'>Jogos</a>");
+            html.append("<a href='biblioteca'>Biblioteca</a>");
+            html.append("<a href='buscar-usuarios.html'>Buscar usuários</a>");
+            html.append("<a href='listas'>Listas</a>");
+            html.append("<a href='perfil'>Meu Perfil</a>");
+            html.append("<a href='logout'>Sair</a>");
 
             html.append("</nav>");
-
             html.append("</header>");
 
-            // =========================================
-            // CONTEÚDO
-            // =========================================
-
             html.append(
-                    "<main class='biblioteca-container'>"
+                    "<main class='library-page'>"
             );
 
             html.append(
-                    "<div class='biblioteca-titulo'>"
+                    "<section class='library-hero'>"
             );
 
             html.append(
@@ -283,42 +304,47 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    "<p>Organize seus jogos no GameBoxd.</p>"
+                    "<p>" +
+                    "Organize todos os seus jogos no GameBoxd." +
+                    "</p>"
             );
 
-            html.append("</div>");
+            html.append("</section>");
 
-            // =========================================
             // JOGANDO
-            // =========================================
 
             html.append(
-                    "<section class='biblioteca-secao'>"
+                    "<section class='section'>"
             );
 
             html.append(
-                    "<h2>🎮 Jogando</h2>"
+                    "<div class='section-header'>" +
+                    "<h2 class='section-title'>🎮 Jogando</h2>" +
+                    "<span class='count'>" +
+                    jogando.size() +
+                    "</span>" +
+                    "</div>"
             );
 
             if (jogando.isEmpty()) {
 
                 html.append(
-                        "<div class='vazio'>"
-                        + "Nenhum jogo sendo jogado."
-                        + "</div>"
+                        "<div class='empty'>" +
+                        "Nenhum jogo sendo jogado." +
+                        "</div>"
                 );
 
             } else {
 
                 html.append(
-                        "<div class='jogos-grid'>"
+                        "<div class='games-grid'>"
                 );
 
                 for (Jogo jogo :
                         jogando) {
 
                     html.append(
-                            montarJogo(
+                            montarCard(
                                     jogo,
                                     request
                             )
@@ -330,37 +356,40 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("</section>");
 
-            // =========================================
             // ZERADOS
-            // =========================================
 
             html.append(
-                    "<section class='biblioteca-secao'>"
+                    "<section class='section'>"
             );
 
             html.append(
-                    "<h2>✅ Zerados</h2>"
+                    "<div class='section-header'>" +
+                    "<h2 class='section-title'>✅ Zerados</h2>" +
+                    "<span class='count'>" +
+                    zerados.size() +
+                    "</span>" +
+                    "</div>"
             );
 
             if (zerados.isEmpty()) {
 
                 html.append(
-                        "<div class='vazio'>"
-                        + "Nenhum jogo zerado ainda."
-                        + "</div>"
+                        "<div class='empty'>" +
+                        "Nenhum jogo zerado ainda." +
+                        "</div>"
                 );
 
             } else {
 
                 html.append(
-                        "<div class='jogos-grid'>"
+                        "<div class='games-grid'>"
                 );
 
                 for (Jogo jogo :
                         zerados) {
 
                     html.append(
-                            montarJogo(
+                            montarCard(
                                     jogo,
                                     request
                             )
@@ -372,37 +401,40 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("</section>");
 
-            // =========================================
             // QUERO JOGAR
-            // =========================================
 
             html.append(
-                    "<section class='biblioteca-secao'>"
+                    "<section class='section'>"
             );
 
             html.append(
-                    "<h2>🎯 Quero jogar</h2>"
+                    "<div class='section-header'>" +
+                    "<h2 class='section-title'>🎯 Quero jogar</h2>" +
+                    "<span class='count'>" +
+                    queroJogar.size() +
+                    "</span>" +
+                    "</div>"
             );
 
             if (queroJogar.isEmpty()) {
 
                 html.append(
-                        "<div class='vazio'>"
-                        + "Nenhum jogo na sua lista de desejos."
-                        + "</div>"
+                        "<div class='empty'>" +
+                        "Nenhum jogo na sua lista." +
+                        "</div>"
                 );
 
             } else {
 
                 html.append(
-                        "<div class='jogos-grid'>"
+                        "<div class='games-grid'>"
                 );
 
                 for (Jogo jogo :
                         queroJogar) {
 
                     html.append(
-                            montarJogo(
+                            montarCard(
                                     jogo,
                                     request
                             )
@@ -417,7 +449,6 @@ public class BibliotecaServlet extends HttpServlet {
             html.append("</main>");
 
             html.append("</body>");
-
             html.append("</html>");
 
             response.getWriter().println(
@@ -433,7 +464,7 @@ public class BibliotecaServlet extends HttpServlet {
     }
 
     // =====================================================
-    // CARREGAR JOGOS
+    // BUSCAR JOGOS
     // =====================================================
 
     private List<Jogo> carregarJogos(
@@ -447,20 +478,16 @@ public class BibliotecaServlet extends HttpServlet {
         Connection conexao =
                 Conexao.conectar();
 
-        String sql =
-                "SELECT j.id, " +
-                "j.titulo, " +
-                "j.capa, " +
-                "b.status " +
-                "FROM biblioteca b " +
-                "INNER JOIN jogo j " +
-                "ON j.id = b.id_jogo " +
-                "WHERE b.id_usuario = ? " +
-                "AND b.status = ? " +
-                "ORDER BY b.id DESC";
-
         PreparedStatement stmt =
-                conexao.prepareStatement(sql);
+                conexao.prepareStatement(
+                        "SELECT j.id,j.titulo,j.capa,b.status " +
+                        "FROM biblioteca b " +
+                        "INNER JOIN jogo j " +
+                        "ON j.id=b.id_jogo " +
+                        "WHERE b.id_usuario=? " +
+                        "AND b.status=? " +
+                        "ORDER BY b.id DESC"
+                );
 
         stmt.setInt(1, idUsuario);
         stmt.setString(2, status);
@@ -496,19 +523,12 @@ public class BibliotecaServlet extends HttpServlet {
     }
 
     // =====================================================
-    // MONTAR CARD
+    // CARD
     // =====================================================
 
-    private String montarJogo(
+    private String montarCard(
             Jogo jogo,
             HttpServletRequest request) {
-
-        StringBuilder html =
-                new StringBuilder();
-
-        html.append(
-                "<div class='jogo-card'>"
-        );
 
         String capa =
                 prepararCapa(
@@ -516,188 +536,138 @@ public class BibliotecaServlet extends HttpServlet {
                         request
                 );
 
-        if (capa != null &&
-                !capa.isEmpty()) {
+        StringBuilder html =
+                new StringBuilder();
+
+        html.append(
+                "<div class='game-card'>"
+        );
+
+        html.append(
+                "<div class='cover-area'>"
+        );
+
+        if (!capa.isEmpty()) {
 
             html.append(
-                    "<img " +
-                    "class='jogo-capa' " +
+                    "<img class='game-cover' " +
                     "src='" +
                     escaparHtml(capa) +
                     "' " +
-                    "alt='Capa de " +
-                    escaparHtml(jogo.titulo) +
-                    "' " +
-                    "onerror=\"this.style.display='none';" +
-                    "this.nextElementSibling.style.display='flex';\">"
-            );
-
-            html.append(
-                    "<div class='sem-capa' " +
-                    "style='display:none;'>"
-                    + "Sem capa"
-                    + "</div>"
+                    "alt='Capa do jogo'>"
             );
 
         } else {
 
             html.append(
-                    "<div class='sem-capa'>"
-                    + "Sem capa"
-                    + "</div>"
+                    "<div style='height:100%;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "color:#777;'>" +
+                    "Sem capa" +
+                    "</div>"
             );
         }
 
+        html.append("</div>");
+
         html.append(
-                "<div class='nome-jogo'>"
-                +
-                escaparHtml(
-                        jogo.titulo
-                )
-                +
+                "<div class='game-info'>"
+        );
+
+        html.append(
+                "<div class='game-title'>" +
+                escaparHtml(jogo.titulo) +
                 "</div>"
         );
 
         html.append(
-                "<div class='acoes-jogo'>"
-        );
-
-        // Botão avaliar
-        html.append(
-                "<a class='botao' " +
+                "<a class='rate-btn' " +
                 "href='avaliar?id=" +
                 jogo.id +
                 "'>" +
-                "Avaliar" +
+                "Avaliar jogo" +
                 "</a>"
         );
 
         html.append("</div>");
-
         html.append("</div>");
 
         return html.toString();
     }
 
     // =====================================================
-    // PREPARAR CAPA
+    // CAPA
     // =====================================================
 
     private String prepararCapa(
-            String caminho,
-            HttpServletRequest request) {
+        String caminho,
+        HttpServletRequest request) {
 
-        if (caminho == null ||
-                caminho.trim().isEmpty()) {
+    if (caminho == null ||
+            caminho.trim().isEmpty()) {
 
-            return "";
-        }
-
-        caminho =
-                caminho.trim();
-
-        // =========================================
-        // URL COMPLETA
-        // NÃO ALTERAR
-        // =========================================
-
-        if (caminho.startsWith("http://") ||
-                caminho.startsWith("https://")) {
-
-            return caminho;
-        }
-
-        // =========================================
-        // MARKDOWN
-        // =========================================
-
-        if (caminho.startsWith("[") &&
-                caminho.contains("](") &&
-                caminho.endsWith(")")) {
-
-            int inicio =
-                    caminho.indexOf("](") + 2;
-
-            int fim =
-                    caminho.lastIndexOf(")");
-
-            if (inicio < fim) {
-
-                String url =
-                        caminho.substring(
-                                inicio,
-                                fim
-                        );
-
-                if (url.startsWith("http://") ||
-                        url.startsWith("https://")) {
-
-                    return url;
-                }
-            }
-        }
-
-        // =========================================
-        // SOMENTE ID
-        // =========================================
-
-        if (caminho.matches("\\d+")) {
-
-            return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
-                    caminho +
-                    "/library_600x900_2x.jpg";
-        }
-
-        // =========================================
-        // CAMINHO LOCAL
-        // =========================================
-
-        while (caminho.startsWith("/")) {
-
-            caminho =
-                    caminho.substring(1);
-        }
-
-        return
-                request.getContextPath()
-                + "/"
-                + caminho;
+        return "";
     }
 
+    caminho = caminho.trim();
+
+    // URL já pronta
+    if (caminho.startsWith("http://") ||
+            caminho.startsWith("https://")) {
+
+        return caminho;
+    }
+
+    // Se o banco tiver somente o App ID
+    if (caminho.matches("\\d+")) {
+
+        return
+                "https://shared.fastly.steamstatic.com/" +
+                "store_item_assets/steam/apps/" +
+                caminho +
+                "/library_600x900.jpg";
+    }
+
+    while (caminho.startsWith("/")) {
+        caminho = caminho.substring(1);
+    }
+
+    return
+            request.getContextPath()
+            + "/"
+            + caminho;
+}
+
     // =====================================================
-    // ESCAPAR HTML
+    // ESCAPAR
     // =====================================================
 
     private String escaparHtml(
             String texto) {
 
         if (texto == null) {
-
             return "";
         }
 
         return texto
-                .replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
+                .replace("&","&amp;")
+                .replace("<","&lt;")
+                .replace(">","&gt;")
+                .replace("\"","&quot;")
+                .replace("'","&#39;");
     }
 
     // =====================================================
-    // CLASSE JOGO
+    // CLASSE
     // =====================================================
 
     private static class Jogo {
 
         int id;
-
         String titulo;
-
         String capa;
-
         String status;
     }
 }

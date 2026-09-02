@@ -27,7 +27,8 @@ public class PerfilServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession sessao = request.getSession(false);
+        HttpSession sessao =
+                request.getSession(false);
 
         if (sessao == null ||
                 sessao.getAttribute("usuario") == null) {
@@ -44,8 +45,11 @@ public class PerfilServlet extends HttpServlet {
             int idUsuario =
                     usuarioSessao.getId();
 
+            UsuarioDAO dao =
+                    new UsuarioDAO();
+
             Usuario usuario =
-                    new UsuarioDAO().buscarPorId(idUsuario);
+                    dao.buscarPorId(idUsuario);
 
             if (usuario == null) {
 
@@ -53,32 +57,30 @@ public class PerfilServlet extends HttpServlet {
                 return;
             }
 
-            UsuarioDAO dao =
-                    new UsuarioDAO();
-
-            int seguidores =
+            int totalSeguidores =
                     dao.contarSeguidores(idUsuario);
 
-            int seguindo =
+            int totalSeguindo =
                     dao.contarSeguindo(idUsuario);
 
-            boolean usuarioEspecial =
-                    usuario.getEmail() != null &&
+            List<Usuario> seguidores =
+                    dao.listarSeguidores(idUsuario);
+
+            List<Usuario> seguindo =
+                    dao.listarSeguindo(idUsuario);
+
+            List<Jogo> favoritos =
+                    carregarFavoritos(idUsuario);
+
+            List<Lista> listas =
+                    carregarListas(idUsuario);
+
+            boolean especial =
+                    usuario.getEmail() != null
+                    &&
                     usuario.getEmail().equalsIgnoreCase(
                             "rebecarodriguesduarte2@gmail.com"
                     );
-
-            List<Usuario> listaSeguidores =
-                    dao.listarSeguidores(idUsuario);
-
-            List<Usuario> listaSeguindo =
-                    dao.listarSeguindo(idUsuario);
-
-            List<JogoFavorito> favoritos =
-                    carregarFavoritos(idUsuario);
-
-            List<ListaJogo> listas =
-                    carregarListas(idUsuario);
 
             response.setContentType(
                     "text/html;charset=UTF-8"
@@ -86,6 +88,10 @@ public class PerfilServlet extends HttpServlet {
 
             StringBuilder html =
                     new StringBuilder();
+
+            // =====================================================
+            // HTML
+            // =====================================================
 
             html.append("<!DOCTYPE html>");
             html.append("<html lang='pt-BR'>");
@@ -104,215 +110,365 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<link rel='stylesheet' href='style.css'>"
+                    "<link rel='stylesheet' " +
+                    "href='style.css'>"
             );
+
+            // =====================================================
+            // CSS
+            // =====================================================
 
             html.append("<style>");
 
             html.append(
-                    ".perfil-container {" +
-                    "max-width:1000px;" +
-                    "margin:40px auto;" +
-                    "padding:20px;" +
+                    "* {" +
+                    "box-sizing:border-box;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-topo {" +
-                    "background:#202830;" +
+                    "body {" +
+                    "margin:0;" +
+                    "background:#14181c;" +
+                    "color:#ffffff;" +
+                    "font-family:Arial,Helvetica,sans-serif;" +
+                    "}"
+            );
+
+            // PÁGINA
+
+            html.append(
+                    ".perfil-page {" +
+                    "max-width:1150px;" +
+                    "margin:0 auto;" +
+                    "padding:30px 20px 60px;" +
+                    "}"
+            );
+
+            // PERFIL
+
+            html.append(
+                    ".perfil-card {" +
+                    "background:linear-gradient(135deg,#24152f,#202830);" +
+                    "border:1px solid #392743;" +
+                    "border-radius:18px;" +
                     "padding:30px;" +
-                    "border-radius:14px;" +
-                    "text-align:center;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "gap:28px;" +
+                    "box-shadow:0 12px 35px rgba(0,0,0,.30);" +
                     "}"
             );
 
             html.append(
-                    ".foto-perfil {" +
-                    "width:120px;" +
-                    "height:120px;" +
+                    ".perfil-foto {" +
+                    "width:125px;" +
+                    "height:125px;" +
                     "border-radius:50%;" +
                     "object-fit:cover;" +
-                    "border:3px solid #6300c0;" +
+                    "border:3px solid #7300d1;" +
+                    "background:transparent;" +
+                    "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
-                    ".nome-perfil {" +
-                    "font-size:28px;" +
-                    "margin:15px 0 5px;" +
+                    ".perfil-info {" +
+                    "flex:1;" +
                     "}"
             );
 
             html.append(
-                    ".username {" +
-                    "color:#aaa;" +
-                    "margin-bottom:10px;" +
+                    ".perfil-nome {" +
+                    "margin:0;" +
+                    "font-size:32px;" +
+                    "font-weight:bold;" +
                     "}"
             );
 
             html.append(
-                    ".bio {" +
-                    "color:#ddd;" +
-                    "margin:15px auto;" +
-                    "max-width:600px;" +
+                    ".perfil-username {" +
+                    "color:#939aa3;" +
+                    "margin-top:5px;" +
+                    "font-size:15px;" +
                     "}"
             );
 
             html.append(
-                    ".emblema {" +
+                    ".perfil-bio {" +
+                    "color:#d8dadd;" +
+                    "margin-top:15px;" +
+                    "line-height:1.5;" +
+                    "}"
+            );
+
+            // EMBLEMA
+
+            html.append(
+                    ".love-badge {" +
                     "display:inline-block;" +
-                    "margin-top:10px;" +
+                    "margin-top:12px;" +
                     "padding:7px 14px;" +
-                    "border-radius:20px;" +
                     "background:#6300c0;" +
-                    "color:white;" +
+                    "border-radius:20px;" +
+                    "font-size:13px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
+            // ESTATÍSTICAS
+
             html.append(
-                    ".estatisticas {" +
+                    ".perfil-stats {" +
                     "display:flex;" +
-                    "justify-content:center;" +
-                    "gap:50px;" +
-                    "margin-top:25px;" +
-                    "flex-wrap:wrap;" +
-                    "}"
-            );
-
-            html.append(
-                    ".estatistica {" +
-                    "text-align:center;" +
-                    "cursor:pointer;" +
-                    "}"
-            );
-
-            html.append(
-                    ".numero {" +
-                    "font-size:24px;" +
-                    "font-weight:bold;" +
-                    "color:white;" +
-                    "}"
-            );
-
-            html.append(
-                    ".texto-estatistica {" +
-                    "color:#aaa;" +
-                    "font-size:14px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".secao {" +
-                    "background:#202830;" +
-                    "padding:25px;" +
-                    "border-radius:14px;" +
-                    "margin-top:25px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".secao h2 {" +
-                    "margin-top:0;" +
-                    "}"
-            );
-
-            html.append(
-                    ".jogos-grid {" +
-                    "display:grid;" +
-                    "grid-template-columns:" +
-                    "repeat(auto-fill,minmax(160px,1fr));" +
-                    "gap:20px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".jogo-card {" +
-                    "background:#14181c;" +
-                    "padding:12px;" +
-                    "border-radius:10px;" +
-                    "text-align:center;" +
-                    "}"
-            );
-
-            html.append(
-                    ".jogo-capa {" +
-                    "width:100%;" +
-                    "height:220px;" +
-                    "object-fit:cover;" +
-                    "border-radius:8px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".nome-jogo {" +
-                    "margin-top:10px;" +
-                    "font-weight:bold;" +
-                    "color:white;" +
-                    "}"
-            );
-
-            html.append(
-                    ".lista-box {" +
-                    "background:#14181c;" +
-                    "padding:18px;" +
-                    "border-radius:10px;" +
-                    "margin-bottom:20px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".lista-titulo {" +
-                    "font-size:20px;" +
-                    "font-weight:bold;" +
-                    "margin-bottom:15px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".botoes-perfil {" +
-                    "display:flex;" +
-                    "justify-content:center;" +
-                    "gap:10px;" +
+                    "gap:32px;" +
                     "margin-top:20px;" +
                     "flex-wrap:wrap;" +
                     "}"
             );
 
             html.append(
-                    ".botao-perfil {" +
-                    "display:inline-block;" +
-                    "padding:10px 18px;" +
-                    "background:#6300c0;" +
-                    "color:white;" +
-                    "text-decoration:none;" +
-                    "border-radius:7px;" +
+                    ".stat-number {" +
+                    "font-size:24px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
             html.append(
-                    ".botao-perfil:hover {" +
-                    "background:#7d00ef;" +
+                    ".stat-label {" +
+                    "font-size:13px;" +
+                    "color:#9299a2;" +
+                    "margin-top:3px;" +
+                    "}"
+            );
+
+            // BOTÕES
+
+            html.append(
+                    ".perfil-buttons {" +
+                    "display:flex;" +
+                    "gap:10px;" +
+                    "margin-top:18px;" +
+                    "flex-wrap:wrap;" +
                     "}"
             );
 
             html.append(
-                    ".usuario-lista {" +
+                    ".perfil-button {" +
+                    "display:inline-block;" +
+                    "padding:10px 16px;" +
+                    "background:#6300c0;" +
+                    "border-radius:8px;" +
+                    "color:#ffffff;" +
+                    "text-decoration:none;" +
+                    "font-size:14px;" +
+                    "font-weight:bold;" +
+                    "transition:.2s;" +
+                    "}"
+            );
+
+            html.append(
+                    ".perfil-button:hover {" +
+                    "background:#8300ed;" +
+                    "}"
+            );
+
+            // GRID PRINCIPAL
+
+            html.append(
+                    ".perfil-grid {" +
+                    "display:grid;" +
+                    "grid-template-columns:2fr 1fr;" +
+                    "gap:22px;" +
+                    "margin-top:22px;" +
+                    "}"
+            );
+
+            // SEÇÕES
+
+            html.append(
+                    ".secao {" +
+                    "background:#202830;" +
+                    "border:1px solid #2f373e;" +
+                    "border-radius:15px;" +
+                    "padding:22px;" +
+                    "margin-bottom:22px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".secao-titulo {" +
+                    "font-size:22px;" +
+                    "font-weight:bold;" +
+                    "margin:0 0 18px;" +
+                    "}"
+            );
+
+            // JOGOS
+
+            html.append(
+                    ".jogos-grid {" +
+                    "display:grid;" +
+                    "grid-template-columns:repeat(auto-fill,minmax(145px,1fr));" +
+                    "gap:16px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-card {" +
+                    "background:#171b20;" +
+                    "border:1px solid #2f363d;" +
+                    "border-radius:11px;" +
+                    "overflow:hidden;" +
+                    "transition:.2s;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-card:hover {" +
+                    "transform:translateY(-4px);" +
+                    "border-color:#7300d1;" +
+                    "}"
+            );
+
+            html.append(
+                    ".capa-area {" +
+                    "width:100%;" +
+                    "height:215px;" +
+                    "overflow:hidden;" +
+                    "background:transparent;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-capa {" +
+                    "width:100%;" +
+                    "height:215px;" +
+                    "display:block;" +
+                    "object-fit:cover;" +
+                    "background:transparent;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-info {" +
+                    "padding:11px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-titulo {" +
+                    "font-size:14px;" +
+                    "font-weight:bold;" +
+                    "line-height:1.35;" +
+                    "}"
+            );
+
+            // LISTAS
+
+            html.append(
+                    ".lista-card {" +
+                    "background:#171b20;" +
+                    "border:1px solid #30373e;" +
+                    "border-radius:11px;" +
+                    "padding:16px;" +
+                    "margin-bottom:14px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".lista-nome {" +
+                    "font-size:18px;" +
+                    "font-weight:bold;" +
+                    "margin-bottom:14px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".lista-jogos {" +
+                    "display:grid;" +
+                    "grid-template-columns:repeat(auto-fill,minmax(90px,1fr));" +
+                    "gap:10px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".lista-capa {" +
+                    "width:100%;" +
+                    "height:130px;" +
+                    "object-fit:cover;" +
+                    "display:block;" +
+                    "border-radius:7px;" +
+                    "background:transparent;" +
+                    "}"
+            );
+
+            // USUÁRIOS
+
+            html.append(
+                    ".usuario-item {" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:12px;" +
+                    "gap:11px;" +
                     "padding:10px 0;" +
-                    "border-bottom:1px solid #333;" +
+                    "border-bottom:1px solid #30373e;" +
+                    "}"
+            );
+
+            html.append(
+                    ".usuario-item:last-child {" +
+                    "border-bottom:none;" +
                     "}"
             );
 
             html.append(
                     ".foto-mini {" +
-                    "width:45px;" +
-                    "height:45px;" +
+                    "width:42px;" +
+                    "height:42px;" +
                     "border-radius:50%;" +
                     "object-fit:cover;" +
+                    "background:transparent;" +
+                    "}"
+            );
+
+            html.append(
+                    ".usuario-link {" +
+                    "color:white;" +
+                    "text-decoration:none;" +
+                    "font-weight:bold;" +
+                    "}"
+            );
+
+            // VAZIO
+
+            html.append(
+                    ".vazio {" +
+                    "text-align:center;" +
+                    "color:#7f8790;" +
+                    "padding:22px 5px;" +
+                    "}"
+            );
+
+            // RESPONSIVO
+
+            html.append(
+                    "@media(max-width:800px) {" +
+                    ".perfil-card {" +
+                    "flex-direction:column;" +
+                    "text-align:center;" +
+                    "}" +
+
+                    ".perfil-stats {" +
+                    "justify-content:center;" +
+                    "}" +
+
+                    ".perfil-buttons {" +
+                    "justify-content:center;" +
+                    "}" +
+
+                    ".perfil-grid {" +
+                    "grid-template-columns:1fr;" +
+                    "}" +
                     "}"
             );
 
@@ -322,9 +478,9 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("<body>");
 
-            // =========================
+            // =====================================================
             // HEADER
-            // =========================
+            // =====================================================
 
             html.append("<header>");
 
@@ -345,7 +501,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<a href='buscar-usuarios.html'>Buscar usuários</a>"
+                    "<a href='buscar-usuarios.html'>" +
+                    "Buscar usuários" +
+                    "</a>"
             );
 
             html.append(
@@ -364,16 +522,20 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("</header>");
 
-            // =========================
-            // PERFIL
-            // =========================
+            // =====================================================
+            // PÁGINA
+            // =====================================================
 
             html.append(
-                    "<main class='perfil-container'>"
+                    "<main class='perfil-page'>"
             );
 
+            // =====================================================
+            // CARD DO PERFIL
+            // =====================================================
+
             html.append(
-                    "<section class='perfil-topo'>"
+                    "<section class='perfil-card'>"
             );
 
             String foto =
@@ -382,14 +544,12 @@ public class PerfilServlet extends HttpServlet {
                             request
                     );
 
-            if (foto != null &&
-                    !foto.isEmpty()) {
+            if (!foto.isEmpty()) {
 
                 html.append(
-                        "<img " +
-                        "class='foto-perfil' " +
+                        "<img class='perfil-foto' " +
                         "src='" +
-                        foto +
+                        escaparHtml(foto) +
                         "' " +
                         "alt='Foto de perfil'>"
                 );
@@ -397,29 +557,52 @@ public class PerfilServlet extends HttpServlet {
             } else {
 
                 html.append(
-                        "<div style='font-size:70px;'>👤</div>"
+                        "<div class='perfil-foto' " +
+                        "style='display:flex;" +
+                        "align-items:center;" +
+                        "justify-content:center;" +
+                        "font-size:55px;'>" +
+                        "👤" +
+                        "</div>"
                 );
             }
 
             html.append(
-                    "<div class='nome-perfil'>"
+                    "<div class='perfil-info'>"
             );
 
             html.append(
-                    escaparHtml(
-                            usuario.getNome()
-                    )
+                    "<h1 class='perfil-nome'>" +
+                    escaparHtml(usuario.getNome()) +
+                    "</h1>"
             );
 
-            html.append("</div>");
+            String username =
+                    usuario.getNome();
+
+            try {
+
+                java.lang.reflect.Method metodo =
+                        usuario.getClass()
+                        .getMethod("getUsername");
+
+                Object valor =
+                        metodo.invoke(usuario);
+
+                if (valor != null &&
+                        !valor.toString().trim().isEmpty()) {
+
+                    username =
+                            valor.toString();
+                }
+
+            } catch (Exception ignorado) {
+                // Usa o nome caso username não esteja disponível
+            }
 
             html.append(
-                    "<div class='username'>@"
-                    +
-                    escaparHtml(
-                            usuario.getNome()
-                    )
-                    +
+                    "<div class='perfil-username'>@" +
+                    escaparHtml(username) +
                     "</div>"
             );
 
@@ -427,107 +610,127 @@ public class PerfilServlet extends HttpServlet {
                     !usuario.getBio().trim().isEmpty()) {
 
                 html.append(
-                        "<div class='bio'>"
+                        "<div class='perfil-bio'>" +
+                        escaparHtml(usuario.getBio()) +
+                        "</div>"
                 );
-
-                html.append(
-                        escaparHtml(
-                                usuario.getBio()
-                        )
-                );
-
-                html.append("</div>");
             }
 
-            if (usuarioEspecial) {
+            if (especial) {
 
                 html.append(
-                        "<div class='emblema'>"
-                        + "♡ My Love"
-                        + "</div>"
+                        "<span class='love-badge'>" +
+                        "♡ My Love" +
+                        "</span>"
                 );
             }
 
             html.append(
-                    "<div class='estatisticas'>"
+                    "<div class='perfil-stats'>"
             );
 
             html.append(
-                    "<div class='estatistica'>"
-            );
-
-            html.append(
-                    "<div class='numero'>"
-                    + seguidores +
+                    "<div>" +
+                    "<div class='stat-number'>" +
+                    totalSeguidores +
+                    "</div>" +
+                    "<div class='stat-label'>" +
+                    "Seguidores" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div class='texto-estatistica'>"
-                    + "Seguidores"
-                    + "</div>"
-            );
-
-            html.append("</div>");
-
-            html.append(
-                    "<div class='estatistica'>"
-            );
-
-            html.append(
-                    "<div class='numero'>"
-                    + seguindo +
+                    "<div>" +
+                    "<div class='stat-number'>" +
+                    totalSeguindo +
+                    "</div>" +
+                    "<div class='stat-label'>" +
+                    "Seguindo" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div class='texto-estatistica'>"
-                    + "Seguindo"
-                    + "</div>"
+                    "<div>" +
+                    "<div class='stat-number'>" +
+                    favoritos.size() +
+                    "</div>" +
+                    "<div class='stat-label'>" +
+                    "Favoritos" +
+                    "</div>" +
+                    "</div>"
+            );
+
+            html.append(
+                    "<div>" +
+                    "<div class='stat-number'>" +
+                    listas.size() +
+                    "</div>" +
+                    "<div class='stat-label'>" +
+                    "Listas" +
+                    "</div>" +
+                    "</div>"
             );
 
             html.append("</div>");
 
+            html.append(
+                    "<div class='perfil-buttons'>"
+            );
+
+            html.append(
+                    "<a class='perfil-button' " +
+                    "href='listas'>" +
+                    "Minhas listas" +
+                    "</a>"
+            );
+
+            html.append(
+                    "<a class='perfil-button' " +
+                    "href='buscar-usuarios.html'>" +
+                    "Buscar usuários" +
+                    "</a>"
+            );
+
             html.append("</div>");
-
-            html.append(
-                    "<div class='botoes-perfil'>"
-            );
-
-            html.append(
-                    "<a class='botao-perfil' " +
-                    "href='buscar-usuarios.html'>"
-                    + "Buscar usuários"
-                    + "</a>"
-            );
-
-            html.append(
-                    "<a class='botao-perfil' " +
-                    "href='listas'>"
-                    + "Minhas listas"
-                    + "</a>"
-            );
 
             html.append("</div>");
 
             html.append("</section>");
 
-            // =========================
+            // =====================================================
+            // GRID
+            // =====================================================
+
+            html.append(
+                    "<div class='perfil-grid'>"
+            );
+
+            // =====================================================
+            // ESQUERDA
+            // =====================================================
+
+            html.append("<div>");
+
             // FAVORITOS
-            // =========================
 
             html.append(
                     "<section class='secao'>"
             );
 
             html.append(
-                    "<h2>❤️ Favoritos</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "❤️ Favoritos" +
+                    "</h2>"
             );
 
             if (favoritos.isEmpty()) {
 
                 html.append(
-                        "<p>Nenhum jogo favorito ainda.</p>"
+                        "<div class='vazio'>" +
+                        "Nenhum jogo favorito ainda." +
+                        "</div>"
                 );
 
             } else {
@@ -536,45 +739,15 @@ public class PerfilServlet extends HttpServlet {
                         "<div class='jogos-grid'>"
                 );
 
-                for (JogoFavorito jogo :
+                for (Jogo jogo :
                         favoritos) {
 
                     html.append(
-                            "<div class='jogo-card'>"
-                    );
-
-                    String capaJogo =
-                            prepararCapa(
-                                    jogo.capa,
+                            montarJogo(
+                                    jogo,
                                     request
-                            );
-
-                    if (capaJogo != null &&
-                            !capaJogo.isEmpty()) {
-
-                        html.append(
-                                "<img " +
-                                "class='jogo-capa' " +
-                                "src='" +
-                                capaJogo +
-                                "' " +
-                                "alt='Capa do jogo'>"
-                        );
-                    }
-
-                    html.append(
-                            "<div class='nome-jogo'>"
-                    );
-
-                    html.append(
-                            escaparHtml(
-                                    jogo.titulo
                             )
                     );
-
-                    html.append("</div>");
-
-                    html.append("</div>");
                 }
 
                 html.append("</div>");
@@ -582,96 +755,77 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("</section>");
 
-            // =========================
             // LISTAS
-            // =========================
 
             html.append(
                     "<section class='secao'>"
             );
 
             html.append(
-                    "<h2>📚 Minhas listas</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "📚 Minhas listas" +
+                    "</h2>"
             );
 
             if (listas.isEmpty()) {
 
                 html.append(
-                        "<p>Você ainda não criou nenhuma lista.</p>"
+                        "<div class='vazio'>" +
+                        "Nenhuma lista criada ainda." +
+                        "</div>"
                 );
 
             } else {
 
-                for (ListaJogo lista :
+                for (Lista lista :
                         listas) {
 
                     html.append(
-                            "<div class='lista-box'>"
+                            "<div class='lista-card'>"
                     );
 
                     html.append(
-                            "<div class='lista-titulo'>"
+                            "<div class='lista-nome'>" +
+                            escaparHtml(lista.nome) +
+                            "</div>"
                     );
-
-                    html.append(
-                            escaparHtml(
-                                    lista.nome
-                            )
-                    );
-
-                    html.append("</div>");
 
                     if (lista.jogos.isEmpty()) {
 
                         html.append(
-                                "<p>Essa lista está vazia.</p>"
+                                "<div class='vazio'>" +
+                                "Esta lista está vazia." +
+                                "</div>"
                         );
 
                     } else {
 
                         html.append(
-                                "<div class='jogos-grid'>"
+                                "<div class='lista-jogos'>"
                         );
 
-                        for (JogoFavorito jogo :
+                        for (Jogo jogo :
                                 lista.jogos) {
 
-                            html.append(
-                                    "<div class='jogo-card'>"
-                            );
-
-                            String capaJogo =
+                            String capa =
                                     prepararCapa(
                                             jogo.capa,
                                             request
                                     );
 
-                            if (capaJogo != null &&
-                                    !capaJogo.isEmpty()) {
+                            if (!capa.isEmpty()) {
 
                                 html.append(
                                         "<img " +
-                                        "class='jogo-capa' " +
+                                        "class='lista-capa' " +
                                         "src='" +
-                                        capaJogo +
+                                        escaparHtml(capa) +
                                         "' " +
-                                        "alt='Capa do jogo'>"
+                                        "alt='Capa de " +
+                                        escaparHtml(jogo.titulo) +
+                                        "'>"
                                 );
                             }
-
-                            html.append(
-                                    "<div class='nome-jogo'>"
-                            );
-
-                            html.append(
-                                    escaparHtml(
-                                            jogo.titulo
-                                    )
-                            );
-
-                            html.append("</div>");
-
-                            html.append("</div>");
                         }
 
                         html.append("</div>");
@@ -683,141 +837,89 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("</section>");
 
-            // =========================
+            html.append("</div>");
+
+            // =====================================================
+            // DIREITA
+            // =====================================================
+
+            html.append("<div>");
+
             // SEGUIDORES
-            // =========================
 
             html.append(
                     "<section class='secao'>"
             );
 
             html.append(
-                    "<h2>👥 Seguidores</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "👥 Seguidores" +
+                    "</h2>"
             );
 
-            if (listaSeguidores.isEmpty()) {
+            if (seguidores.isEmpty()) {
 
                 html.append(
-                        "<p>Você ainda não tem seguidores.</p>"
+                        "<div class='vazio'>" +
+                        "Nenhum seguidor ainda." +
+                        "</div>"
                 );
 
             } else {
 
                 for (Usuario u :
-                        listaSeguidores) {
+                        seguidores) {
 
                     html.append(
-                            "<div class='usuario-lista'>"
-                    );
-
-                    String fotoMini =
-                            prepararFoto(
-                                    u.getFoto(),
+                            montarUsuario(
+                                    u,
                                     request
-                            );
-
-                    if (fotoMini != null &&
-                            !fotoMini.isEmpty()) {
-
-                        html.append(
-                                "<img " +
-                                "class='foto-mini' " +
-                                "src='" +
-                                fotoMini +
-                                "' " +
-                                "alt='Foto'>"
-                        );
-                    }
-
-                    html.append(
-                            "<a href='perfil-usuario?id="
-                            +
-                            u.getId()
-                            +
-                            "' style='color:white;text-decoration:none;'>"
-                    );
-
-                    html.append(
-                            escaparHtml(
-                                    u.getNome()
                             )
                     );
-
-                    html.append("</a>");
-
-                    html.append("</div>");
                 }
             }
 
             html.append("</section>");
 
-            // =========================
             // SEGUINDO
-            // =========================
 
             html.append(
                     "<section class='secao'>"
             );
 
             html.append(
-                    "<h2>➕ Seguindo</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "➕ Seguindo" +
+                    "</h2>"
             );
 
-            if (listaSeguindo.isEmpty()) {
+            if (seguindo.isEmpty()) {
 
                 html.append(
-                        "<p>Você ainda não segue ninguém.</p>"
+                        "<div class='vazio'>" +
+                        "Você ainda não segue ninguém." +
+                        "</div>"
                 );
 
             } else {
 
                 for (Usuario u :
-                        listaSeguindo) {
+                        seguindo) {
 
                     html.append(
-                            "<div class='usuario-lista'>"
-                    );
-
-                    String fotoMini =
-                            prepararFoto(
-                                    u.getFoto(),
+                            montarUsuario(
+                                    u,
                                     request
-                            );
-
-                    if (fotoMini != null &&
-                            !fotoMini.isEmpty()) {
-
-                        html.append(
-                                "<img " +
-                                "class='foto-mini' " +
-                                "src='" +
-                                fotoMini +
-                                "' " +
-                                "alt='Foto'>"
-                        );
-                    }
-
-                    html.append(
-                            "<a href='perfil-usuario?id="
-                            +
-                            u.getId()
-                            +
-                            "' style='color:white;text-decoration:none;'>"
-                    );
-
-                    html.append(
-                            escaparHtml(
-                                    u.getNome()
                             )
                     );
-
-                    html.append("</a>");
-
-                    html.append("</div>");
                 }
             }
 
             html.append("</section>");
+
+            html.append("</div>");
+
+            html.append("</div>");
 
             html.append("</main>");
 
@@ -837,29 +939,29 @@ public class PerfilServlet extends HttpServlet {
         }
     }
 
-    // =====================================================
+    // =========================================================
     // FAVORITOS
-    // =====================================================
+    // =========================================================
 
-    private List<JogoFavorito> carregarFavoritos(
+    private List<Jogo> carregarFavoritos(
             int idUsuario)
             throws Exception {
 
-        List<JogoFavorito> lista =
+        List<Jogo> jogos =
                 new ArrayList<>();
 
         Connection conexao =
                 Conexao.conectar();
 
-        String sql =
-                "SELECT j.id, j.titulo, j.capa " +
-                "FROM favorito f " +
-                "INNER JOIN jogo j ON j.id = f.id_jogo " +
-                "WHERE f.id_usuario = ? " +
-                "ORDER BY f.id DESC";
-
         PreparedStatement stmt =
-                conexao.prepareStatement(sql);
+                conexao.prepareStatement(
+                        "SELECT j.id, j.titulo, j.capa " +
+                        "FROM favorito f " +
+                        "INNER JOIN jogo j " +
+                        "ON j.id = f.id_jogo " +
+                        "WHERE f.id_usuario = ? " +
+                        "ORDER BY f.id DESC"
+                );
 
         stmt.setInt(1, idUsuario);
 
@@ -868,8 +970,8 @@ public class PerfilServlet extends HttpServlet {
 
         while (rs.next()) {
 
-            JogoFavorito jogo =
-                    new JogoFavorito();
+            Jogo jogo =
+                    new Jogo();
 
             jogo.id =
                     rs.getInt("id");
@@ -880,38 +982,37 @@ public class PerfilServlet extends HttpServlet {
             jogo.capa =
                     rs.getString("capa");
 
-            lista.add(jogo);
+            jogos.add(jogo);
         }
 
         rs.close();
         stmt.close();
         conexao.close();
 
-        return lista;
+        return jogos;
     }
 
-    // =====================================================
+    // =========================================================
     // LISTAS
-    // =====================================================
+    // =========================================================
 
-    private List<ListaJogo> carregarListas(
+    private List<Lista> carregarListas(
             int idUsuario)
             throws Exception {
 
-        List<ListaJogo> listas =
+        List<Lista> listas =
                 new ArrayList<>();
 
         Connection conexao =
                 Conexao.conectar();
 
-        String sql =
-                "SELECT id, nome " +
-                "FROM lista " +
-                "WHERE id_usuario = ? " +
-                "ORDER BY id DESC";
-
         PreparedStatement stmt =
-                conexao.prepareStatement(sql);
+                conexao.prepareStatement(
+                        "SELECT id, nome " +
+                        "FROM lista " +
+                        "WHERE id_usuario = ? " +
+                        "ORDER BY id DESC"
+                );
 
         stmt.setInt(1, idUsuario);
 
@@ -920,8 +1021,8 @@ public class PerfilServlet extends HttpServlet {
 
         while (rs.next()) {
 
-            ListaJogo lista =
-                    new ListaJogo();
+            Lista lista =
+                    new Lista();
 
             lista.id =
                     rs.getInt("id");
@@ -944,30 +1045,29 @@ public class PerfilServlet extends HttpServlet {
         return listas;
     }
 
-    // =====================================================
+    // =========================================================
     // JOGOS DA LISTA
-    // =====================================================
+    // =========================================================
 
-    private List<JogoFavorito> carregarJogosLista(
+    private List<Jogo> carregarJogosLista(
             int idLista)
             throws Exception {
 
-        List<JogoFavorito> jogos =
+        List<Jogo> jogos =
                 new ArrayList<>();
 
         Connection conexao =
                 Conexao.conectar();
 
-        String sql =
-                "SELECT j.id, j.titulo, j.capa " +
-                "FROM lista_jogo lj " +
-                "INNER JOIN jogo j " +
-                "ON j.id = lj.id_jogo " +
-                "WHERE lj.id_lista = ? " +
-                "ORDER BY lj.id ASC";
-
         PreparedStatement stmt =
-                conexao.prepareStatement(sql);
+                conexao.prepareStatement(
+                        "SELECT j.id, j.titulo, j.capa " +
+                        "FROM lista_jogo lj " +
+                        "INNER JOIN jogo j " +
+                        "ON j.id = lj.id_jogo " +
+                        "WHERE lj.id_lista = ? " +
+                        "ORDER BY lj.id ASC"
+                );
 
         stmt.setInt(1, idLista);
 
@@ -976,8 +1076,8 @@ public class PerfilServlet extends HttpServlet {
 
         while (rs.next()) {
 
-            JogoFavorito jogo =
-                    new JogoFavorito();
+            Jogo jogo =
+                    new Jogo();
 
             jogo.id =
                     rs.getInt("id");
@@ -998,9 +1098,124 @@ public class PerfilServlet extends HttpServlet {
         return jogos;
     }
 
-    // =====================================================
-    // CORREÇÃO DAS CAPAS
-    // =====================================================
+    // =========================================================
+    // CARD JOGO
+    // =========================================================
+
+    private String montarJogo(
+            Jogo jogo,
+            HttpServletRequest request) {
+
+        StringBuilder html =
+                new StringBuilder();
+
+        String capa =
+                prepararCapa(
+                        jogo.capa,
+                        request
+                );
+
+        html.append(
+                "<div class='jogo-card'>"
+        );
+
+        html.append(
+                "<div class='capa-area'>"
+        );
+
+        if (!capa.isEmpty()) {
+
+            html.append(
+                    "<img " +
+                    "class='jogo-capa' " +
+                    "src='" +
+                    escaparHtml(capa) +
+                    "' " +
+                    "alt='Capa de " +
+                    escaparHtml(jogo.titulo) +
+                    "'>"
+            );
+        }
+
+        html.append("</div>");
+
+        html.append(
+                "<div class='jogo-info'>"
+        );
+
+        html.append(
+                "<div class='jogo-titulo'>" +
+                escaparHtml(jogo.titulo) +
+                "</div>"
+        );
+
+        html.append("</div>");
+
+        html.append("</div>");
+
+        return html.toString();
+    }
+
+    // =========================================================
+    // USUARIO
+    // =========================================================
+
+    private String montarUsuario(
+            Usuario usuario,
+            HttpServletRequest request) {
+
+        StringBuilder html =
+                new StringBuilder();
+
+        String foto =
+                prepararFoto(
+                        usuario.getFoto(),
+                        request
+                );
+
+        html.append(
+                "<div class='usuario-item'>"
+        );
+
+        if (!foto.isEmpty()) {
+
+            html.append(
+                    "<img " +
+                    "class='foto-mini' " +
+                    "src='" +
+                    escaparHtml(foto) +
+                    "' " +
+                    "alt='Foto'>"
+            );
+
+        } else {
+
+            html.append(
+                    "<div class='foto-mini' " +
+                    "style='display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "font-size:22px;'>👤</div>"
+            );
+        }
+
+        html.append(
+                "<a class='usuario-link' " +
+                "href='perfil-usuario?id=" +
+                usuario.getId() +
+                "'>" +
+                escaparHtml(usuario.getNome()) +
+                "</a>"
+        );
+
+        html.append("</div>");
+
+        return html.toString();
+    }
+
+    // =========================================================
+    // CAPA
+    // =========================================================
 
     private String prepararCapa(
             String caminho,
@@ -1015,41 +1230,15 @@ public class PerfilServlet extends HttpServlet {
         caminho =
                 caminho.trim();
 
-        // URL completa: NÃO ALTERAR
+        // URL completa já salva no banco.
+        // NÃO ALTERAR.
         if (caminho.startsWith("http://") ||
                 caminho.startsWith("https://")) {
 
             return caminho;
         }
 
-        // Markdown: [texto](URL)
-        if (caminho.startsWith("[") &&
-                caminho.contains("](") &&
-                caminho.endsWith(")")) {
-
-            int inicio =
-                    caminho.indexOf("](") + 2;
-
-            int fim =
-                    caminho.lastIndexOf(")");
-
-            if (inicio < fim) {
-
-                String url =
-                        caminho.substring(
-                                inicio,
-                                fim
-                        );
-
-                if (url.startsWith("http://") ||
-                        url.startsWith("https://")) {
-
-                    return url;
-                }
-            }
-        }
-
-        // Caso seja apenas ID do jogo
+        // Caso o banco tenha somente o App ID.
         if (caminho.matches("\\d+")) {
 
             return
@@ -1059,6 +1248,7 @@ public class PerfilServlet extends HttpServlet {
                     "/library_600x900_2x.jpg";
         }
 
+        // Caminho local.
         while (caminho.startsWith("/")) {
 
             caminho =
@@ -1071,9 +1261,9 @@ public class PerfilServlet extends HttpServlet {
                 + caminho;
     }
 
-    // =====================================================
-    // CORREÇÃO DA FOTO
-    // =====================================================
+    // =========================================================
+    // FOTO
+    // =========================================================
 
     private String prepararFoto(
             String foto,
@@ -1103,15 +1293,13 @@ public class PerfilServlet extends HttpServlet {
 
         return
                 request.getContextPath()
-                +
-                "/foto-perfil?arquivo="
-                +
-                foto;
+                + "/foto-perfil?arquivo="
+                + foto;
     }
 
-    // =====================================================
+    // =========================================================
     // ESCAPAR HTML
-    // =====================================================
+    // =========================================================
 
     private String escaparHtml(
             String texto) {
@@ -1129,22 +1317,26 @@ public class PerfilServlet extends HttpServlet {
                 .replace("'", "&#39;");
     }
 
-    // =====================================================
-    // CLASSES AUXILIARES
-    // =====================================================
+    // =========================================================
+    // CLASSES
+    // =========================================================
 
-    private static class JogoFavorito {
+    private static class Jogo {
 
         int id;
+
         String titulo;
+
         String capa;
     }
 
-    private static class ListaJogo {
+    private static class Lista {
 
         int id;
+
         String nome;
-        List<JogoFavorito> jogos =
+
+        List<Jogo> jogos =
                 new ArrayList<>();
     }
 }
