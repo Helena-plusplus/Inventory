@@ -211,7 +211,7 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append(
                     ".jogo-card {" +
-                    "background:#171b20;" +
+                    "background:transparent;" +
                     "border:1px solid #303840;" +
                     "border-radius:11px;" +
                     "overflow:hidden;" +
@@ -245,6 +245,7 @@ public class BibliotecaServlet extends HttpServlet {
                     "height:245px;" +
                     "object-fit:cover;" +
                     "display:block;" +
+                    "background:transparent;" +
                     "}"
             );
 
@@ -255,6 +256,7 @@ public class BibliotecaServlet extends HttpServlet {
             html.append(
                     ".jogo-info {" +
                     "padding:12px;" +
+                    "background:#171b20;" +
                     "}"
             );
 
@@ -451,8 +453,7 @@ public class BibliotecaServlet extends HttpServlet {
 
                     html.append(
                             montarCard(
-                                    jogo,
-                                    request
+                                    jogo
                             )
                     );
                 }
@@ -507,8 +508,7 @@ public class BibliotecaServlet extends HttpServlet {
 
                     html.append(
                             montarCard(
-                                    jogo,
-                                    request
+                                    jogo
                             )
                     );
                 }
@@ -563,8 +563,7 @@ public class BibliotecaServlet extends HttpServlet {
 
                     html.append(
                             montarCard(
-                                    jogo,
-                                    request
+                                    jogo
                             )
                     );
                 }
@@ -660,18 +659,12 @@ public class BibliotecaServlet extends HttpServlet {
     // =========================================================
 
     private String montarCard(
-            Jogo jogo,
-            HttpServletRequest request) {
+            Jogo jogo) {
 
         StringBuilder html =
                 new StringBuilder();
 
-        /*
-         * IMPORTANTE:
-         * Usa diretamente j.capa,
-         * igual à página Jogos.
-         */
-
+        // Usa exatamente o valor salvo no banco
         String capa =
                 jogo.capa;
 
@@ -694,8 +687,7 @@ public class BibliotecaServlet extends HttpServlet {
                     "' " +
                     "alt='Capa de " +
                     escaparHtml(jogo.titulo) +
-                    "' " +
-                    "onerror='this.style.display=\"none\";'>"
+                    "'>"
             );
         }
 
