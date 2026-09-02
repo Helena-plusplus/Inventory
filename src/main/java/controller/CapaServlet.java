@@ -1,87 +1,208 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import dao.Conexao;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author 221712
- */
-@WebServlet(name = "CapaServlet", urlPatterns = {"/CapaServlet"})
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+@WebServlet("/capa")
 public class CapaServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CapaServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CapaServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException {
+
+        String idTexto =
+                request.getParameter("id");
+
+        if (idTexto == null ||
+                idTexto.trim().isEmpty()) {
+
+            response.setStatus(
+                    HttpServletResponse.SC_NOT_FOUND
+            );
+
+            return;
+        }
+
+        try {
+
+            int idJogo =
+                    Integer.parseInt(idTexto);
+
+            Connection conexao =
+                    Conexao.conectar();
+
+            PreparedStatement stmt =
+                    conexao.prepareStatement(
+                            "SELECT capa " +
+                            "FROM jogo " +
+                            "WHERE id = ?"
+                    );
+
+            stmt.setInt(1, idJogo);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            if (!rs.next()) {
+
+                rs.close();
+                stmt.close();
+                conexao.close();
+
+                response.setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+                return;
+            }
+
+            String capa =
+                    rs.getString("capa");
+
+            rs.close();
+            stmt.close();
+            conexao.close();
+
+            if (capa == null ||
+                    capa.trim().isEmpty()) {
+
+                response.setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+                return;
+            }
+
+            capa = capa.trim();
+
+            // =================================================
+            // CASO SEJA APENAS O APP ID
+            // =================================================
+
+            if (capa.matches("\\d+")) {
+
+                capa =
+                        "https://cdn.akamai.steamstatic.com/" +
+                        "steam/apps/" +
+                        capa +
+                        "/library_600x900_2x.jpg";
+            }
+
+            // =================================================
+            // PEGAR IMAGEM
+            // =================================================
+
+            URL url =
+                    new URL(capa);
+
+            HttpURLConnection conexaoHttp =
+                    (HttpURLConnection) url.openConnection();
+
+            conexaoHttp.setRequestMethod("GET");
+
+            conexaoHttp.setConnectTimeout(10000);
+
+            conexaoHttp.setReadTimeout(15000);
+
+            conexaoHttp.setRequestProperty(
+                    "User-Agent",
+                    "Mozilla/5.0"
+            );
+
+            conexaoHttp.setRequestProperty(
+                    "Accept",
+                    "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"
+            );
+
+            int codigo =
+                    conexaoHttp.getResponseCode();
+
+            if (codigo < 200 ||
+                    codigo >= 300) {
+
+                conexaoHttp.disconnect();
+
+                response.setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+                return;
+            }
+
+            String tipo =
+                    conexaoHttp.getContentType();
+
+            if (tipo == null ||
+                    !tipo.startsWith("image/")) {
+
+                conexaoHttp.disconnect();
+
+                response.setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+                return;
+            }
+
+            response.setContentType(tipo);
+
+            response.setHeader(
+                    "Cache-Control",
+                    "public, max-age=86400"
+            );
+
+            InputStream entrada =
+                    conexaoHttp.getInputStream();
+
+            OutputStream saida =
+                    response.getOutputStream();
+
+            byte[] buffer =
+                    new byte[8192];
+
+            int quantidade;
+
+            while (
+                    (quantidade =
+                            entrada.read(buffer)) != -1
+            ) {
+
+                saida.write(
+                        buffer,
+                        0,
+                        quantidade
+                );
+            }
+
+            saida.flush();
+
+            entrada.close();
+            saida.close();
+
+            conexaoHttp.disconnect();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            response.setStatus(
+                    HttpServletResponse.SC_NOT_FOUND
+            );
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

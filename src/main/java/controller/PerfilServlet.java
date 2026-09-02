@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,8 +130,8 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     "body {" +
                     "margin:0;" +
-                    "background:#14181c;" +
-                    "color:#ffffff;" +
+                    "background:#14101b;" +
+                    "color:#fff;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
             );
@@ -145,20 +146,22 @@ public class PerfilServlet extends HttpServlet {
                     "}"
             );
 
-            // PERFIL
+            // CARD PERFIL
 
             html.append(
                     ".perfil-card {" +
-                    "background:linear-gradient(135deg,#24152f,#202830);" +
-                    "border:1px solid #392743;" +
+                    "background:linear-gradient(135deg,#24102f,#202830);" +
+                    "border:1px solid #3e2849;" +
                     "border-radius:18px;" +
-                    "padding:30px;" +
+                    "padding:28px;" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:28px;" +
-                    "box-shadow:0 12px 35px rgba(0,0,0,.30);" +
+                    "gap:25px;" +
+                    "box-shadow:0 12px 35px rgba(0,0,0,.3);" +
                     "}"
             );
+
+            // FOTO
 
             html.append(
                     ".perfil-foto {" +
@@ -180,8 +183,8 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".perfil-nome {" +
+                    "font-size:31px;" +
                     "margin:0;" +
-                    "font-size:32px;" +
                     "font-weight:bold;" +
                     "}"
             );
@@ -190,14 +193,13 @@ public class PerfilServlet extends HttpServlet {
                     ".perfil-username {" +
                     "color:#939aa3;" +
                     "margin-top:5px;" +
-                    "font-size:15px;" +
                     "}"
             );
 
             html.append(
                     ".perfil-bio {" +
-                    "color:#d8dadd;" +
-                    "margin-top:15px;" +
+                    "color:#d7d7d7;" +
+                    "margin-top:14px;" +
                     "line-height:1.5;" +
                     "}"
             );
@@ -216,28 +218,28 @@ public class PerfilServlet extends HttpServlet {
                     "}"
             );
 
-            // ESTATÍSTICAS
+            // STATS
 
             html.append(
                     ".perfil-stats {" +
                     "display:flex;" +
-                    "gap:32px;" +
-                    "margin-top:20px;" +
+                    "gap:30px;" +
+                    "margin-top:19px;" +
                     "flex-wrap:wrap;" +
                     "}"
             );
 
             html.append(
-                    ".stat-number {" +
+                    ".stat-numero {" +
                     "font-size:24px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
             html.append(
-                    ".stat-label {" +
+                    ".stat-texto {" +
                     "font-size:13px;" +
-                    "color:#9299a2;" +
+                    "color:#939aa2;" +
                     "margin-top:3px;" +
                     "}"
             );
@@ -259,10 +261,10 @@ public class PerfilServlet extends HttpServlet {
                     "padding:10px 16px;" +
                     "background:#6300c0;" +
                     "border-radius:8px;" +
-                    "color:#ffffff;" +
+                    "color:white;" +
                     "text-decoration:none;" +
-                    "font-size:14px;" +
                     "font-weight:bold;" +
+                    "font-size:14px;" +
                     "transition:.2s;" +
                     "}"
             );
@@ -273,7 +275,7 @@ public class PerfilServlet extends HttpServlet {
                     "}"
             );
 
-            // GRID PRINCIPAL
+            // GRID
 
             html.append(
                     ".perfil-grid {" +
@@ -289,7 +291,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".secao {" +
                     "background:#202830;" +
-                    "border:1px solid #2f373e;" +
+                    "border:1px solid #303942;" +
                     "border-radius:15px;" +
                     "padding:22px;" +
                     "margin-bottom:22px;" +
@@ -317,7 +319,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".jogo-card {" +
                     "background:#171b20;" +
-                    "border:1px solid #2f363d;" +
+                    "border:1px solid #303840;" +
                     "border-radius:11px;" +
                     "overflow:hidden;" +
                     "transition:.2s;" +
@@ -332,9 +334,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    ".capa-area {" +
-                    "width:100%;" +
+                    ".capa-container {" +
                     "height:215px;" +
+                    "width:100%;" +
                     "overflow:hidden;" +
                     "background:transparent;" +
                     "}"
@@ -344,8 +346,8 @@ public class PerfilServlet extends HttpServlet {
                     ".jogo-capa {" +
                     "width:100%;" +
                     "height:215px;" +
-                    "display:block;" +
                     "object-fit:cover;" +
+                    "display:block;" +
                     "background:transparent;" +
                     "}"
             );
@@ -369,7 +371,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".lista-card {" +
                     "background:#171b20;" +
-                    "border:1px solid #30373e;" +
+                    "border:1px solid #303840;" +
                     "border-radius:11px;" +
                     "padding:16px;" +
                     "margin-bottom:14px;" +
@@ -398,8 +400,8 @@ public class PerfilServlet extends HttpServlet {
                     "height:130px;" +
                     "object-fit:cover;" +
                     "display:block;" +
-                    "border-radius:7px;" +
                     "background:transparent;" +
+                    "border-radius:7px;" +
                     "}"
             );
 
@@ -411,7 +413,7 @@ public class PerfilServlet extends HttpServlet {
                     "align-items:center;" +
                     "gap:11px;" +
                     "padding:10px 0;" +
-                    "border-bottom:1px solid #30373e;" +
+                    "border-bottom:1px solid #303840;" +
                     "}"
             );
 
@@ -433,7 +435,7 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".usuario-link {" +
-                    "color:white;" +
+                    "color:#fff;" +
                     "text-decoration:none;" +
                     "font-weight:bold;" +
                     "}"
@@ -444,8 +446,8 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".vazio {" +
                     "text-align:center;" +
-                    "color:#7f8790;" +
                     "padding:22px 5px;" +
+                    "color:#7d858d;" +
                     "}"
             );
 
@@ -453,6 +455,7 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     "@media(max-width:800px) {" +
+
                     ".perfil-card {" +
                     "flex-direction:column;" +
                     "text-align:center;" +
@@ -469,6 +472,7 @@ public class PerfilServlet extends HttpServlet {
                     ".perfil-grid {" +
                     "grid-template-columns:1fr;" +
                     "}" +
+
                     "}"
             );
 
@@ -531,7 +535,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // CARD DO PERFIL
+            // PERFIL
             // =====================================================
 
             html.append(
@@ -561,9 +565,7 @@ public class PerfilServlet extends HttpServlet {
                         "style='display:flex;" +
                         "align-items:center;" +
                         "justify-content:center;" +
-                        "font-size:55px;'>" +
-                        "👤" +
-                        "</div>"
+                        "font-size:55px;'>👤</div>"
                 );
             }
 
@@ -577,32 +579,9 @@ public class PerfilServlet extends HttpServlet {
                     "</h1>"
             );
 
-            String username =
-                    usuario.getNome();
-
-            try {
-
-                java.lang.reflect.Method metodo =
-                        usuario.getClass()
-                        .getMethod("getUsername");
-
-                Object valor =
-                        metodo.invoke(usuario);
-
-                if (valor != null &&
-                        !valor.toString().trim().isEmpty()) {
-
-                    username =
-                            valor.toString();
-                }
-
-            } catch (Exception ignorado) {
-                // Usa o nome caso username não esteja disponível
-            }
-
             html.append(
                     "<div class='perfil-username'>@" +
-                    escaparHtml(username) +
+                    escaparHtml(usuario.getNome()) +
                     "</div>"
             );
 
@@ -625,55 +604,51 @@ public class PerfilServlet extends HttpServlet {
                 );
             }
 
+            // STATS
+
             html.append(
                     "<div class='perfil-stats'>"
             );
 
             html.append(
                     "<div>" +
-                    "<div class='stat-number'>" +
+                    "<div class='stat-numero'>" +
                     totalSeguidores +
                     "</div>" +
-                    "<div class='stat-label'>" +
-                    "Seguidores" +
-                    "</div>" +
+                    "<div class='stat-texto'>Seguidores</div>" +
                     "</div>"
             );
 
             html.append(
                     "<div>" +
-                    "<div class='stat-number'>" +
+                    "<div class='stat-numero'>" +
                     totalSeguindo +
                     "</div>" +
-                    "<div class='stat-label'>" +
-                    "Seguindo" +
-                    "</div>" +
+                    "<div class='stat-texto'>Seguindo</div>" +
                     "</div>"
             );
 
             html.append(
                     "<div>" +
-                    "<div class='stat-number'>" +
+                    "<div class='stat-numero'>" +
                     favoritos.size() +
                     "</div>" +
-                    "<div class='stat-label'>" +
-                    "Favoritos" +
-                    "</div>" +
+                    "<div class='stat-texto'>Favoritos</div>" +
                     "</div>"
             );
 
             html.append(
                     "<div>" +
-                    "<div class='stat-number'>" +
+                    "<div class='stat-numero'>" +
                     listas.size() +
                     "</div>" +
-                    "<div class='stat-label'>" +
-                    "Listas" +
-                    "</div>" +
+                    "<div class='stat-texto'>Listas</div>" +
                     "</div>"
             );
 
             html.append("</div>");
+
+            // BOTÕES
 
             html.append(
                     "<div class='perfil-buttons'>"
@@ -708,7 +683,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // ESQUERDA
+            // COLUNA ESQUERDA
             // =====================================================
 
             html.append("<div>");
@@ -743,7 +718,7 @@ public class PerfilServlet extends HttpServlet {
                         favoritos) {
 
                     html.append(
-                            montarJogo(
+                            montarCardJogo(
                                     jogo,
                                     request
                             )
@@ -808,24 +783,21 @@ public class PerfilServlet extends HttpServlet {
                                 lista.jogos) {
 
                             String capa =
-                                    prepararCapa(
-                                            jogo.capa,
-                                            request
-                                    );
+                                    request.getContextPath()
+                                    + "/capa?id="
+                                    + jogo.id;
 
-                            if (!capa.isEmpty()) {
-
-                                html.append(
-                                        "<img " +
-                                        "class='lista-capa' " +
-                                        "src='" +
-                                        escaparHtml(capa) +
-                                        "' " +
-                                        "alt='Capa de " +
-                                        escaparHtml(jogo.titulo) +
-                                        "'>"
-                                );
-                            }
+                            html.append(
+                                    "<img " +
+                                    "class='lista-capa' " +
+                                    "src='" +
+                                    escaparHtml(capa) +
+                                    "' " +
+                                    "alt='Capa de " +
+                                    escaparHtml(jogo.titulo) +
+                                    "' " +
+                                    "onerror='this.style.display=\"none\";'>"
+                            );
                         }
 
                         html.append("</div>");
@@ -840,7 +812,7 @@ public class PerfilServlet extends HttpServlet {
             html.append("</div>");
 
             // =====================================================
-            // DIREITA
+            // COLUNA DIREITA
             // =====================================================
 
             html.append("<div>");
@@ -955,11 +927,11 @@ public class PerfilServlet extends HttpServlet {
 
         PreparedStatement stmt =
                 conexao.prepareStatement(
-                        "SELECT j.id, j.titulo, j.capa " +
+                        "SELECT j.id,j.titulo,j.capa " +
                         "FROM favorito f " +
                         "INNER JOIN jogo j " +
-                        "ON j.id = f.id_jogo " +
-                        "WHERE f.id_usuario = ? " +
+                        "ON j.id=f.id_jogo " +
+                        "WHERE f.id_usuario=? " +
                         "ORDER BY f.id DESC"
                 );
 
@@ -1008,9 +980,9 @@ public class PerfilServlet extends HttpServlet {
 
         PreparedStatement stmt =
                 conexao.prepareStatement(
-                        "SELECT id, nome " +
+                        "SELECT id,nome " +
                         "FROM lista " +
-                        "WHERE id_usuario = ? " +
+                        "WHERE id_usuario=? " +
                         "ORDER BY id DESC"
                 );
 
@@ -1061,11 +1033,11 @@ public class PerfilServlet extends HttpServlet {
 
         PreparedStatement stmt =
                 conexao.prepareStatement(
-                        "SELECT j.id, j.titulo, j.capa " +
+                        "SELECT j.id,j.titulo,j.capa " +
                         "FROM lista_jogo lj " +
                         "INNER JOIN jogo j " +
-                        "ON j.id = lj.id_jogo " +
-                        "WHERE lj.id_lista = ? " +
+                        "ON j.id=lj.id_jogo " +
+                        "WHERE lj.id_lista=? " +
                         "ORDER BY lj.id ASC"
                 );
 
@@ -1099,10 +1071,10 @@ public class PerfilServlet extends HttpServlet {
     }
 
     // =========================================================
-    // CARD JOGO
+    // CARD FAVORITO
     // =========================================================
 
-    private String montarJogo(
+    private String montarCardJogo(
             Jogo jogo,
             HttpServletRequest request) {
 
@@ -1110,32 +1082,29 @@ public class PerfilServlet extends HttpServlet {
                 new StringBuilder();
 
         String capa =
-                prepararCapa(
-                        jogo.capa,
-                        request
-                );
+                request.getContextPath()
+                + "/capa?id="
+                + jogo.id;
 
         html.append(
                 "<div class='jogo-card'>"
         );
 
         html.append(
-                "<div class='capa-area'>"
+                "<div class='capa-container'>"
         );
 
-        if (!capa.isEmpty()) {
-
-            html.append(
-                    "<img " +
-                    "class='jogo-capa' " +
-                    "src='" +
-                    escaparHtml(capa) +
-                    "' " +
-                    "alt='Capa de " +
-                    escaparHtml(jogo.titulo) +
-                    "'>"
-            );
-        }
+        html.append(
+                "<img " +
+                "class='jogo-capa' " +
+                "src='" +
+                escaparHtml(capa) +
+                "' " +
+                "alt='Capa de " +
+                escaparHtml(jogo.titulo) +
+                "' " +
+                "onerror='this.style.display=\"none\";'>"
+        );
 
         html.append("</div>");
 
@@ -1195,7 +1164,7 @@ public class PerfilServlet extends HttpServlet {
                     "style='display:flex;" +
                     "align-items:center;" +
                     "justify-content:center;" +
-                    "font-size:22px;'>👤</div>"
+                    "font-size:21px;'>👤</div>"
             );
         }
 
@@ -1211,54 +1180,6 @@ public class PerfilServlet extends HttpServlet {
         html.append("</div>");
 
         return html.toString();
-    }
-
-    // =========================================================
-    // CAPA
-    // =========================================================
-
-    private String prepararCapa(
-            String caminho,
-            HttpServletRequest request) {
-
-        if (caminho == null ||
-                caminho.trim().isEmpty()) {
-
-            return "";
-        }
-
-        caminho =
-                caminho.trim();
-
-        // URL completa já salva no banco.
-        // NÃO ALTERAR.
-        if (caminho.startsWith("http://") ||
-                caminho.startsWith("https://")) {
-
-            return caminho;
-        }
-
-        // Caso o banco tenha somente o App ID.
-        if (caminho.matches("\\d+")) {
-
-            return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
-                    caminho +
-                    "/library_600x900_2x.jpg";
-        }
-
-        // Caminho local.
-        while (caminho.startsWith("/")) {
-
-            caminho =
-                    caminho.substring(1);
-        }
-
-        return
-                request.getContextPath()
-                + "/"
-                + caminho;
     }
 
     // =========================================================

@@ -70,6 +70,10 @@ public class BibliotecaServlet extends HttpServlet {
             StringBuilder html =
                     new StringBuilder();
 
+            // =====================================================
+            // HTML
+            // =====================================================
+
             html.append("<!DOCTYPE html>");
             html.append("<html lang='pt-BR'>");
 
@@ -91,53 +95,71 @@ public class BibliotecaServlet extends HttpServlet {
                     "href='style.css'>"
             );
 
+            // =====================================================
+            // CSS
+            // =====================================================
+
             html.append("<style>");
 
             html.append(
-                    "body{" +
+                    "* {" +
+                    "box-sizing:border-box;" +
+                    "}"
+            );
+
+            html.append(
+                    "body {" +
                     "margin:0;" +
-                    "background:#14181c;" +
-                    "color:#fff;" +
+                    "background:#14101b;" +
+                    "color:#ffffff;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
             );
 
             html.append(
-                    ".library-page{" +
+                    ".biblioteca-page {" +
                     "max-width:1200px;" +
-                    "margin:auto;" +
+                    "margin:0 auto;" +
                     "padding:30px 20px 60px;" +
                     "}"
             );
 
+            // =====================================================
+            // TOPO
+            // =====================================================
+
             html.append(
-                    ".library-hero{" +
-                    "background:linear-gradient(135deg,#251436,#202830);" +
-                    "border:1px solid #3a2946;" +
+                    ".biblioteca-topo {" +
+                    "background:linear-gradient(135deg,#24102f,#1b1820);" +
+                    "border:1px solid #40244f;" +
                     "border-radius:18px;" +
-                    "padding:30px;" +
+                    "padding:28px;" +
                     "margin-bottom:25px;" +
                     "}"
             );
 
             html.append(
-                    ".library-hero h2{" +
-                    "font-size:32px;" +
+                    ".biblioteca-topo h2 {" +
                     "margin:0 0 8px;" +
+                    "font-size:32px;" +
                     "}"
             );
 
             html.append(
-                    ".library-hero p{" +
+                    ".biblioteca-topo p {" +
                     "margin:0;" +
-                    "color:#9299a2;" +
+                    "color:#98919f;" +
                     "}"
             );
 
+            // =====================================================
+            // SEÇÃO
+            // =====================================================
+
             html.append(
-                    ".section{" +
+                    ".biblioteca-secao {" +
                     "background:#202830;" +
-                    "border:1px solid #2f373e;" +
+                    "border:1px solid #303942;" +
                     "border-radius:15px;" +
                     "padding:24px;" +
                     "margin-bottom:25px;" +
@@ -145,7 +167,7 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    ".section-header{" +
+                    ".secao-header {" +
                     "display:flex;" +
                     "justify-content:space-between;" +
                     "align-items:center;" +
@@ -154,58 +176,71 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             html.append(
-                    ".section-title{" +
+                    ".secao-titulo {" +
                     "margin:0;" +
                     "font-size:23px;" +
                     "}"
             );
 
             html.append(
-                    ".count{" +
+                    ".contador {" +
                     "background:#171b20;" +
-                    "border:1px solid #343c43;" +
-                    "border-radius:20px;" +
+                    "border:1px solid #363e46;" +
                     "padding:6px 11px;" +
+                    "border-radius:20px;" +
                     "font-size:13px;" +
-                    "color:#a3aab1;" +
+                    "color:#aaa;" +
                     "}"
             );
 
+            // =====================================================
+            // GRID
+            // =====================================================
+
             html.append(
-                    ".games-grid{" +
+                    ".jogos-grid {" +
                     "display:grid;" +
-                    "grid-template-columns:" +
-                    "repeat(auto-fill,minmax(165px,1fr));" +
+                    "grid-template-columns:repeat(auto-fill,minmax(165px,1fr));" +
                     "gap:18px;" +
                     "}"
             );
 
+            // =====================================================
+            // CARD
+            // =====================================================
+
             html.append(
-                    ".game-card{" +
+                    ".jogo-card {" +
                     "background:#171b20;" +
-                    "border:1px solid #2f363d;" +
+                    "border:1px solid #303840;" +
                     "border-radius:11px;" +
                     "overflow:hidden;" +
-                    "transition:.2s;" +
+                    "transition:0.2s;" +
                     "}"
             );
 
             html.append(
-                    ".game-card:hover{" +
+                    ".jogo-card:hover {" +
                     "transform:translateY(-4px);" +
                     "border-color:#7300d1;" +
                     "}"
             );
 
+            // =====================================================
+            // CAPA
+            // =====================================================
+
             html.append(
-                    ".cover-area{" +
+                    ".capa-container {" +
+                    "width:100%;" +
                     "height:245px;" +
-                    "background:#292f35;" +
+                    "overflow:hidden;" +
+                    "background:transparent;" +
                     "}"
             );
 
             html.append(
-                    ".game-cover{" +
+                    ".jogo-capa {" +
                     "width:100%;" +
                     "height:245px;" +
                     "object-fit:cover;" +
@@ -213,14 +248,18 @@ public class BibliotecaServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // INFO
+            // =====================================================
+
             html.append(
-                    ".game-info{" +
+                    ".jogo-info {" +
                     "padding:12px;" +
                     "}"
             );
 
             html.append(
-                    ".game-title{" +
+                    ".jogo-titulo {" +
                     "font-size:14px;" +
                     "font-weight:bold;" +
                     "line-height:1.35;" +
@@ -228,75 +267,131 @@ public class BibliotecaServlet extends HttpServlet {
                     "}"
             );
 
+            // =====================================================
+            // BOTÃO
+            // =====================================================
+
             html.append(
-                    ".rate-btn{" +
+                    ".botao-avaliar {" +
                     "display:block;" +
-                    "background:#6300c0;" +
-                    "color:white;" +
-                    "text-align:center;" +
+                    "margin-top:11px;" +
                     "padding:9px;" +
-                    "margin-top:10px;" +
-                    "border-radius:7px;" +
+                    "background:#6500c7;" +
+                    "color:#ffffff;" +
                     "text-decoration:none;" +
+                    "text-align:center;" +
+                    "border-radius:7px;" +
                     "font-size:13px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
             html.append(
-                    ".rate-btn:hover{" +
+                    ".botao-avaliar:hover {" +
                     "background:#8300ed;" +
                     "}"
             );
 
+            // =====================================================
+            // VAZIO
+            // =====================================================
+
             html.append(
-                    ".empty{" +
+                    ".vazio {" +
                     "text-align:center;" +
-                    "padding:30px;" +
                     "color:#7f8790;" +
+                    "padding:30px;" +
                     "}"
             );
 
+            // =====================================================
+            // RESPONSIVO
+            // =====================================================
+
             html.append(
-                    "@media(max-width:600px){" +
-                    ".games-grid{" +
+                    "@media(max-width:600px) {" +
+
+                    ".biblioteca-page {" +
+                    "padding:20px 12px 40px;" +
+                    "}" +
+
+                    ".biblioteca-topo h2 {" +
+                    "font-size:26px;" +
+                    "}" +
+
+                    ".jogos-grid {" +
                     "grid-template-columns:repeat(2,1fr);" +
                     "gap:12px;" +
                     "}" +
-                    ".cover-area,.game-cover{" +
+
+                    ".capa-container," +
+                    ".jogo-capa {" +
                     "height:210px;" +
                     "}" +
+
                     "}"
             );
 
             html.append("</style>");
 
             html.append("</head>");
+
             html.append("<body>");
 
+            // =====================================================
             // HEADER
+            // =====================================================
 
             html.append("<header>");
+
             html.append("<h1>GameBoxd</h1>");
+
             html.append("<nav>");
 
-            html.append("<a href='index.html'>Início</a>");
-            html.append("<a href='jogos'>Jogos</a>");
-            html.append("<a href='biblioteca'>Biblioteca</a>");
-            html.append("<a href='buscar-usuarios.html'>Buscar usuários</a>");
-            html.append("<a href='listas'>Listas</a>");
-            html.append("<a href='perfil'>Meu Perfil</a>");
-            html.append("<a href='logout'>Sair</a>");
-
-            html.append("</nav>");
-            html.append("</header>");
-
             html.append(
-                    "<main class='library-page'>"
+                    "<a href='index.html'>Início</a>"
             );
 
             html.append(
-                    "<section class='library-hero'>"
+                    "<a href='jogos'>Jogos</a>"
+            );
+
+            html.append(
+                    "<a href='biblioteca'>Biblioteca</a>"
+            );
+
+            html.append(
+                    "<a href='buscar-usuarios.html'>" +
+                    "Buscar usuários" +
+                    "</a>"
+            );
+
+            html.append(
+                    "<a href='listas'>Listas</a>"
+            );
+
+            html.append(
+                    "<a href='perfil'>Meu Perfil</a>"
+            );
+
+            html.append(
+                    "<a href='logout'>Sair</a>"
+            );
+
+            html.append("</nav>");
+
+            html.append("</header>");
+
+            // =====================================================
+            // PÁGINA
+            // =====================================================
+
+            html.append(
+                    "<main class='biblioteca-page'>"
+            );
+
+            html.append(
+                    "<section class='biblioteca-topo'>"
             );
 
             html.append(
@@ -305,31 +400,42 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append(
                     "<p>" +
-                    "Organize todos os seus jogos no GameBoxd." +
+                    "Seus jogos organizados por status." +
                     "</p>"
             );
 
             html.append("</section>");
 
+            // =====================================================
             // JOGANDO
+            // =====================================================
 
             html.append(
-                    "<section class='section'>"
+                    "<section class='biblioteca-secao'>"
             );
 
             html.append(
-                    "<div class='section-header'>" +
-                    "<h2 class='section-title'>🎮 Jogando</h2>" +
-                    "<span class='count'>" +
+                    "<div class='secao-header'>"
+            );
+
+            html.append(
+                    "<h2 class='secao-titulo'>" +
+                    "🎮 Jogando" +
+                    "</h2>"
+            );
+
+            html.append(
+                    "<span class='contador'>" +
                     jogando.size() +
-                    "</span>" +
-                    "</div>"
+                    "</span>"
             );
+
+            html.append("</div>");
 
             if (jogando.isEmpty()) {
 
                 html.append(
-                        "<div class='empty'>" +
+                        "<div class='vazio'>" +
                         "Nenhum jogo sendo jogado." +
                         "</div>"
                 );
@@ -337,7 +443,7 @@ public class BibliotecaServlet extends HttpServlet {
             } else {
 
                 html.append(
-                        "<div class='games-grid'>"
+                        "<div class='jogos-grid'>"
                 );
 
                 for (Jogo jogo :
@@ -356,25 +462,36 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("</section>");
 
+            // =====================================================
             // ZERADOS
+            // =====================================================
 
             html.append(
-                    "<section class='section'>"
+                    "<section class='biblioteca-secao'>"
             );
 
             html.append(
-                    "<div class='section-header'>" +
-                    "<h2 class='section-title'>✅ Zerados</h2>" +
-                    "<span class='count'>" +
+                    "<div class='secao-header'>"
+            );
+
+            html.append(
+                    "<h2 class='secao-titulo'>" +
+                    "✅ Zerados" +
+                    "</h2>"
+            );
+
+            html.append(
+                    "<span class='contador'>" +
                     zerados.size() +
-                    "</span>" +
-                    "</div>"
+                    "</span>"
             );
+
+            html.append("</div>");
 
             if (zerados.isEmpty()) {
 
                 html.append(
-                        "<div class='empty'>" +
+                        "<div class='vazio'>" +
                         "Nenhum jogo zerado ainda." +
                         "</div>"
                 );
@@ -382,7 +499,7 @@ public class BibliotecaServlet extends HttpServlet {
             } else {
 
                 html.append(
-                        "<div class='games-grid'>"
+                        "<div class='jogos-grid'>"
                 );
 
                 for (Jogo jogo :
@@ -401,25 +518,36 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("</section>");
 
+            // =====================================================
             // QUERO JOGAR
+            // =====================================================
 
             html.append(
-                    "<section class='section'>"
+                    "<section class='biblioteca-secao'>"
             );
 
             html.append(
-                    "<div class='section-header'>" +
-                    "<h2 class='section-title'>🎯 Quero jogar</h2>" +
-                    "<span class='count'>" +
+                    "<div class='secao-header'>"
+            );
+
+            html.append(
+                    "<h2 class='secao-titulo'>" +
+                    "🎯 Quero jogar" +
+                    "</h2>"
+            );
+
+            html.append(
+                    "<span class='contador'>" +
                     queroJogar.size() +
-                    "</span>" +
-                    "</div>"
+                    "</span>"
             );
+
+            html.append("</div>");
 
             if (queroJogar.isEmpty()) {
 
                 html.append(
-                        "<div class='empty'>" +
+                        "<div class='vazio'>" +
                         "Nenhum jogo na sua lista." +
                         "</div>"
                 );
@@ -427,7 +555,7 @@ public class BibliotecaServlet extends HttpServlet {
             } else {
 
                 html.append(
-                        "<div class='games-grid'>"
+                        "<div class='jogos-grid'>"
                 );
 
                 for (Jogo jogo :
@@ -449,6 +577,7 @@ public class BibliotecaServlet extends HttpServlet {
             html.append("</main>");
 
             html.append("</body>");
+
             html.append("</html>");
 
             response.getWriter().println(
@@ -463,9 +592,9 @@ public class BibliotecaServlet extends HttpServlet {
         }
     }
 
-    // =====================================================
-    // BUSCAR JOGOS
-    // =====================================================
+    // =========================================================
+    // CARREGAR JOGOS
+    // =========================================================
 
     private List<Jogo> carregarJogos(
             int idUsuario,
@@ -480,12 +609,16 @@ public class BibliotecaServlet extends HttpServlet {
 
         PreparedStatement stmt =
                 conexao.prepareStatement(
-                        "SELECT j.id,j.titulo,j.capa,b.status " +
+                        "SELECT " +
+                        "j.id, " +
+                        "j.titulo, " +
+                        "j.capa, " +
+                        "b.status " +
                         "FROM biblioteca b " +
                         "INNER JOIN jogo j " +
-                        "ON j.id=b.id_jogo " +
-                        "WHERE b.id_usuario=? " +
-                        "AND b.status=? " +
+                        "ON j.id = b.id_jogo " +
+                        "WHERE b.id_usuario = ? " +
+                        "AND b.status = ? " +
                         "ORDER BY b.id DESC"
                 );
 
@@ -522,68 +655,64 @@ public class BibliotecaServlet extends HttpServlet {
         return jogos;
     }
 
-    // =====================================================
+    // =========================================================
     // CARD
-    // =====================================================
+    // =========================================================
 
     private String montarCard(
             Jogo jogo,
             HttpServletRequest request) {
 
-        String capa =
-                prepararCapa(
-                        jogo.capa,
-                        request
-                );
-
         StringBuilder html =
                 new StringBuilder();
 
+        /*
+         * IMPORTANTE:
+         * Usa diretamente j.capa,
+         * igual à página Jogos.
+         */
+
+        String capa =
+                jogo.capa;
+
         html.append(
-                "<div class='game-card'>"
+                "<div class='jogo-card'>"
         );
 
         html.append(
-                "<div class='cover-area'>"
+                "<div class='capa-container'>"
         );
 
-        if (!capa.isEmpty()) {
+        if (capa != null &&
+                !capa.trim().isEmpty()) {
 
             html.append(
-                    "<img class='game-cover' " +
+                    "<img " +
+                    "class='jogo-capa' " +
                     "src='" +
-                    escaparHtml(capa) +
+                    escaparHtml(capa.trim()) +
                     "' " +
-                    "alt='Capa do jogo'>"
-            );
-
-        } else {
-
-            html.append(
-                    "<div style='height:100%;" +
-                    "display:flex;" +
-                    "align-items:center;" +
-                    "justify-content:center;" +
-                    "color:#777;'>" +
-                    "Sem capa" +
-                    "</div>"
+                    "alt='Capa de " +
+                    escaparHtml(jogo.titulo) +
+                    "' " +
+                    "onerror='this.style.display=\"none\";'>"
             );
         }
 
         html.append("</div>");
 
         html.append(
-                "<div class='game-info'>"
+                "<div class='jogo-info'>"
         );
 
         html.append(
-                "<div class='game-title'>" +
+                "<div class='jogo-titulo'>" +
                 escaparHtml(jogo.titulo) +
                 "</div>"
         );
 
         html.append(
-                "<a class='rate-btn' " +
+                "<a class='botao-avaliar' " +
                 "href='avaliar?id=" +
                 jogo.id +
                 "'>" +
@@ -592,57 +721,15 @@ public class BibliotecaServlet extends HttpServlet {
         );
 
         html.append("</div>");
+
         html.append("</div>");
 
         return html.toString();
     }
 
-    // =====================================================
-    // CAPA
-    // =====================================================
-
-    private String prepararCapa(
-        String caminho,
-        HttpServletRequest request) {
-
-    if (caminho == null ||
-            caminho.trim().isEmpty()) {
-
-        return "";
-    }
-
-    caminho = caminho.trim();
-
-    // URL já pronta
-    if (caminho.startsWith("http://") ||
-            caminho.startsWith("https://")) {
-
-        return caminho;
-    }
-
-    // Se o banco tiver somente o App ID
-    if (caminho.matches("\\d+")) {
-
-        return
-                "https://shared.fastly.steamstatic.com/" +
-                "store_item_assets/steam/apps/" +
-                caminho +
-                "/library_600x900.jpg";
-    }
-
-    while (caminho.startsWith("/")) {
-        caminho = caminho.substring(1);
-    }
-
-    return
-            request.getContextPath()
-            + "/"
-            + caminho;
-}
-
-    // =====================================================
-    // ESCAPAR
-    // =====================================================
+    // =========================================================
+    // ESCAPAR HTML
+    // =========================================================
 
     private String escaparHtml(
             String texto) {
@@ -652,22 +739,25 @@ public class BibliotecaServlet extends HttpServlet {
         }
 
         return texto
-                .replace("&","&amp;")
-                .replace("<","&lt;")
-                .replace(">","&gt;")
-                .replace("\"","&quot;")
-                .replace("'","&#39;");
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 
-    // =====================================================
-    // CLASSE
-    // =====================================================
+    // =========================================================
+    // CLASSE JOGO
+    // =========================================================
 
     private static class Jogo {
 
         int id;
+
         String titulo;
+
         String capa;
+
         String status;
     }
 }
