@@ -113,7 +113,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     "<link rel='icon' " +
                     "type='image/png' " +
-                    "href='LOGO.png'>"
+                    "href='favicon.png'>"
             );
 
             html.append(
