@@ -106,8 +106,15 @@ public class PerfilServlet extends HttpServlet {
                     "content='width=device-width, initial-scale=1.0'>"
             );
 
+            // FAVICON
             html.append(
-                    "<title>Meu Perfil - GameBoxd</title>"
+                    "<link rel='icon' " +
+                    "type='image/png' " +
+                    "href='LOGO.png'>"
+            );
+
+            html.append(
+                    "<title>Meu Perfil - Inventory</title>"
             );
 
             html.append(
@@ -122,355 +129,500 @@ public class PerfilServlet extends HttpServlet {
             html.append("<style>");
 
             html.append(
-                    "* {" +
+                    "*{" +
                     "box-sizing:border-box;" +
                     "}"
             );
 
             html.append(
-                    "body {" +
+                    "body{" +
                     "margin:0;" +
-                    "background:#14101b;" +
-                    "color:#fff;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
+                    "background:" +
+                    "radial-gradient(circle at top left,#31134b 0%,transparent 35%)," +
+                    "radial-gradient(circle at bottom right,#24103c 0%,transparent 35%)," +
+                    "#0f0b14;" +
+                    "color:#fff;" +
+                    "min-height:100vh;" +
                     "}"
             );
 
+            // =====================================================
             // PÁGINA
+            // =====================================================
 
             html.append(
-                    ".perfil-page {" +
-                    "max-width:1150px;" +
+                    ".perfil-page{" +
+                    "max-width:1200px;" +
                     "margin:0 auto;" +
-                    "padding:30px 20px 60px;" +
+                    "padding:38px 20px 70px;" +
                     "}"
             );
 
-            // CARD PERFIL
+            // =====================================================
+            // HERO
+            // =====================================================
 
             html.append(
-                    ".perfil-card {" +
-                    "background:linear-gradient(135deg,#24102f,#202830);" +
-                    "border:1px solid #3e2849;" +
-                    "border-radius:18px;" +
-                    "padding:28px;" +
+                    ".perfil-card{" +
+                    "position:relative;" +
+                    "overflow:hidden;" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:25px;" +
-                    "box-shadow:0 12px 35px rgba(0,0,0,.3);" +
+                    "gap:28px;" +
+                    "padding:32px;" +
+                    "border-radius:24px;" +
+                    "background:linear-gradient(135deg," +
+                    "rgba(43,18,61,.95)," +
+                    "rgba(24,28,36,.96));" +
+                    "border:1px solid rgba(155,70,220,.25);" +
+                    "box-shadow:0 20px 60px rgba(0,0,0,.35);" +
+                    "}"
+            );
+
+            html.append(
+                    ".perfil-card:before{" +
+                    "content:'';" +
+                    "position:absolute;" +
+                    "width:300px;" +
+                    "height:300px;" +
+                    "right:-120px;" +
+                    "top:-150px;" +
+                    "background:#7200d6;" +
+                    "opacity:.13;" +
+                    "border-radius:50%;" +
                     "}"
             );
 
             // FOTO
 
             html.append(
-                    ".perfil-foto {" +
-                    "width:125px;" +
-                    "height:125px;" +
-                    "border-radius:50%;" +
-                    "object-fit:cover;" +
-                    "border:3px solid #7300d1;" +
-                    "background:transparent;" +
+                    ".foto-area{" +
+                    "position:relative;" +
                     "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-info {" +
+                    ".perfil-foto{" +
+                    "width:155px;" +
+                    "height:155px;" +
+                    "border-radius:50%;" +
+                    "object-fit:cover;" +
+                    "display:block;" +
+                    "border:4px solid #7d16d6;" +
+                    "background:#17131d;" +
+                    "box-shadow:" +
+                    "0 0 0 6px rgba(125,22,214,.12)," +
+                    "0 0 35px rgba(125,22,214,.35);" +
+                    "}"
+            );
+
+            // INFORMAÇÕES
+
+            html.append(
+                    ".perfil-info{" +
+                    "position:relative;" +
+                    "z-index:2;" +
                     "flex:1;" +
+                    "min-width:0;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-nome {" +
-                    "font-size:31px;" +
+                    ".perfil-nome{" +
+                    "font-size:38px;" +
+                    "line-height:1.1;" +
                     "margin:0;" +
-                    "font-weight:bold;" +
+                    "font-weight:800;" +
+                    "letter-spacing:-.5px;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-username {" +
-                    "color:#939aa3;" +
-                    "margin-top:5px;" +
+                    ".perfil-username{" +
+                    "margin-top:8px;" +
+                    "font-size:16px;" +
+                    "color:#a39aaa;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-bio {" +
-                    "color:#d7d7d7;" +
-                    "margin-top:14px;" +
-                    "line-height:1.5;" +
+                    ".perfil-bio{" +
+                    "max-width:700px;" +
+                    "margin-top:18px;" +
+                    "font-size:16px;" +
+                    "line-height:1.6;" +
+                    "color:#ddd6e4;" +
                     "}"
             );
 
             // EMBLEMA
 
             html.append(
-                    ".love-badge {" +
-                    "display:inline-block;" +
-                    "margin-top:12px;" +
-                    "padding:7px 14px;" +
-                    "background:#6300c0;" +
-                    "border-radius:20px;" +
+                    ".love-badge{" +
+                    "display:inline-flex;" +
+                    "align-items:center;" +
+                    "gap:6px;" +
+                    "margin-top:17px;" +
+                    "padding:8px 14px;" +
+                    "border-radius:30px;" +
+                    "background:linear-gradient(135deg,#6900c9,#9200ff);" +
                     "font-size:13px;" +
                     "font-weight:bold;" +
+                    "box-shadow:0 8px 22px rgba(110,0,200,.25);" +
                     "}"
             );
 
-            // STATS
+            // =====================================================
+            // ESTATÍSTICAS
+            // =====================================================
 
             html.append(
-                    ".perfil-stats {" +
+                    ".perfil-stats{" +
                     "display:flex;" +
-                    "gap:30px;" +
-                    "margin-top:19px;" +
+                    "gap:12px;" +
                     "flex-wrap:wrap;" +
+                    "margin-top:24px;" +
                     "}"
             );
 
             html.append(
-                    ".stat-numero {" +
+                    ".stat-card{" +
+                    "min-width:110px;" +
+                    "padding:13px 16px;" +
+                    "border-radius:13px;" +
+                    "background:rgba(255,255,255,.045);" +
+                    "border:1px solid rgba(255,255,255,.07);" +
+                    "}"
+            );
+
+            html.append(
+                    ".stat-numero{" +
                     "font-size:24px;" +
-                    "font-weight:bold;" +
+                    "font-weight:800;" +
                     "}"
             );
 
             html.append(
-                    ".stat-texto {" +
-                    "font-size:13px;" +
-                    "color:#939aa2;" +
-                    "margin-top:3px;" +
+                    ".stat-texto{" +
+                    "margin-top:4px;" +
+                    "font-size:12px;" +
+                    "text-transform:uppercase;" +
+                    "letter-spacing:.6px;" +
+                    "color:#95909d;" +
                     "}"
             );
 
+            // =====================================================
             // BOTÕES
+            // =====================================================
 
             html.append(
-                    ".perfil-buttons {" +
+                    ".perfil-buttons{" +
                     "display:flex;" +
                     "gap:10px;" +
-                    "margin-top:18px;" +
                     "flex-wrap:wrap;" +
+                    "margin-top:20px;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-button {" +
-                    "display:inline-block;" +
-                    "padding:10px 16px;" +
-                    "background:#6300c0;" +
-                    "border-radius:8px;" +
-                    "color:white;" +
+                    ".perfil-button{" +
+                    "display:inline-flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "padding:11px 17px;" +
+                    "border-radius:10px;" +
+                    "background:linear-gradient(135deg,#6500c7,#8500ec);" +
+                    "color:#fff;" +
                     "text-decoration:none;" +
-                    "font-weight:bold;" +
                     "font-size:14px;" +
+                    "font-weight:bold;" +
                     "transition:.2s;" +
+                    "box-shadow:0 8px 20px rgba(99,0,192,.18);" +
                     "}"
             );
 
             html.append(
-                    ".perfil-button:hover {" +
-                    "background:#8300ed;" +
+                    ".perfil-button:hover{" +
+                    "transform:translateY(-2px);" +
+                    "box-shadow:0 12px 28px rgba(99,0,192,.3);" +
                     "}"
             );
 
-            // GRID
+            // =====================================================
+            // GRID PRINCIPAL
+            // =====================================================
 
             html.append(
-                    ".perfil-grid {" +
+                    ".perfil-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:2fr 1fr;" +
+                    "grid-template-columns:minmax(0,2fr) minmax(270px,1fr);" +
                     "gap:22px;" +
                     "margin-top:22px;" +
                     "}"
             );
 
+            // =====================================================
             // SEÇÕES
+            // =====================================================
 
             html.append(
-                    ".secao {" +
-                    "background:#202830;" +
-                    "border:1px solid #303942;" +
-                    "border-radius:15px;" +
+                    ".secao{" +
+                    "background:rgba(29,25,35,.88);" +
+                    "border:1px solid rgba(255,255,255,.07);" +
+                    "border-radius:18px;" +
                     "padding:22px;" +
                     "margin-bottom:22px;" +
+                    "box-shadow:0 12px 35px rgba(0,0,0,.18);" +
                     "}"
             );
 
             html.append(
-                    ".secao-titulo {" +
-                    "font-size:22px;" +
-                    "font-weight:bold;" +
-                    "margin:0 0 18px;" +
+                    ".secao-titulo{" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:space-between;" +
+                    "margin:0 0 20px;" +
+                    "font-size:20px;" +
+                    "font-weight:800;" +
                     "}"
             );
 
-            // JOGOS
+            // =====================================================
+            // FAVORITOS
+            // =====================================================
 
             html.append(
-                    ".jogos-grid {" +
+                    ".jogos-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:repeat(auto-fill,minmax(145px,1fr));" +
-                    "gap:16px;" +
+                    "grid-template-columns:" +
+                    "repeat(auto-fill,minmax(145px,1fr));" +
+                    "gap:17px;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-card {" +
-                    "background:#171b20;" +
-                    "border:1px solid #303840;" +
-                    "border-radius:11px;" +
+                    ".jogo-card{" +
                     "overflow:hidden;" +
-                    "transition:.2s;" +
+                    "border-radius:14px;" +
+                    "background:#15121a;" +
+                    "border:1px solid #2f2935;" +
+                    "transition:.25s;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-card:hover {" +
-                    "transform:translateY(-4px);" +
-                    "border-color:#7300d1;" +
+                    ".jogo-card:hover{" +
+                    "transform:translateY(-6px);" +
+                    "border-color:#7d16d6;" +
+                    "box-shadow:0 15px 30px rgba(0,0,0,.3);" +
                     "}"
             );
 
             html.append(
-                    ".capa-container {" +
-                    "height:215px;" +
+                    ".capa-container{" +
                     "width:100%;" +
+                    "height:225px;" +
                     "overflow:hidden;" +
-                    "background:transparent;" +
+                    "background:#15121a;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-capa {" +
+                    ".jogo-capa{" +
                     "width:100%;" +
-                    "height:215px;" +
+                    "height:225px;" +
                     "object-fit:cover;" +
                     "display:block;" +
-                    "background:transparent;" +
+                    "transition:.3s;" +
                     "}"
             );
 
             html.append(
-                    ".jogo-info {" +
-                    "padding:11px;" +
+                    ".jogo-card:hover .jogo-capa{" +
+                    "transform:scale(1.04);" +
                     "}"
             );
 
             html.append(
-                    ".jogo-titulo {" +
+                    ".jogo-info{" +
+                    "padding:13px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".jogo-titulo{" +
                     "font-size:14px;" +
                     "font-weight:bold;" +
-                    "line-height:1.35;" +
+                    "line-height:1.4;" +
+                    "color:#f2edf6;" +
                     "}"
             );
 
+            // =====================================================
             // LISTAS
+            // =====================================================
 
             html.append(
-                    ".lista-card {" +
-                    "background:#171b20;" +
-                    "border:1px solid #303840;" +
-                    "border-radius:11px;" +
-                    "padding:16px;" +
+                    ".lista-card{" +
+                    "background:rgba(20,17,25,.82);" +
+                    "border:1px solid #312b36;" +
+                    "border-radius:14px;" +
+                    "padding:17px;" +
                     "margin-bottom:14px;" +
                     "}"
             );
 
             html.append(
-                    ".lista-nome {" +
+                    ".lista-nome{" +
                     "font-size:18px;" +
-                    "font-weight:bold;" +
-                    "margin-bottom:14px;" +
+                    "font-weight:800;" +
+                    "margin-bottom:15px;" +
                     "}"
             );
 
             html.append(
-                    ".lista-jogos {" +
+                    ".lista-jogos{" +
                     "display:grid;" +
-                    "grid-template-columns:repeat(auto-fill,minmax(90px,1fr));" +
+                    "grid-template-columns:" +
+                    "repeat(auto-fill,minmax(85px,1fr));" +
                     "gap:10px;" +
                     "}"
             );
 
             html.append(
-                    ".lista-capa {" +
+                    ".lista-capa{" +
                     "width:100%;" +
-                    "height:130px;" +
+                    "height:125px;" +
                     "object-fit:cover;" +
                     "display:block;" +
-                    "background:transparent;" +
-                    "border-radius:7px;" +
+                    "border-radius:9px;" +
+                    "background:#17131d;" +
+                    "border:1px solid #2d2732;" +
+                    "transition:.2s;" +
                     "}"
             );
 
+            html.append(
+                    ".lista-capa:hover{" +
+                    "transform:scale(1.03);" +
+                    "}"
+            );
+
+            // =====================================================
             // USUÁRIOS
+            // =====================================================
 
             html.append(
-                    ".usuario-item {" +
+                    ".usuario-item{" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:11px;" +
-                    "padding:10px 0;" +
-                    "border-bottom:1px solid #303840;" +
+                    "gap:12px;" +
+                    "padding:12px 0;" +
+                    "border-bottom:1px solid rgba(255,255,255,.07);" +
                     "}"
             );
 
             html.append(
-                    ".usuario-item:last-child {" +
+                    ".usuario-item:last-child{" +
                     "border-bottom:none;" +
                     "}"
             );
 
             html.append(
-                    ".foto-mini {" +
-                    "width:42px;" +
-                    "height:42px;" +
+                    ".foto-mini{" +
+                    "width:46px;" +
+                    "height:46px;" +
                     "border-radius:50%;" +
                     "object-fit:cover;" +
-                    "background:transparent;" +
+                    "background:#17131d;" +
+                    "border:2px solid #403748;" +
+                    "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
-                    ".usuario-link {" +
+                    ".usuario-link{" +
                     "color:#fff;" +
                     "text-decoration:none;" +
                     "font-weight:bold;" +
+                    "font-size:14px;" +
+                    "transition:.2s;" +
                     "}"
             );
 
+            html.append(
+                    ".usuario-link:hover{" +
+                    "color:#b85dff;" +
+                    "}"
+            );
+
+            // =====================================================
             // VAZIO
+            // =====================================================
 
             html.append(
-                    ".vazio {" +
+                    ".vazio{" +
                     "text-align:center;" +
-                    "padding:22px 5px;" +
-                    "color:#7d858d;" +
+                    "padding:28px 10px;" +
+                    "color:#827b89;" +
+                    "font-size:14px;" +
                     "}"
             );
 
+            // =====================================================
             // RESPONSIVO
+            // =====================================================
 
             html.append(
-                    "@media(max-width:800px) {" +
+                    "@media(max-width:850px){" +
 
-                    ".perfil-card {" +
+                    ".perfil-card{" +
                     "flex-direction:column;" +
                     "text-align:center;" +
+                    "padding:25px 18px;" +
                     "}" +
 
-                    ".perfil-stats {" +
+                    ".perfil-stats{" +
                     "justify-content:center;" +
                     "}" +
 
-                    ".perfil-buttons {" +
+                    ".perfil-buttons{" +
                     "justify-content:center;" +
                     "}" +
 
-                    ".perfil-grid {" +
+                    ".perfil-grid{" +
                     "grid-template-columns:1fr;" +
+                    "}" +
+
+                    ".perfil-nome{" +
+                    "font-size:31px;" +
+                    "}" +
+
+                    "}"
+            );
+
+            html.append(
+                    "@media(max-width:500px){" +
+
+                    ".perfil-page{" +
+                    "padding-left:12px;" +
+                    "padding-right:12px;" +
+                    "}" +
+
+                    ".perfil-foto{" +
+                    "width:125px;" +
+                    "height:125px;" +
+                    "}" +
+
+                    ".secao{" +
+                    "padding:16px;" +
+                    "}" +
+
+                    ".jogos-grid{" +
+                    "grid-template-columns:repeat(2,1fr);" +
                     "}" +
 
                     "}"
@@ -488,7 +640,7 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("<header>");
 
-            html.append("<h1>GameBoxd</h1>");
+            html.append("<h1>Inventory</h1>");
 
             html.append("<nav>");
 
@@ -505,7 +657,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<a href='buscar-usuarios.html'>" +
+                    "<a href='buscar-usuarios'>" +
                     "Buscar usuários" +
                     "</a>"
             );
@@ -535,7 +687,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // PERFIL
+            // HERO PERFIL
             // =====================================================
 
             html.append(
@@ -547,6 +699,10 @@ public class PerfilServlet extends HttpServlet {
                             usuario.getFoto(),
                             request
                     );
+
+            html.append(
+                    "<div class='foto-area'>"
+            );
 
             if (!foto.isEmpty()) {
 
@@ -565,9 +721,13 @@ public class PerfilServlet extends HttpServlet {
                         "style='display:flex;" +
                         "align-items:center;" +
                         "justify-content:center;" +
-                        "font-size:55px;'>👤</div>"
+                        "font-size:55px;'>" +
+                        "👤" +
+                        "</div>"
                 );
             }
+
+            html.append("</div>");
 
             html.append(
                     "<div class='perfil-info'>"
@@ -579,9 +739,19 @@ public class PerfilServlet extends HttpServlet {
                     "</h1>"
             );
 
+            String username =
+                    usuario.getUsername();
+
+            if (username == null ||
+                    username.trim().isEmpty()) {
+
+                username =
+                        usuario.getNome();
+            }
+
             html.append(
                     "<div class='perfil-username'>@" +
-                    escaparHtml(usuario.getNome()) +
+                    escaparHtml(username) +
                     "</div>"
             );
 
@@ -604,51 +774,63 @@ public class PerfilServlet extends HttpServlet {
                 );
             }
 
+            // =====================================================
             // STATS
+            // =====================================================
 
             html.append(
                     "<div class='perfil-stats'>"
             );
 
             html.append(
-                    "<div>" +
+                    "<div class='stat-card'>" +
                     "<div class='stat-numero'>" +
                     totalSeguidores +
                     "</div>" +
-                    "<div class='stat-texto'>Seguidores</div>" +
+                    "<div class='stat-texto'>" +
+                    "Seguidores" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div>" +
+                    "<div class='stat-card'>" +
                     "<div class='stat-numero'>" +
                     totalSeguindo +
                     "</div>" +
-                    "<div class='stat-texto'>Seguindo</div>" +
+                    "<div class='stat-texto'>" +
+                    "Seguindo" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div>" +
+                    "<div class='stat-card'>" +
                     "<div class='stat-numero'>" +
                     favoritos.size() +
                     "</div>" +
-                    "<div class='stat-texto'>Favoritos</div>" +
+                    "<div class='stat-texto'>" +
+                    "Favoritos" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div>" +
+                    "<div class='stat-card'>" +
                     "<div class='stat-numero'>" +
                     listas.size() +
                     "</div>" +
-                    "<div class='stat-texto'>Listas</div>" +
+                    "<div class='stat-texto'>" +
+                    "Listas" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append("</div>");
 
+            // =====================================================
             // BOTÕES
+            // =====================================================
 
             html.append(
                     "<div class='perfil-buttons'>"
@@ -663,7 +845,7 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     "<a class='perfil-button' " +
-                    "href='buscar-usuarios.html'>" +
+                    "href='buscar-usuarios'>" +
                     "Buscar usuários" +
                     "</a>"
             );
@@ -683,12 +865,14 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // COLUNA ESQUERDA
+            // ESQUERDA
             // =====================================================
 
             html.append("<div>");
 
+            // =====================================================
             // FAVORITOS
+            // =====================================================
 
             html.append(
                     "<section class='secao'>"
@@ -730,7 +914,9 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("</section>");
 
+            // =====================================================
             // LISTAS
+            // =====================================================
 
             html.append(
                     "<section class='secao'>"
@@ -783,9 +969,16 @@ public class PerfilServlet extends HttpServlet {
                                 lista.jogos) {
 
                             String capa =
-                                    request.getContextPath()
-                                    + "/capa?id="
-                                    + jogo.id;
+                                    prepararCapa(
+                                            jogo.capa,
+                                            request
+                                    );
+
+                            if (capa == null ||
+                                    capa.isEmpty()) {
+
+                                continue;
+                            }
 
                             html.append(
                                     "<img " +
@@ -812,12 +1005,14 @@ public class PerfilServlet extends HttpServlet {
             html.append("</div>");
 
             // =====================================================
-            // COLUNA DIREITA
+            // DIREITA
             // =====================================================
 
             html.append("<div>");
 
+            // =====================================================
             // SEGUIDORES
+            // =====================================================
 
             html.append(
                     "<section class='secao'>"
@@ -853,7 +1048,9 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("</section>");
 
+            // =====================================================
             // SEGUINDO
+            // =====================================================
 
             html.append(
                     "<section class='secao'>"
@@ -1082,9 +1279,19 @@ public class PerfilServlet extends HttpServlet {
                 new StringBuilder();
 
         String capa =
-                request.getContextPath()
-                + "/capa?id="
-                + jogo.id;
+                prepararCapa(
+                        jogo.capa,
+                        request
+                );
+
+        if (capa == null ||
+                capa.isEmpty()) {
+
+            capa =
+                    request.getContextPath()
+                    + "/capa?id="
+                    + jogo.id;
+        }
 
         html.append(
                 "<div class='jogo-card'>"
@@ -1164,7 +1371,9 @@ public class PerfilServlet extends HttpServlet {
                     "style='display:flex;" +
                     "align-items:center;" +
                     "justify-content:center;" +
-                    "font-size:21px;'>👤</div>"
+                    "font-size:21px;'>" +
+                    "👤" +
+                    "</div>"
             );
         }
 
@@ -1216,6 +1425,94 @@ public class PerfilServlet extends HttpServlet {
                 request.getContextPath()
                 + "/foto-perfil?arquivo="
                 + foto;
+    }
+
+    // =========================================================
+    // CAPA
+    // =========================================================
+
+    private String prepararCapa(
+            String capa,
+            HttpServletRequest request) {
+
+        if (capa == null ||
+                capa.trim().isEmpty()) {
+
+            return null;
+        }
+
+        capa =
+                capa.trim();
+
+        // Markdown: [texto](url)
+
+        if (capa.startsWith("[") &&
+                capa.contains("](") &&
+                capa.endsWith(")")) {
+
+            int inicio =
+                    capa.indexOf("](");
+
+            if (inicio >= 0) {
+
+                String url =
+                        capa.substring(
+                                inicio + 2,
+                                capa.length() - 1
+                        );
+
+                if (url.startsWith("http://") ||
+                        url.startsWith("https://")) {
+
+                    return url;
+                }
+            }
+        }
+
+        // Caso seja somente o APP ID
+
+        if (capa.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    capa +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // Caso contenha /apps/123456/
+
+        java.util.regex.Matcher matcher =
+                java.util.regex.Pattern
+                        .compile("/apps/(\\d+)")
+                        .matcher(capa);
+
+        if (matcher.find()) {
+
+            String appId =
+                    matcher.group(1);
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    appId +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // URL normal
+
+        if (capa.startsWith("http://") ||
+                capa.startsWith("https://")) {
+
+            return capa;
+        }
+
+        // Caminho local
+
+        return
+                request.getContextPath()
+                + "/"
+                + capa.replaceFirst("^/+", "");
     }
 
     // =========================================================

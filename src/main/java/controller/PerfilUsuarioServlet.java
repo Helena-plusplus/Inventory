@@ -1967,6 +1967,11 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 escapar(username) +
                 "</span>"
         );
+        html.append(
+        "<link rel='icon' " +
+        "type='image/png' " +
+        "href='favicon.png'>"
+);
 
         html.append(
                 "</div>"

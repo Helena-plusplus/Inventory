@@ -131,6 +131,11 @@ public class AvaliacaoServlet extends HttpServlet {
         html.append("<html lang='pt-BR'>");
 
         html.append("<head>");
+        html.append(
+        "<link rel='icon' " +
+        "type='image/png' " +
+        "href='favicon.png'>"
+);
 
         html.append(
                 "<meta charset='UTF-8'>"

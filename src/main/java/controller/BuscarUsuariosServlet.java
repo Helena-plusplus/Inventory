@@ -439,6 +439,11 @@ public class BuscarUsuariosServlet extends HttpServlet {
                 "color:#ff6b91;" +
                 "}"
         );
+        html.append(
+        "<link rel='icon' " +
+        "type='image/png' " +
+        "href='favicon.png'>"
+);
 
         // =====================================================
         // RESPONSIVO
