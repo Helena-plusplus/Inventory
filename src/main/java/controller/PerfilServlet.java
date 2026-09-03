@@ -106,7 +106,10 @@ public class PerfilServlet extends HttpServlet {
                     "content='width=device-width, initial-scale=1.0'>"
             );
 
+            // =====================================================
             // FAVICON
+            // =====================================================
+
             html.append(
                     "<link rel='icon' " +
                     "type='image/png' " +
@@ -128,28 +131,32 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("<style>");
 
+            // RESET
+
             html.append(
                     "*{" +
                     "box-sizing:border-box;" +
+                    "margin:0;" +
+                    "padding:0;" +
                     "}"
             );
+
+            // BODY
 
             html.append(
                     "body{" +
                     "margin:0;" +
                     "font-family:Arial,Helvetica,sans-serif;" +
                     "background:" +
-                    "radial-gradient(circle at top left,#31134b 0%,transparent 35%)," +
-                    "radial-gradient(circle at bottom right,#24103c 0%,transparent 35%)," +
-                    "#0f0b14;" +
+                    "radial-gradient(circle at 15% 0%,rgba(115,0,200,.18),transparent 30%)," +
+                    "radial-gradient(circle at 100% 100%,rgba(76,0,130,.15),transparent 30%)," +
+                    "#0b0810;" +
                     "color:#fff;" +
                     "min-height:100vh;" +
                     "}"
             );
 
-            // =====================================================
-            // PÁGINA
-            // =====================================================
+            // PAGE
 
             html.append(
                     ".perfil-page{" +
@@ -160,7 +167,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // HERO
+            // HERO DO PERFIL
             // =====================================================
 
             html.append(
@@ -172,11 +179,9 @@ public class PerfilServlet extends HttpServlet {
                     "gap:28px;" +
                     "padding:32px;" +
                     "border-radius:24px;" +
-                    "background:linear-gradient(135deg," +
-                    "rgba(43,18,61,.95)," +
-                    "rgba(24,28,36,.96));" +
-                    "border:1px solid rgba(155,70,220,.25);" +
-                    "box-shadow:0 20px 60px rgba(0,0,0,.35);" +
+                    "background:linear-gradient(145deg,#1c1226,#100c15);" +
+                    "border:1px solid rgba(143,50,220,.22);" +
+                    "box-shadow:0 20px 60px rgba(0,0,0,.40);" +
                     "}"
             );
 
@@ -184,21 +189,38 @@ public class PerfilServlet extends HttpServlet {
                     ".perfil-card:before{" +
                     "content:'';" +
                     "position:absolute;" +
-                    "width:300px;" +
-                    "height:300px;" +
-                    "right:-120px;" +
-                    "top:-150px;" +
-                    "background:#7200d6;" +
-                    "opacity:.13;" +
+                    "width:360px;" +
+                    "height:360px;" +
+                    "right:-150px;" +
+                    "top:-190px;" +
                     "border-radius:50%;" +
+                    "background:#7c12d4;" +
+                    "opacity:.10;" +
                     "}"
             );
 
+            html.append(
+                    ".perfil-card:after{" +
+                    "content:'';" +
+                    "position:absolute;" +
+                    "width:220px;" +
+                    "height:220px;" +
+                    "left:-120px;" +
+                    "bottom:-140px;" +
+                    "border-radius:50%;" +
+                    "background:#4e0080;" +
+                    "opacity:.12;" +
+                    "}"
+            );
+
+            // =====================================================
             // FOTO
+            // =====================================================
 
             html.append(
                     ".foto-area{" +
                     "position:relative;" +
+                    "z-index:2;" +
                     "flex-shrink:0;" +
                     "}"
             );
@@ -210,15 +232,17 @@ public class PerfilServlet extends HttpServlet {
                     "border-radius:50%;" +
                     "object-fit:cover;" +
                     "display:block;" +
-                    "border:4px solid #7d16d6;" +
-                    "background:#17131d;" +
+                    "border:4px solid #7916ce;" +
+                    "background:#100c15;" +
                     "box-shadow:" +
-                    "0 0 0 6px rgba(125,22,214,.12)," +
-                    "0 0 35px rgba(125,22,214,.35);" +
+                    "0 0 0 7px rgba(121,22,206,.10)," +
+                    "0 0 40px rgba(121,22,206,.30);" +
                     "}"
             );
 
-            // INFORMAÇÕES
+            // =====================================================
+            // INFO
+            // =====================================================
 
             html.append(
                     ".perfil-info{" +
@@ -231,33 +255,35 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".perfil-nome{" +
-                    "font-size:38px;" +
-                    "line-height:1.1;" +
-                    "margin:0;" +
+                    "font-size:40px;" +
+                    "line-height:1.05;" +
                     "font-weight:800;" +
-                    "letter-spacing:-.5px;" +
+                    "color:#fff;" +
+                    "letter-spacing:-.6px;" +
                     "}"
             );
 
             html.append(
                     ".perfil-username{" +
-                    "margin-top:8px;" +
+                    "margin-top:9px;" +
                     "font-size:16px;" +
-                    "color:#a39aaa;" +
+                    "color:#978ea1;" +
                     "}"
             );
 
             html.append(
                     ".perfil-bio{" +
-                    "max-width:700px;" +
+                    "max-width:720px;" +
                     "margin-top:18px;" +
-                    "font-size:16px;" +
-                    "line-height:1.6;" +
-                    "color:#ddd6e4;" +
+                    "font-size:15px;" +
+                    "line-height:1.65;" +
+                    "color:#ddd5e3;" +
                     "}"
             );
 
+            // =====================================================
             // EMBLEMA
+            // =====================================================
 
             html.append(
                     ".love-badge{" +
@@ -265,17 +291,17 @@ public class PerfilServlet extends HttpServlet {
                     "align-items:center;" +
                     "gap:6px;" +
                     "margin-top:17px;" +
-                    "padding:8px 14px;" +
+                    "padding:8px 15px;" +
                     "border-radius:30px;" +
-                    "background:linear-gradient(135deg,#6900c9,#9200ff);" +
+                    "background:linear-gradient(135deg,#6500c7,#9000ff);" +
                     "font-size:13px;" +
                     "font-weight:bold;" +
-                    "box-shadow:0 8px 22px rgba(110,0,200,.25);" +
+                    "box-shadow:0 8px 24px rgba(112,0,205,.25);" +
                     "}"
             );
 
             // =====================================================
-            // ESTATÍSTICAS
+            // STATS
             // =====================================================
 
             html.append(
@@ -283,17 +309,18 @@ public class PerfilServlet extends HttpServlet {
                     "display:flex;" +
                     "gap:12px;" +
                     "flex-wrap:wrap;" +
-                    "margin-top:24px;" +
+                    "margin-top:25px;" +
                     "}"
             );
 
             html.append(
                     ".stat-card{" +
-                    "min-width:110px;" +
-                    "padding:13px 16px;" +
+                    "min-width:112px;" +
+                    "padding:14px 16px;" +
                     "border-radius:13px;" +
-                    "background:rgba(255,255,255,.045);" +
-                    "border:1px solid rgba(255,255,255,.07);" +
+                    "background:#120e17;" +
+                    "border:1px solid rgba(255,255,255,.06);" +
+                    "box-shadow:0 7px 20px rgba(0,0,0,.18);" +
                     "}"
             );
 
@@ -301,16 +328,17 @@ public class PerfilServlet extends HttpServlet {
                     ".stat-numero{" +
                     "font-size:24px;" +
                     "font-weight:800;" +
+                    "color:#fff;" +
                     "}"
             );
 
             html.append(
                     ".stat-texto{" +
                     "margin-top:4px;" +
-                    "font-size:12px;" +
+                    "font-size:11px;" +
                     "text-transform:uppercase;" +
-                    "letter-spacing:.6px;" +
-                    "color:#95909d;" +
+                    "letter-spacing:.7px;" +
+                    "color:#89818f;" +
                     "}"
             );
 
@@ -332,14 +360,14 @@ public class PerfilServlet extends HttpServlet {
                     "display:inline-flex;" +
                     "align-items:center;" +
                     "justify-content:center;" +
-                    "padding:11px 17px;" +
+                    "padding:11px 18px;" +
                     "border-radius:10px;" +
-                    "background:linear-gradient(135deg,#6500c7,#8500ec);" +
+                    "background:linear-gradient(135deg,#6200c2,#8600ed);" +
                     "color:#fff;" +
                     "text-decoration:none;" +
                     "font-size:14px;" +
                     "font-weight:bold;" +
-                    "transition:.2s;" +
+                    "transition:.22s;" +
                     "box-shadow:0 8px 20px rgba(99,0,192,.18);" +
                     "}"
             );
@@ -347,20 +375,26 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".perfil-button:hover{" +
                     "transform:translateY(-2px);" +
-                    "box-shadow:0 12px 28px rgba(99,0,192,.3);" +
+                    "box-shadow:0 13px 28px rgba(99,0,192,.32);" +
                     "}"
             );
 
             // =====================================================
-            // GRID PRINCIPAL
+            // GRID
             // =====================================================
 
             html.append(
                     ".perfil-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:minmax(0,2fr) minmax(270px,1fr);" +
+                    "grid-template-columns:minmax(0,2fr) minmax(280px,1fr);" +
                     "gap:22px;" +
                     "margin-top:22px;" +
+                    "}"
+            );
+
+            html.append(
+                    ".perfil-grid > div{" +
+                    "min-width:0;" +
                     "}"
             );
 
@@ -370,12 +404,18 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".secao{" +
-                    "background:rgba(29,25,35,.88);" +
-                    "border:1px solid rgba(255,255,255,.07);" +
+                    "background:linear-gradient(145deg,#18121f,#0f0b14);" +
+                    "border:1px solid rgba(132,48,205,.16);" +
                     "border-radius:18px;" +
                     "padding:22px;" +
                     "margin-bottom:22px;" +
-                    "box-shadow:0 12px 35px rgba(0,0,0,.18);" +
+                    "box-shadow:0 15px 40px rgba(0,0,0,.28);" +
+                    "}"
+            );
+
+            html.append(
+                    ".secao:hover{" +
+                    "border-color:rgba(145,55,220,.28);" +
                     "}"
             );
 
@@ -387,6 +427,7 @@ public class PerfilServlet extends HttpServlet {
                     "margin:0 0 20px;" +
                     "font-size:20px;" +
                     "font-weight:800;" +
+                    "color:#fff;" +
                     "}"
             );
 
@@ -397,8 +438,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
                     ".jogos-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:" +
-                    "repeat(auto-fill,minmax(145px,1fr));" +
+                    "grid-template-columns:repeat(auto-fill,minmax(145px,1fr));" +
                     "gap:17px;" +
                     "}"
             );
@@ -407,9 +447,10 @@ public class PerfilServlet extends HttpServlet {
                     ".jogo-card{" +
                     "overflow:hidden;" +
                     "border-radius:14px;" +
-                    "background:#15121a;" +
-                    "border:1px solid #2f2935;" +
+                    "background:#100c15;" +
+                    "border:1px solid rgba(255,255,255,.055);" +
                     "transition:.25s;" +
+                    "box-shadow:0 8px 25px rgba(0,0,0,.20);" +
                     "}"
             );
 
@@ -417,7 +458,7 @@ public class PerfilServlet extends HttpServlet {
                     ".jogo-card:hover{" +
                     "transform:translateY(-6px);" +
                     "border-color:#7d16d6;" +
-                    "box-shadow:0 15px 30px rgba(0,0,0,.3);" +
+                    "box-shadow:0 17px 35px rgba(105,0,190,.20);" +
                     "}"
             );
 
@@ -426,7 +467,7 @@ public class PerfilServlet extends HttpServlet {
                     "width:100%;" +
                     "height:225px;" +
                     "overflow:hidden;" +
-                    "background:#15121a;" +
+                    "background:#100c15;" +
                     "}"
             );
 
@@ -442,13 +483,14 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".jogo-card:hover .jogo-capa{" +
-                    "transform:scale(1.04);" +
+                    "transform:scale(1.05);" +
                     "}"
             );
 
             html.append(
                     ".jogo-info{" +
                     "padding:13px;" +
+                    "background:#100c15;" +
                     "}"
             );
 
@@ -457,7 +499,7 @@ public class PerfilServlet extends HttpServlet {
                     "font-size:14px;" +
                     "font-weight:bold;" +
                     "line-height:1.4;" +
-                    "color:#f2edf6;" +
+                    "color:#f4eef8;" +
                     "}"
             );
 
@@ -467,11 +509,19 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".lista-card{" +
-                    "background:rgba(20,17,25,.82);" +
-                    "border:1px solid #312b36;" +
+                    "background:linear-gradient(145deg,#16101d,#0d0912);" +
+                    "border:1px solid rgba(255,255,255,.05);" +
                     "border-radius:14px;" +
-                    "padding:17px;" +
+                    "padding:18px;" +
                     "margin-bottom:14px;" +
+                    "transition:.2s;" +
+                    "}"
+            );
+
+            html.append(
+                    ".lista-card:hover{" +
+                    "border-color:rgba(133,0,220,.30);" +
+                    "box-shadow:0 10px 30px rgba(90,0,160,.12);" +
                     "}"
             );
 
@@ -480,14 +530,14 @@ public class PerfilServlet extends HttpServlet {
                     "font-size:18px;" +
                     "font-weight:800;" +
                     "margin-bottom:15px;" +
+                    "color:#fff;" +
                     "}"
             );
 
             html.append(
                     ".lista-jogos{" +
                     "display:grid;" +
-                    "grid-template-columns:" +
-                    "repeat(auto-fill,minmax(85px,1fr));" +
+                    "grid-template-columns:repeat(auto-fill,minmax(85px,1fr));" +
                     "gap:10px;" +
                     "}"
             );
@@ -499,15 +549,16 @@ public class PerfilServlet extends HttpServlet {
                     "object-fit:cover;" +
                     "display:block;" +
                     "border-radius:9px;" +
-                    "background:#17131d;" +
-                    "border:1px solid #2d2732;" +
+                    "background:#100c15;" +
+                    "border:1px solid rgba(255,255,255,.06);" +
                     "transition:.2s;" +
                     "}"
             );
 
             html.append(
                     ".lista-capa:hover{" +
-                    "transform:scale(1.03);" +
+                    "transform:scale(1.04);" +
+                    "border-color:#7d16d6;" +
                     "}"
             );
 
@@ -521,7 +572,7 @@ public class PerfilServlet extends HttpServlet {
                     "align-items:center;" +
                     "gap:12px;" +
                     "padding:12px 0;" +
-                    "border-bottom:1px solid rgba(255,255,255,.07);" +
+                    "border-bottom:1px solid rgba(255,255,255,.06);" +
                     "}"
             );
 
@@ -537,8 +588,8 @@ public class PerfilServlet extends HttpServlet {
                     "height:46px;" +
                     "border-radius:50%;" +
                     "object-fit:cover;" +
-                    "background:#17131d;" +
-                    "border:2px solid #403748;" +
+                    "background:#120e17;" +
+                    "border:2px solid #403548;" +
                     "flex-shrink:0;" +
                     "}"
             );
@@ -567,7 +618,7 @@ public class PerfilServlet extends HttpServlet {
                     ".vazio{" +
                     "text-align:center;" +
                     "padding:28px 10px;" +
-                    "color:#827b89;" +
+                    "color:#817989;" +
                     "font-size:14px;" +
                     "}"
             );
@@ -687,7 +738,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // HERO PERFIL
+            // HERO
             // =====================================================
 
             html.append(
@@ -733,11 +784,15 @@ public class PerfilServlet extends HttpServlet {
                     "<div class='perfil-info'>"
             );
 
+            // NOME
+
             html.append(
                     "<h1 class='perfil-nome'>" +
                     escaparHtml(usuario.getNome()) +
                     "</h1>"
             );
+
+            // USERNAME
 
             String username =
                     usuario.getUsername();
@@ -755,6 +810,8 @@ public class PerfilServlet extends HttpServlet {
                     "</div>"
             );
 
+            // BIO
+
             if (usuario.getBio() != null &&
                     !usuario.getBio().trim().isEmpty()) {
 
@@ -764,6 +821,8 @@ public class PerfilServlet extends HttpServlet {
                         "</div>"
                 );
             }
+
+            // EMBLEMA
 
             if (especial) {
 
@@ -865,7 +924,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // ESQUERDA
+            // COLUNA ESQUERDA
             // =====================================================
 
             html.append("<div>");
@@ -1005,7 +1064,7 @@ public class PerfilServlet extends HttpServlet {
             html.append("</div>");
 
             // =====================================================
-            // DIREITA
+            // COLUNA DIREITA
             // =====================================================
 
             html.append("<div>");
@@ -1444,7 +1503,9 @@ public class PerfilServlet extends HttpServlet {
         capa =
                 capa.trim();
 
-        // Markdown: [texto](url)
+        // =====================================================
+        // MARKDOWN
+        // =====================================================
 
         if (capa.startsWith("[") &&
                 capa.contains("](") &&
@@ -1469,7 +1530,9 @@ public class PerfilServlet extends HttpServlet {
             }
         }
 
-        // Caso seja somente o APP ID
+        // =====================================================
+        // SOMENTE APP ID
+        // =====================================================
 
         if (capa.matches("\\d+")) {
 
@@ -1480,7 +1543,9 @@ public class PerfilServlet extends HttpServlet {
                     "/library_600x900_2x.jpg";
         }
 
-        // Caso contenha /apps/123456/
+        // =====================================================
+        // URL DA STEAM COM /apps/ID
+        // =====================================================
 
         java.util.regex.Matcher matcher =
                 java.util.regex.Pattern
@@ -1499,7 +1564,9 @@ public class PerfilServlet extends HttpServlet {
                     "/library_600x900_2x.jpg";
         }
 
-        // URL normal
+        // =====================================================
+        // URL NORMAL
+        // =====================================================
 
         if (capa.startsWith("http://") ||
                 capa.startsWith("https://")) {
@@ -1507,7 +1574,9 @@ public class PerfilServlet extends HttpServlet {
             return capa;
         }
 
-        // Caminho local
+        // =====================================================
+        // CAMINHO LOCAL
+        // =====================================================
 
         return
                 request.getContextPath()
