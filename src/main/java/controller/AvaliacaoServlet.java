@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.Conexao;
@@ -19,9 +18,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/avaliar")
 public class AvaliacaoServlet extends HttpServlet {
 
-    // =====================================================
-    // GET - ABRIR PÁGINA DE AVALIAÇÃO
-    // =====================================================
+    // =========================================================
+    // GET - MOSTRAR TELA DE AVALIAÇÃO
+    // =========================================================
 
     @Override
     protected void doGet(
@@ -49,23 +48,10 @@ public class AvaliacaoServlet extends HttpServlet {
             return;
         }
 
-        int idJogo;
-
         try {
 
-            idJogo =
+            int idJogo =
                     Integer.parseInt(idTexto);
-
-        } catch (Exception e) {
-
-            response.sendRedirect("biblioteca");
-            return;
-        }
-
-        String titulo = "";
-        String capa = "";
-
-        try {
 
             Connection conexao =
                     Conexao.conectar();
@@ -79,564 +65,654 @@ public class AvaliacaoServlet extends HttpServlet {
 
             stmt.setInt(1, idJogo);
 
-            ResultSet rs =
+            ResultSet resultado =
                     stmt.executeQuery();
 
-            if (!rs.next()) {
+            if (!resultado.next()) {
 
-                rs.close();
+                resultado.close();
                 stmt.close();
                 conexao.close();
 
-                response.sendRedirect(
-                        "biblioteca"
-                );
-
+                response.sendRedirect("biblioteca");
                 return;
             }
 
-            titulo =
-                    rs.getString("titulo");
+            String titulo =
+                    resultado.getString("titulo");
 
-            capa =
-                    rs.getString("capa");
+            String capa =
+                    resultado.getString("capa");
 
-            rs.close();
+            resultado.close();
             stmt.close();
             conexao.close();
+
+            response.setContentType(
+                    "text/html;charset=UTF-8"
+            );
+
+            StringBuilder html =
+                    new StringBuilder();
+
+            // =====================================================
+            // HTML
+            // =====================================================
+
+            html.append("<!DOCTYPE html>");
+            html.append("<html lang='pt-BR'>");
+
+            html.append("<head>");
+
+            html.append("<meta charset='UTF-8'>");
+
+            html.append(
+                    "<meta name='viewport' " +
+                    "content='width=device-width, initial-scale=1.0'>"
+            );
+
+            // =====================================================
+            // FAVICON
+            // =====================================================
+
+            html.append(
+                    "<link rel='icon' " +
+                    "type='image/png' " +
+                    "href='favicon.png'>"
+            );
+
+            html.append(
+                    "<title>Avaliar " +
+                    escaparHtml(titulo) +
+                    " - Inventory</title>"
+            );
+
+            html.append(
+                    "<link rel='stylesheet' " +
+                    "href='style.css'>"
+            );
+
+            // =====================================================
+            // CSS
+            // =====================================================
+
+            html.append("<style>");
+
+            html.append(
+                    "*{" +
+                    "box-sizing:border-box;" +
+                    "}"
+            );
+
+            // BODY
+
+            html.append(
+                    "html,body{" +
+                    "width:100%;" +
+                    "min-height:100%;" +
+                    "margin:0;" +
+                    "padding:0;" +
+                    "}"
+            );
+
+            html.append(
+                    "body{" +
+                    "font-family:Arial,Helvetica,sans-serif;" +
+                    "background:" +
+                    "radial-gradient(circle at 15% 0%,#29103d 0%,transparent 32%)," +
+                    "radial-gradient(circle at 100% 100%,#1c0a2a 0%,transparent 35%)," +
+                    "#0d0714;" +
+                    "color:#fff;" +
+                    "min-height:100vh;" +
+                    "}"
+            );
+
+            // =====================================================
+            // HEADER
+            // =====================================================
+
+            html.append(
+                    "body > header{" +
+                    "position:relative !important;" +
+                    "width:100% !important;" +
+                    "min-height:72px;" +
+                    "margin:0 !important;" +
+                    "padding:18px 40px !important;" +
+                    "display:flex !important;" +
+                    "align-items:center !important;" +
+                    "justify-content:space-between !important;" +
+                    "gap:30px;" +
+                    "background:#150a1e !important;" +
+                    "border-bottom:1px solid #382047 !important;" +
+                    "}"
+            );
+
+            html.append(
+                    "body > header h1{" +
+                    "margin:0 !important;" +
+                    "padding:0 !important;" +
+                    "font-size:28px !important;" +
+                    "font-weight:700 !important;" +
+                    "color:#fff !important;" +
+                    "}"
+            );
+
+            html.append(
+                    "body > header nav{" +
+                    "display:flex !important;" +
+                    "align-items:center !important;" +
+                    "justify-content:flex-end !important;" +
+                    "flex-wrap:wrap !important;" +
+                    "gap:24px !important;" +
+                    "margin:0 !important;" +
+                    "padding:0 !important;" +
+                    "}"
+            );
+
+            html.append(
+                    "body > header nav a{" +
+                    "display:inline-block !important;" +
+                    "margin:0 !important;" +
+                    "padding:0 !important;" +
+                    "color:#ac8cbc !important;" +
+                    "font-size:14px !important;" +
+                    "font-weight:500 !important;" +
+                    "text-decoration:none !important;" +
+                    "}"
+            );
+
+            html.append(
+                    "body > header nav a:hover{" +
+                    "color:#c17ade !important;" +
+                    "}"
+            );
+
+            // =====================================================
+            // CONTAINER
+            // =====================================================
+
+            html.append(
+                    ".avaliacao-page{" +
+                    "width:100%;" +
+                    "max-width:760px;" +
+                    "margin:0 auto;" +
+                    "padding:40px 20px 70px;" +
+                    "}"
+            );
+
+            // =====================================================
+            // CARD
+            // =====================================================
+
+            html.append(
+                    ".avaliacao-container{" +
+                    "width:100%;" +
+                    "background:linear-gradient(145deg,#1b0d27,#110816);" +
+                    "border:1px solid #3c2050;" +
+                    "border-radius:20px;" +
+                    "padding:35px;" +
+                    "text-align:center;" +
+                    "box-shadow:0 18px 50px rgba(35,0,55,.30);" +
+                    "}"
+            );
+
+            // =====================================================
+            // CAPA
+            // =====================================================
+
+            html.append(
+                    ".capa-avaliacao{" +
+                    "width:190px;" +
+                    "height:265px;" +
+                    "display:block;" +
+                    "margin:0 auto 24px;" +
+                    "object-fit:cover;" +
+                    "border-radius:10px;" +
+                    "background:#140a1c;" +
+                    "border:1px solid #4d2864;" +
+                    "box-shadow:0 12px 30px rgba(0,0,0,.35);" +
+                    "}"
+            );
+
+            // =====================================================
+            // TITULO
+            // =====================================================
+
+            html.append(
+                    ".titulo-avaliacao{" +
+                    "margin:0;" +
+                    "font-size:29px;" +
+                    "font-weight:700;" +
+                    "color:#fff;" +
+                    "}"
+            );
+
+            html.append(
+                    ".subtitulo-avaliacao{" +
+                    "margin:10px 0 0;" +
+                    "color:#aa8cba;" +
+                    "font-size:15px;" +
+                    "}"
+            );
+
+            // =====================================================
+            // ESTRELAS
+            // =====================================================
+
+            html.append(
+                    ".estrelas{" +
+                    "display:flex;" +
+                    "flex-direction:row;" +
+                    "justify-content:center;" +
+                    "gap:5px;" +
+                    "margin:25px 0;" +
+                    "}"
+            );
+
+            html.append(
+                    ".estrelas input{" +
+                    "display:none;" +
+                    "}"
+            );
+
+            html.append(
+                    ".estrelas label{" +
+                    "font-size:41px;" +
+                    "color:#62506b;" +
+                    "cursor:pointer;" +
+                    "transition:.2s;" +
+                    "line-height:1;" +
+                    "}"
+            );
+
+            html.append(
+                    ".estrelas label:hover{" +
+                    "color:#b960df;" +
+                    "}"
+            );
+
+            html.append(
+                    ".estrelas input:checked + label{" +
+                    "color:#9b3dcb;" +
+                    "}"
+            );
+
+            // =====================================================
+            // HORAS
+            // =====================================================
+
+            html.append(
+                    ".horas-container{" +
+                    "margin-top:20px;" +
+                    "text-align:left;" +
+                    "}"
+            );
+
+            html.append(
+                    ".horas-container label{" +
+                    "display:block;" +
+                    "margin-bottom:8px;" +
+                    "font-size:14px;" +
+                    "font-weight:bold;" +
+                    "color:#d8c8df;" +
+                    "}"
+            );
+
+            html.append(
+                    ".campo-horas{" +
+                    "width:100%;" +
+                    "padding:13px;" +
+                    "box-sizing:border-box;" +
+                    "background:#100817;" +
+                    "color:#fff;" +
+                    "border:1px solid #40264d;" +
+                    "border-radius:9px;" +
+                    "font-size:15px;" +
+                    "outline:none;" +
+                    "}"
+            );
+
+            html.append(
+                    ".campo-horas:focus{" +
+                    "border-color:#7c29a9;" +
+                    "}"
+            );
+
+            // =====================================================
+            // RESENHA
+            // =====================================================
+
+            html.append(
+                    ".campo-resenha{" +
+                    "width:100%;" +
+                    "height:155px;" +
+                    "margin-top:20px;" +
+                    "padding:14px;" +
+                    "box-sizing:border-box;" +
+                    "background:#100817;" +
+                    "color:#fff;" +
+                    "border:1px solid #40264d;" +
+                    "border-radius:9px;" +
+                    "resize:vertical;" +
+                    "font-family:Arial,Helvetica,sans-serif;" +
+                    "font-size:15px;" +
+                    "outline:none;" +
+                    "}"
+            );
+
+            html.append(
+                    ".campo-resenha:focus{" +
+                    "border-color:#7c29a9;" +
+                    "}"
+            );
+
+            // =====================================================
+            // BOTÃO
+            // =====================================================
+
+            html.append(
+                    ".botao-postar{" +
+                    "margin-top:22px;" +
+                    "padding:12px 30px;" +
+                    "border:1px solid #8232af;" +
+                    "border-radius:8px;" +
+                    "background:#6819a0;" +
+                    "color:#fff;" +
+                    "font-weight:bold;" +
+                    "cursor:pointer;" +
+                    "font-size:15px;" +
+                    "transition:.2s;" +
+                    "}"
+            );
+
+            html.append(
+                    ".botao-postar:hover{" +
+                    "background:#8127b8;" +
+                    "border-color:#a04acb;" +
+                    "}"
+            );
+
+            // =====================================================
+            // RESPONSIVO
+            // =====================================================
+
+            html.append(
+                    "@media(max-width:850px){" +
+
+                    "body > header{" +
+                    "flex-direction:column !important;" +
+                    "padding:18px 15px !important;" +
+                    "gap:15px !important;" +
+                    "}" +
+
+                    "body > header nav{" +
+                    "justify-content:center !important;" +
+                    "gap:15px !important;" +
+                    "}" +
+
+                    ".avaliacao-page{" +
+                    "padding:25px 12px 50px;" +
+                    "}" +
+
+                    ".avaliacao-container{" +
+                    "padding:25px 18px;" +
+                    "}" +
+
+                    "}"
+            );
+
+            html.append(
+                    "@media(max-width:500px){" +
+
+                    ".capa-avaliacao{" +
+                    "width:160px;" +
+                    "height:225px;" +
+                    "}" +
+
+                    ".titulo-avaliacao{" +
+                    "font-size:24px;" +
+                    "}" +
+
+                    ".estrelas label{" +
+                    "font-size:34px;" +
+                    "}" +
+
+                    "}"
+            );
+
+            html.append("</style>");
+
+            html.append("</head>");
+
+            html.append("<body>");
+
+            // =====================================================
+            // HEADER
+            // =====================================================
+
+            html.append("<header>");
+
+            html.append(
+                    "<h1>Inventory</h1>"
+            );
+
+            html.append("<nav>");
+
+            html.append(
+                    "<a href='index.html'>Início</a>"
+            );
+
+            html.append(
+                    "<a href='jogos'>Jogos</a>"
+            );
+
+            html.append(
+                    "<a href='biblioteca'>Biblioteca</a>"
+            );
+
+            html.append(
+                    "<a href='buscar-usuarios'>Buscar usuários</a>"
+            );
+
+            html.append(
+                    "<a href='listas'>Listas</a>"
+            );
+
+            html.append(
+                    "<a href='perfil'>Meu Perfil</a>"
+            );
+
+            html.append(
+                    "<a href='logout'>Sair</a>"
+            );
+
+            html.append("</nav>");
+
+            html.append("</header>");
+
+            // =====================================================
+            // PÁGINA
+            // =====================================================
+
+            html.append(
+                    "<main class='avaliacao-page'>"
+            );
+
+            html.append(
+                    "<div class='avaliacao-container'>"
+            );
+
+            // =====================================================
+            // CAPA
+            // =====================================================
+
+            String caminhoCapa =
+                    prepararCapa(
+                            capa,
+                            request
+                    );
+
+            if (caminhoCapa != null &&
+                    !caminhoCapa.isEmpty()) {
+
+                html.append(
+                        "<img " +
+                        "class='capa-avaliacao' " +
+                        "src='" +
+                        escaparHtml(caminhoCapa) +
+                        "' " +
+                        "alt='Capa de " +
+                        escaparHtml(titulo) +
+                        "' " +
+                        "onerror='this.style.display=\"none\";'>"
+                );
+            }
+
+            // =====================================================
+            // TITULO
+            // =====================================================
+
+            html.append(
+                    "<h2 class='titulo-avaliacao'>" +
+                    escaparHtml(titulo) +
+                    "</h2>"
+            );
+
+            html.append(
+                    "<p class='subtitulo-avaliacao'>" +
+                    "O que você achou desse jogo?" +
+                    "</p>"
+            );
+
+            // =====================================================
+            // FORM
+            // =====================================================
+
+            html.append(
+                    "<form method='POST' action='avaliar'>"
+            );
+
+            html.append(
+                    "<input type='hidden' " +
+                    "name='idJogo' " +
+                    "value='" +
+                    idJogo +
+                    "'>"
+            );
+
+            // =====================================================
+            // ESTRELAS
+            // =====================================================
+
+            html.append(
+                    "<p><strong>Sua nota</strong></p>"
+            );
+
+            html.append(
+                    "<div class='estrelas'>"
+            );
+
+            for (int i = 1; i <= 5; i++) {
+
+                html.append(
+                        "<input " +
+                        "type='radio' " +
+                        "id='estrela" +
+                        i +
+                        "' " +
+                        "name='nota' " +
+                        "value='" +
+                        i +
+                        "' " +
+                        "required>"
+                );
+
+                html.append(
+                        "<label for='estrela" +
+                        i +
+                        "'>★</label>"
+                );
+            }
+
+            html.append("</div>");
+
+            // =====================================================
+            // HORAS
+            // =====================================================
+
+            html.append(
+                    "<div class='horas-container'>"
+            );
+
+            html.append(
+                    "<label for='horasJogadas'>" +
+                    "Horas jogadas" +
+                    "</label>"
+            );
+
+            html.append(
+                    "<input " +
+                    "class='campo-horas' " +
+                    "type='number' " +
+                    "id='horasJogadas' " +
+                    "name='horasJogadas' " +
+                    "min='0' " +
+                    "step='0.1' " +
+                    "placeholder='Ex: 25.5' " +
+                    "required>"
+            );
+
+            html.append("</div>");
+
+            // =====================================================
+            // RESENHA
+            // =====================================================
+
+            html.append(
+                    "<textarea " +
+                    "class='campo-resenha' " +
+                    "name='comentario' " +
+                    "placeholder='Escreva sua resenha...' " +
+                    "required></textarea>"
+            );
+
+            // =====================================================
+            // BOTAO
+            // =====================================================
+
+            html.append(
+                    "<button " +
+                    "class='botao-postar' " +
+                    "type='submit'>" +
+                    "Postar avaliação" +
+                    "</button>"
+            );
+
+            html.append("</form>");
+
+            html.append("</div>");
+
+            html.append("</main>");
+
+            html.append("</body>");
+
+            html.append("</html>");
+
+            response.getWriter().println(
+                    html.toString()
+            );
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            response.sendRedirect(
-                    "biblioteca"
-            );
-
-            return;
+            response.sendRedirect("biblioteca");
         }
-
-        response.setContentType(
-                "text/html;charset=UTF-8"
-        );
-
-        StringBuilder html =
-                new StringBuilder();
-
-        // =====================================================
-        // HTML
-        // =====================================================
-
-        html.append("<!DOCTYPE html>");
-        html.append("<html lang='pt-BR'>");
-
-        html.append("<head>");
-        html.append(
-        "<link rel='icon' " +
-        "type='image/png' " +
-        "href='favicon.png'>"
-);
-
-        html.append(
-                "<meta charset='UTF-8'>"
-        );
-
-        html.append(
-                "<meta name='viewport' " +
-                "content='width=device-width, initial-scale=1.0'>"
-        );
-
-        html.append(
-                "<title>Avaliar "
-                + escapar(titulo)
-                + " - Inventory</title>"
-        );
-
-        html.append(
-                "<link rel='stylesheet' "
-                + "href='style.css'>"
-        );
-
-        // =====================================================
-        // CSS
-        // =====================================================
-
-        html.append("<style>");
-
-        html.append(
-                "body{"
-                + "background:"
-                + "radial-gradient(circle at top,#35105f,#17121f 45%,#0d0b11);"
-                + "min-height:100vh;"
-                + "}"
-        );
-
-        html.append(
-                ".avaliacao-container{"
-                + "max-width:680px;"
-                + "margin:45px auto;"
-                + "padding:35px;"
-                + "background:linear-gradient(145deg,#21142c,#140b1b);"
-                + "border:1px solid #54256f;"
-                + "border-radius:22px;"
-                + "box-shadow:0 20px 50px rgba(0,0,0,.4);"
-                + "text-align:center;"
-                + "}"
-        );
-
-        html.append(
-                ".capa-avaliacao{"
-                + "width:210px;"
-                + "height:295px;"
-                + "object-fit:cover;"
-                + "border-radius:12px;"
-                + "display:block;"
-                + "margin:0 auto 22px;"
-                + "box-shadow:0 15px 35px rgba(0,0,0,.4);"
-                + "}"
-        );
-
-        html.append(
-                ".sem-capa{"
-                + "width:210px;"
-                + "height:295px;"
-                + "display:flex;"
-                + "align-items:center;"
-                + "justify-content:center;"
-                + "background:#17101f;"
-                + "border:1px dashed #56356a;"
-                + "border-radius:12px;"
-                + "color:#888;"
-                + "margin:0 auto 22px;"
-                + "}"
-        );
-
-        html.append(
-                ".titulo-jogo{"
-                + "font-size:28px;"
-                + "margin-bottom:8px;"
-                + "}"
-        );
-
-        html.append(
-                ".subtitulo{"
-                + "color:#aaa;"
-                + "margin-bottom:22px;"
-                + "}"
-        );
-
-        // ESTRELAS
-
-        html.append(
-                ".estrelas{"
-                + "display:flex;"
-                + "justify-content:center;"
-                + "gap:6px;"
-                + "margin:22px 0 30px;"
-                + "}"
-        );
-
-        html.append(
-                ".estrela{"
-                + "font-size:48px;"
-                + "color:#554b5e;"
-                + "cursor:pointer;"
-                + "transition:.2s;"
-                + "user-select:none;"
-                + "}"
-        );
-
-        html.append(
-                ".estrela:hover{"
-                + "transform:scale(1.1);"
-                + "}"
-        );
-
-        html.append(
-                ".estrela.selecionada{"
-                + "color:#c084fc;"
-                + "text-shadow:0 0 12px rgba(192,132,252,.35);"
-                + "}"
-        );
-
-        // CAMPOS
-
-        html.append(
-                ".campo-area{"
-                + "text-align:left;"
-                + "margin-bottom:20px;"
-                + "}"
-        );
-
-        html.append(
-                ".campo-area label{"
-                + "display:block;"
-                + "margin-bottom:8px;"
-                + "color:#ddd;"
-                + "font-weight:bold;"
-                + "}"
-        );
-
-        html.append(
-                ".campo-horas{"
-                + "width:100%;"
-                + "box-sizing:border-box;"
-                + "padding:14px;"
-                + "background:#100b15;"
-                + "color:white;"
-                + "border:1px solid #47305a;"
-                + "border-radius:9px;"
-                + "font-size:15px;"
-                + "outline:none;"
-                + "}"
-        );
-
-        html.append(
-                ".campo-horas:focus{"
-                + "border-color:#a855f7;"
-                + "box-shadow:0 0 0 3px rgba(168,85,247,.12);"
-                + "}"
-        );
-
-        html.append(
-                ".campo-resenha{"
-                + "width:100%;"
-                + "height:150px;"
-                + "box-sizing:border-box;"
-                + "padding:14px;"
-                + "background:#100b15;"
-                + "color:white;"
-                + "border:1px solid #47305a;"
-                + "border-radius:9px;"
-                + "resize:vertical;"
-                + "font-family:Arial,sans-serif;"
-                + "font-size:15px;"
-                + "outline:none;"
-                + "}"
-        );
-
-        html.append(
-                ".campo-resenha:focus{"
-                + "border-color:#a855f7;"
-                + "box-shadow:0 0 0 3px rgba(168,85,247,.12);"
-                + "}"
-        );
-
-        // BOTÃO
-
-        html.append(
-                ".botao-postar{"
-                + "width:100%;"
-                + "margin-top:10px;"
-                + "padding:14px;"
-                + "border:none;"
-                + "border-radius:10px;"
-                + "background:linear-gradient(135deg,#7c3aed,#a855f7);"
-                + "color:white;"
-                + "font-weight:bold;"
-                + "font-size:15px;"
-                + "cursor:pointer;"
-                + "transition:.2s;"
-                + "}"
-        );
-
-        html.append(
-                ".botao-postar:hover{"
-                + "transform:translateY(-2px);"
-                + "box-shadow:0 10px 25px rgba(124,58,237,.3);"
-                + "}"
-        );
-
-        html.append(
-                "@media(max-width:650px){"
-                + ".avaliacao-container{"
-                + "margin:25px 12px;"
-                + "padding:25px 20px;"
-                + "}"
-                + ".capa-avaliacao,.sem-capa{"
-                + "width:170px;"
-                + "height:240px;"
-                + "}"
-                + ".estrela{font-size:40px;}"
-                + "}"
-        );
-
-        html.append("</style>");
-
-        html.append("</head>");
-
-        html.append("<body>");
-
-        // =====================================================
-        // HEADER
-        // =====================================================
-
-        html.append("<header>");
-
-        html.append(
-                "<h1>Inventory</h1>"
-        );
-
-        html.append("<nav>");
-
-        html.append(
-                "<a href='index.html'>Início</a>"
-        );
-
-        html.append(
-                "<a href='jogos'>Jogos</a>"
-        );
-
-        html.append(
-                "<a href='biblioteca'>Biblioteca</a>"
-        );
-
-        html.append(
-        "<a href='buscar-usuarios'>"
-        + "Buscar usuários"
-        + "</a>"
-);
-        html.append(
-        "<a href='listas'>"
-        + "Listas"
-        + "</a>"
-);
-
-        html.append(
-                "<a href='perfil'>Meu Perfil</a>"
-        );
-
-        html.append(
-                "<a href='logout'>Sair</a>"
-        );
-
-        html.append("</nav>");
-
-        html.append("</header>");
-
-        // =====================================================
-        // CONTEÚDO
-        // =====================================================
-
-        html.append(
-                "<main class='avaliacao-container'>"
-        );
-
-        // CAPA
-
-        if (capa != null &&
-                !capa.trim().isEmpty()) {
-
-            String caminhoCapa =
-                    capa.trim();
-
-            if (!caminhoCapa.startsWith(
-                    "http://")
-                    &&
-                    !caminhoCapa.startsWith(
-                    "https://")) {
-
-                while (
-                        caminhoCapa.startsWith("/")
-                ) {
-
-                    caminhoCapa =
-                            caminhoCapa.substring(1);
-                }
-
-                caminhoCapa =
-                        request.getContextPath()
-                        + "/"
-                        + caminhoCapa;
-            }
-
-            html.append(
-                    "<img class='capa-avaliacao' "
-                    + "src='"
-                    + escapar(caminhoCapa)
-                    + "' "
-                    + "alt='Capa do jogo'>"
-            );
-
-        } else {
-
-            html.append(
-                    "<div class='sem-capa'>"
-                    + "🎮 Sem capa"
-                    + "</div>"
-            );
-        }
-
-        html.append(
-                "<h2 class='titulo-jogo'>"
-                + escapar(titulo)
-                + "</h2>"
-        );
-
-        html.append(
-                "<p class='subtitulo'>"
-                + "Como foi sua experiência com esse jogo?"
-                + "</p>"
-        );
-
-        // =====================================================
-        // FORM
-        // =====================================================
-
-        html.append(
-                "<form method='POST' "
-                + "action='avaliar' "
-                + "id='formAvaliacao'>"
-        );
-
-        html.append(
-                "<input type='hidden' "
-                + "name='idJogo' "
-                + "value='"
-                + idJogo
-                + "'>"
-        );
-
-        html.append(
-                "<input type='hidden' "
-                + "name='nota' "
-                + "id='nota' "
-                + "value=''>"
-        );
-
-        // ESTRELAS
-
-        html.append(
-                "<p><strong>Sua nota</strong></p>"
-        );
-
-        html.append(
-                "<div class='estrelas'>"
-        );
-
-        for (int i = 1; i <= 5; i++) {
-
-            html.append(
-                    "<span "
-                    + "class='estrela' "
-                    + "data-nota='"
-                    + i
-                    + "'>★</span>"
-            );
-        }
-
-        html.append("</div>");
-
-        // =====================================================
-        // HORAS
-        // =====================================================
-
-        html.append(
-                "<div class='campo-area'>"
-                + "<label for='horas'>"
-                + "⏱️ Horas jogadas"
-                + "</label>"
-                + "<input "
-                + "class='campo-horas' "
-                + "type='number' "
-                + "id='horas' "
-                + "name='horas' "
-                + "min='0' "
-                + "step='0.1' "
-                + "placeholder='Ex: 25.5' "
-                + "required>"
-                + "</div>"
-        );
-
-        // =====================================================
-        // RESENHA
-        // =====================================================
-
-        html.append(
-                "<div class='campo-area'>"
-                + "<label for='comentario'>"
-                + "📝 Sua resenha"
-                + "</label>"
-                + "<textarea "
-                + "class='campo-resenha' "
-                + "id='comentario' "
-                + "name='comentario' "
-                + "placeholder='Escreva sua opinião sobre o jogo...' "
-                + "required></textarea>"
-                + "</div>"
-        );
-
-        html.append(
-                "<button "
-                + "class='botao-postar' "
-                + "type='submit'>"
-                + "💾 Salvar avaliação"
-                + "</button>"
-        );
-
-        html.append("</form>");
-
-        html.append("</main>");
-
-        // =====================================================
-        // JAVASCRIPT
-        // =====================================================
-
-        html.append("<script>");
-
-        html.append(
-                "var estrelas = "
-                + "document.querySelectorAll('.estrela');"
-        );
-
-        html.append(
-                "var campoNota = "
-                + "document.getElementById('nota');"
-        );
-
-        html.append(
-                "for(var i=0;i<estrelas.length;i++){"
-                + "estrelas[i].addEventListener('click',function(){"
-                + "var valor=parseInt(this.getAttribute('data-nota'));"
-                + "campoNota.value=valor;"
-                + "for(var j=0;j<estrelas.length;j++){"
-                + "var numero=parseInt("
-                + "estrelas[j].getAttribute('data-nota')"
-                + ");"
-                + "if(numero<=valor){"
-                + "estrelas[j].classList.add('selecionada');"
-                + "}else{"
-                + "estrelas[j].classList.remove('selecionada');"
-                + "}"
-                + "}"
-                + "});"
-                + "}"
-        );
-
-        html.append(
-                "document.getElementById('formAvaliacao')"
-                + ".addEventListener('submit',function(event){"
-                + "if(campoNota.value===''){"
-                + "event.preventDefault();"
-                + "alert('Escolha uma nota de 1 a 5 estrelas.');"
-                + "}"
-                + "});"
-        );
-
-        html.append("</script>");
-
-        html.append("</body>");
-
-        html.append("</html>");
-
-        response.getWriter().println(
-                html.toString()
-        );
     }
 
-    // =====================================================
+    // =========================================================
     // POST - SALVAR AVALIAÇÃO
-    // =====================================================
+    // =========================================================
 
     @Override
     protected void doPost(
@@ -656,8 +732,6 @@ public class AvaliacaoServlet extends HttpServlet {
             return;
         }
 
-        Connection conexao = null;
-
         try {
 
             Usuario usuario =
@@ -668,285 +742,201 @@ public class AvaliacaoServlet extends HttpServlet {
 
             int idJogo =
                     Integer.parseInt(
-                            request.getParameter(
-                                    "idJogo"
-                            )
+                            request.getParameter("idJogo")
                     );
 
             double nota =
                     Double.parseDouble(
-                            request.getParameter(
-                                    "nota"
-                            )
+                            request.getParameter("nota")
+                    );
+
+            double horasJogadas =
+                    Double.parseDouble(
+                            request.getParameter("horasJogadas")
                     );
 
             String comentario =
-                    request.getParameter(
-                            "comentario"
-                    );
+                    request.getParameter("comentario");
 
-            String horasTexto =
-                    request.getParameter(
-                            "horas"
-                    );
-
-            double horas = 0;
-
-            if (horasTexto != null &&
-                    !horasTexto.trim().isEmpty()) {
-
-                horas =
-                        Double.parseDouble(
-                                horasTexto
-                        );
-            }
-
-            if (horas < 0) {
-                horas = 0;
-            }
-
-            if (nota < 1 ||
-                    nota > 5) {
-
-                response.sendRedirect(
-                        "avaliar?id=" + idJogo
-                );
-
-                return;
-            }
-
-            conexao =
+            Connection conexao =
                     Conexao.conectar();
 
-            conexao.setAutoCommit(false);
+            // =====================================================
+            // SALVAR/ATUALIZAR AVALIAÇÃO
+            // =====================================================
 
-            // =================================================
-            // AVALIACAO
-            // =================================================
+            String sql =
+                    "INSERT INTO avaliacao " +
+                    "(id_usuario, id_jogo, nota, comentario, horas_jogadas) " +
+                    "VALUES (?, ?, ?, ?, ?) " +
+                    "ON CONFLICT(id_usuario, id_jogo) " +
+                    "DO UPDATE SET " +
+                    "nota = excluded.nota, " +
+                    "comentario = excluded.comentario, " +
+                    "horas_jogadas = excluded.horas_jogadas, " +
+                    "data_avaliacao = CURRENT_TIMESTAMP";
 
-            String inserirAvaliacao =
-                    "INSERT INTO avaliacao "
-                    + "(id_usuario, id_jogo, nota, "
-                    + "comentario, horas_jogadas) "
-                    + "VALUES (?, ?, ?, ?, ?) "
-                    + "ON CONFLICT(id_usuario, id_jogo) "
-                    + "DO UPDATE SET "
-                    + "nota = excluded.nota, "
-                    + "comentario = excluded.comentario, "
-                    + "horas_jogadas = excluded.horas_jogadas, "
-                    + "data_avaliacao = CURRENT_TIMESTAMP";
+            PreparedStatement stmt =
+                    conexao.prepareStatement(sql);
 
-            PreparedStatement stmtAvaliacao =
-                    conexao.prepareStatement(
-                            inserirAvaliacao
-                    );
+            stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idJogo);
+            stmt.setDouble(3, nota);
+            stmt.setString(4, comentario);
+            stmt.setDouble(5, horasJogadas);
 
-            stmtAvaliacao.setInt(
-                    1,
-                    idUsuario
-            );
+            stmt.executeUpdate();
 
-            stmtAvaliacao.setInt(
-                    2,
-                    idJogo
-            );
-
-            stmtAvaliacao.setDouble(
-                    3,
-                    nota
-            );
-
-            stmtAvaliacao.setString(
-                    4,
-                    comentario
-            );
-
-            stmtAvaliacao.setDouble(
-                    5,
-                    horas
-            );
-
-            stmtAvaliacao.executeUpdate();
-
-            stmtAvaliacao.close();
-
-            // =================================================
-            // BIBLIOTECA
-            // =================================================
-
-            String verificarBiblioteca =
-                    "SELECT id "
-                    + "FROM biblioteca "
-                    + "WHERE id_usuario = ? "
-                    + "AND id_jogo = ?";
-
-            PreparedStatement stmtBusca =
-                    conexao.prepareStatement(
-                            verificarBiblioteca
-                    );
-
-            stmtBusca.setInt(
-                    1,
-                    idUsuario
-            );
-
-            stmtBusca.setInt(
-                    2,
-                    idJogo
-            );
-
-            ResultSet rs =
-                    stmtBusca.executeQuery();
-
-            boolean existeNaBiblioteca =
-                    rs.next();
-
-            rs.close();
-            stmtBusca.close();
-
-            if (existeNaBiblioteca) {
-
-                String atualizarBiblioteca =
-                        "UPDATE biblioteca SET "
-                        + "status = 'zerado', "
-                        + "horas_jogadas = ? "
-                        + "WHERE id_usuario = ? "
-                        + "AND id_jogo = ?";
-
-                PreparedStatement stmtUpdate =
-                        conexao.prepareStatement(
-                                atualizarBiblioteca
-                        );
-
-                stmtUpdate.setDouble(
-                        1,
-                        horas
-                );
-
-                stmtUpdate.setInt(
-                        2,
-                        idUsuario
-                );
-
-                stmtUpdate.setInt(
-                        3,
-                        idJogo
-                );
-
-                stmtUpdate.executeUpdate();
-
-                stmtUpdate.close();
-
-            } else {
-
-                String inserirBiblioteca =
-                        "INSERT INTO biblioteca "
-                        + "(id_usuario, id_jogo, "
-                        + "status, horas_jogadas) "
-                        + "VALUES (?, ?, 'zerado', ?)";
-
-                PreparedStatement stmtInsert =
-                        conexao.prepareStatement(
-                                inserirBiblioteca
-                        );
-
-                stmtInsert.setInt(
-                        1,
-                        idUsuario
-                );
-
-                stmtInsert.setInt(
-                        2,
-                        idJogo
-                );
-
-                stmtInsert.setDouble(
-                        3,
-                        horas
-                );
-
-                stmtInsert.executeUpdate();
-
-                stmtInsert.close();
-            }
-
-            // =================================================
-            // CONFIRMAR
-            // =================================================
-
-            conexao.commit();
-
-            conexao.setAutoCommit(true);
-
-            System.out.println(
-                    "================================="
-            );
-
-            System.out.println(
-                    "AVALIAÇÃO SALVA"
-            );
-
-            System.out.println(
-                    "ID USUARIO: "
-                    + idUsuario
-            );
-
-            System.out.println(
-                    "ID JOGO: "
-                    + idJogo
-            );
-
-            System.out.println(
-                    "NOTA: "
-                    + nota
-            );
-
-            System.out.println(
-                    "HORAS JOGADAS: "
-                    + horas
-            );
-
-            System.out.println(
-                    "================================="
-            );
-
+            stmt.close();
             conexao.close();
 
-            response.sendRedirect(
-                    "biblioteca#zerados"
-            );
+            // =====================================================
+            // MUDAR PARA ZERADO
+            // =====================================================
+
+            try {
+
+                Connection conexao2 =
+                        Conexao.conectar();
+
+                PreparedStatement atualizar =
+                        conexao2.prepareStatement(
+                                "UPDATE biblioteca " +
+                                "SET status = 'zerado' " +
+                                "WHERE id_usuario = ? " +
+                                "AND id_jogo = ?"
+                        );
+
+                atualizar.setInt(1, idUsuario);
+                atualizar.setInt(2, idJogo);
+
+                atualizar.executeUpdate();
+
+                atualizar.close();
+                conexao2.close();
+
+            } catch (Exception erroBiblioteca) {
+
+                erroBiblioteca.printStackTrace();
+            }
+
+            response.sendRedirect("biblioteca");
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            try {
-
-                if (conexao != null) {
-
-                    conexao.rollback();
-
-                    conexao.close();
-                }
-
-            } catch (Exception erro) {
-
-                erro.printStackTrace();
-            }
-
-            response.sendRedirect(
-                    "biblioteca"
-            );
+            response.sendRedirect("biblioteca");
         }
     }
 
-    // =====================================================
-    // ESCAPAR HTML
-    // =====================================================
+    // =========================================================
+    // PREPARAR CAPA
+    // =========================================================
 
-    private String escapar(String texto) {
+    private String prepararCapa(
+            String capa,
+            HttpServletRequest request) {
+
+        if (capa == null ||
+                capa.trim().isEmpty()) {
+
+            return null;
+        }
+
+        capa =
+                capa.trim();
+
+        // =====================================================
+        // MARKDOWN
+        // =====================================================
+
+        if (capa.startsWith("[") &&
+                capa.contains("](") &&
+                capa.endsWith(")")) {
+
+            int inicio =
+                    capa.indexOf("](");
+
+            if (inicio >= 0) {
+
+                String url =
+                        capa.substring(
+                                inicio + 2,
+                                capa.length() - 1
+                        );
+
+                if (url.startsWith("http://") ||
+                        url.startsWith("https://")) {
+
+                    return url;
+                }
+            }
+        }
+
+        // =====================================================
+        // SOMENTE APP ID
+        // =====================================================
+
+        if (capa.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    capa +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =====================================================
+        // URL STEAM COM /apps/ID
+        // =====================================================
+
+        java.util.regex.Matcher matcher =
+                java.util.regex.Pattern
+                        .compile("/apps/(\\d+)")
+                        .matcher(capa);
+
+        if (matcher.find()) {
+
+            String appId =
+                    matcher.group(1);
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    appId +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =====================================================
+        // URL NORMAL
+        // =====================================================
+
+        if (capa.startsWith("http://") ||
+                capa.startsWith("https://")) {
+
+            return capa;
+        }
+
+        // =====================================================
+        // CAMINHO LOCAL
+        // =====================================================
+
+        return
+                request.getContextPath()
+                + "/"
+                + capa.replaceFirst("^/+", "");
+    }
+
+    // =========================================================
+    // ESCAPAR HTML
+    // =========================================================
+
+    private String escaparHtml(
+            String texto) {
 
         if (texto == null) {
+
             return "";
         }
 
@@ -958,4 +948,3 @@ public class AvaliacaoServlet extends HttpServlet {
                 .replace("'", "&#39;");
     }
 }
-
