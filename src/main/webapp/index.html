@@ -9,7 +9,7 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>Inventory</title>
-
+<link rel="icon" type="image/png" href="icon.png">
   <link rel="icon" type="image/png" href="icon.png">
 
     <style>
@@ -114,6 +114,17 @@
             }
 
         }
+        .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-header {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
 
     </style>
 
@@ -136,7 +147,10 @@
                 class="logo-header"
             >
 
-            <h1>Inventory</h1>
+            <div class="logo-area">
+    <img src="icon.png" alt="Logo Inventory" class="logo-header">
+    <h1>Inventory</h1>
+</div>
 
         </div>
 
