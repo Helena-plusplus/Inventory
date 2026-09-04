@@ -7,58 +7,219 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-    
 
     <title>Inventory</title>
-    <link rel="icon" type="image/png" href="LOGO.png">
 
-    <link rel="stylesheet" href="style.css">
+    <!-- FAVICON -->
+    <link rel="icon"
+          type="image/png"
+          href="LOGO.png">
+
+    <link rel="stylesheet"
+          href="style.css">
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #35105f 0%,
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #1d0b2d 0%,
+                    transparent 35%
+                ),
+                #0b0710;
+
+            color: white;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+        }
+
         /* =====================================================
-           INÍCIO
+           HEADER
+           ===================================================== */
+
+        header {
+
+            width: 100%;
+
+            min-height: 72px;
+
+            padding: 16px 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 30px;
+
+            background: #140a1d;
+
+            border-bottom:
+                1px solid #39204a;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,.25);
+
+        }
+
+        /* LOGO + NOME */
+
+        .logo-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-shrink: 0;
+        }
+
+        .logo-header {
+
+            width: 42px;
+
+            height: 42px;
+
+            object-fit: contain;
+
+            display: block;
+        }
+
+        .logo-area h1 {
+
+            margin: 0;
+
+            padding: 0;
+
+            font-size: 29px;
+
+            font-weight: 700;
+
+            letter-spacing: -.5px;
+
+            color: white;
+        }
+
+        /* =====================================================
+           MENU
+           ===================================================== */
+
+        nav {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            flex-wrap: wrap;
+
+            gap: 24px;
+        }
+
+        nav a {
+
+            color: #ad92bd;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            transition: .2s;
+        }
+
+        nav a:hover {
+
+            color: #c47be5;
+        }
+
+        /* =====================================================
+           MAIN
            ===================================================== */
 
         main {
-            max-width: 1200px;
-            margin: auto;
-            padding: 30px 25px 60px;
+
+            width: 100%;
+
+            max-width: 1180px;
+
+            margin: 0 auto;
+
+            padding: 45px 20px 60px;
         }
 
+        /* =====================================================
+           BEM-VINDO
+           ===================================================== */
+
         .inicio {
-            text-align: center;
-            padding: 55px 25px;
-            margin-bottom: 35px;
+
+            padding: 50px 35px;
+
+            margin-bottom: 25px;
 
             background:
-                radial-gradient(
-                    circle at top,
-                    rgba(124, 58, 237, 0.28),
-                    transparent 65%
-                ),
-                #17121f;
+                linear-gradient(
+                    145deg,
+                    #1b0d27,
+                    #110916
+                );
 
-            border: 1px solid #30263a;
+            border:
+                1px solid #39204a;
+
             border-radius: 18px;
 
             box-shadow:
-                0 15px 40px rgba(0, 0, 0, 0.3);
+                0 15px 40px
+                rgba(0,0,0,.22);
         }
 
         .inicio h2 {
-            font-size: 38px;
-            margin-bottom: 12px;
-        }
 
-        .inicio h2 span {
-            color: #a855f7;
+            margin: 0 0 12px;
+
+            font-size: 35px;
+
+            font-weight: 700;
         }
 
         .inicio p {
+
+            margin: 0;
+
+            color: #b9a7c4;
+
             font-size: 16px;
-            max-width: 650px;
-            margin: auto;
+
+            line-height: 1.6;
         }
 
         /* =====================================================
@@ -66,139 +227,203 @@
            ===================================================== */
 
         .busca {
-            background: #17131d;
-            border: 1px solid #30263a;
-            border-radius: 14px;
 
-            padding: 25px;
-            margin-bottom: 40px;
+            padding: 28px;
+
+            margin-bottom: 30px;
+
+            background: #150b1e;
+
+            border:
+                1px solid #39204a;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 12px 30px
+                rgba(0,0,0,.18);
         }
 
         .busca h2 {
-            margin-bottom: 15px;
+
+            margin: 0 0 18px;
+
+            font-size: 22px;
         }
 
         .busca-form {
+
             display: flex;
+
             gap: 10px;
+
+            width: 100%;
         }
 
-        .busca-form input {
+        .campo-busca {
+
             flex: 1;
 
-            padding: 13px 15px;
+            min-width: 0;
 
-            background: #0f0b15;
+            height: 46px;
+
+            padding: 0 15px;
+
+            background: #0f0814;
+
             color: white;
 
-            border: 1px solid #7c3aed;
-            border-radius: 8px;
+            border:
+                1px solid #432454;
 
-            font-size: 15px;
+            border-radius: 8px;
 
             outline: none;
 
-            box-sizing: border-box;
+            font-size: 15px;
         }
 
-        .busca-form input::placeholder {
-            color: #888;
+        .campo-busca::placeholder {
+
+            color: #76677e;
         }
 
-        .busca-form button {
-            padding: 13px 22px;
+        .campo-busca:focus {
 
-            border: none;
+            border-color: #7b2ba5;
+        }
+
+        .botao-busca {
+
+            height: 46px;
+
+            padding: 0 23px;
+
+            border: 1px solid #8030ad;
+
             border-radius: 8px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #7c3aed,
-                    #a855f7
+                    #671a9b,
+                    #8428b6
                 );
 
             color: white;
 
-            font-weight: bold;
             font-size: 14px;
+
+            font-weight: bold;
 
             cursor: pointer;
 
-            transition: 0.2s;
+            transition: .2s;
         }
 
-        .busca-form button:hover {
-            transform: translateY(-2px);
+        .botao-busca:hover {
 
-            box-shadow:
-                0 8px 20px
-                rgba(124, 58, 237, 0.35);
-        }
-
-        /* =====================================================
-           TÍTULO DO CATÁLOGO
-           ===================================================== */
-
-        .titulo-catalogo {
-            margin-bottom: 20px;
-        }
-
-        .titulo-catalogo h2 {
-            margin-bottom: 5px;
-        }
-
-        /* =====================================================
-           CATÁLOGO
-           ===================================================== */
-
-        .catalogo-jogos {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(200px, 1fr)
+            background:
+                linear-gradient(
+                    135deg,
+                    #7b22b2,
+                    #983bd0
                 );
 
-            gap: 22px;
+            transform: translateY(-1px);
         }
 
         /* =====================================================
-           CARD DO JOGO
+           SEÇÃO JOGOS
            ===================================================== */
 
-        .card-jogo {
+        .jogos-section {
+
+            padding: 28px;
+
             background:
                 linear-gradient(
                     145deg,
-                    #211a2b,
-                    #17131d
+                    #180d23,
+                    #100816
                 );
 
-            border: 1px solid #30263a;
+            border:
+                1px solid #39204a;
 
-            border-radius: 14px;
+            border-radius: 18px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,.20);
+        }
+
+        .jogos-section h2 {
+
+            margin: 0 0 8px;
+
+            font-size: 24px;
+
+            font-weight: 700;
+        }
+
+        .jogos-section > p {
+
+            margin: 0 0 25px;
+
+            color: #9d8aa8;
+
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           GRID
+           ===================================================== */
+
+        .catalogo-jogos {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0,1fr));
+
+            gap: 18px;
+        }
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card-jogo {
 
             overflow: hidden;
 
+            min-width: 0;
+
+            background: #100817;
+
+            border:
+                1px solid #32203f;
+
+            border-radius: 12px;
+
             text-align: center;
 
-            transition:
-                transform 0.2s,
-                border-color 0.2s,
-                box-shadow 0.2s;
+            transition: .25s;
         }
 
         .card-jogo:hover {
-            transform: translateY(-6px);
+
+            transform:
+                translateY(-5px);
 
             border-color:
-                rgba(168, 85, 247, 0.65);
+                #7424a5;
 
             box-shadow:
-                0 15px 35px
-                rgba(124, 58, 237, 0.18);
+                0 15px 30px
+                rgba(81,0,120,.22);
         }
 
         /* =====================================================
@@ -206,33 +431,36 @@
            ===================================================== */
 
         .card-jogo img {
+
             width: 100%;
 
-            height: 280px;
+            height: 285px;
 
             object-fit: cover;
 
             display: block;
 
-            transition: transform 0.3s;
+            transition: .25s;
         }
 
         .card-jogo:hover img {
-            transform: scale(1.035);
+
+            transform:
+                scale(1.025);
         }
 
         /* =====================================================
-           INFORMAÇÕES
+           CONTEÚDO
            ===================================================== */
 
         .card-jogo-conteudo {
-            padding: 18px;
+
+            padding: 15px;
         }
 
         .card-jogo h3 {
-            font-size: 17px;
 
-            margin-bottom: 8px;
+            margin: 0 0 8px;
 
             min-height: 40px;
 
@@ -241,22 +469,28 @@
             align-items: center;
 
             justify-content: center;
+
+            color: #eee6f2;
+
+            font-size: 16px;
+
+            line-height: 1.3;
         }
 
-        .card-jogo .genero {
-            color: #aaa1b4;
+        .card-jogo p {
+
+            margin: 5px 0;
+
+            color: #9d8aa8;
 
             font-size: 13px;
-
-            margin-bottom: 8px;
         }
 
         .nota {
+
             color: #c084fc !important;
 
             font-weight: bold;
-
-            margin-bottom: 12px !important;
         }
 
         /* =====================================================
@@ -264,19 +498,20 @@
            ===================================================== */
 
         .botao-biblioteca {
+
             display: block;
 
             width: 100%;
 
-            padding: 11px 15px;
+            margin-top: 13px;
 
-            margin-top: 12px;
+            padding: 11px 10px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #7c3aed,
-                    #a855f7
+                    #6d1aa2,
+                    #8b29bd
                 );
 
             color: white;
@@ -289,89 +524,188 @@
 
             font-weight: bold;
 
-            transition: 0.2s;
-
-            box-sizing: border-box;
+            transition: .2s;
         }
 
         .botao-biblioteca:hover {
+
             background:
                 linear-gradient(
                     135deg,
-                    #9333ea,
-                    #c084fc
+                    #8124b9,
+                    #a43bd0
                 );
 
-            transform: translateY(-2px);
+            transform:
+                translateY(-1px);
+        }
 
-            box-shadow:
-                0 8px 20px
-                rgba(124, 58, 237, 0.35);
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+
+            width: 100%;
+
+            padding: 25px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid #2c1a38;
+
+            color: #6f6277;
+
+            font-size: 13px;
         }
 
         /* =====================================================
            RESPONSIVO
            ===================================================== */
 
-        @media (max-width: 700px) {
+        @media (max-width: 1000px) {
+
+            .catalogo-jogos {
+
+                grid-template-columns:
+                    repeat(3, minmax(0,1fr));
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            header {
+
+                flex-direction: column;
+
+                padding: 18px 15px;
+
+            }
+
+            nav {
+
+                width: 100%;
+
+                justify-content: center;
+
+                gap: 16px;
+            }
 
             main {
-                padding: 20px 15px 40px;
-            }
 
-            .inicio {
-                padding: 40px 20px;
-            }
-
-            .inicio h2 {
-                font-size: 30px;
-            }
-
-            .busca-form {
-                flex-direction: column;
-            }
-
-            .busca-form input {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .busca-form button {
-                width: 100%;
+                padding:
+                    25px 14px 50px;
             }
 
             .catalogo-jogos {
+
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+                    repeat(2, minmax(0,1fr));
 
                 gap: 14px;
             }
 
             .card-jogo img {
-                height: 220px;
+
+                height: 235px;
+            }
+
+            .inicio {
+
+                padding:
+                    35px 22px;
+            }
+
+            .inicio h2 {
+
+                font-size: 29px;
+            }
+
+            .busca,
+            .jogos-section {
+
+                padding: 20px;
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            .logo-header {
+
+                width: 38px;
+
+                height: 38px;
+            }
+
+            .logo-area h1 {
+
+                font-size: 25px;
+            }
+
+            nav {
+
+                gap: 11px;
+            }
+
+            nav a {
+
+                font-size: 12px;
+            }
+
+            .busca-form {
+
+                flex-direction: column;
+            }
+
+            .botao-busca {
+
+                width: 100%;
+            }
+
+            .catalogo-jogos {
+
+                grid-template-columns:
+                    repeat(2, minmax(0,1fr));
+
+                gap: 10px;
+            }
+
+            .card-jogo img {
+
+                height: 205px;
             }
 
             .card-jogo-conteudo {
-                padding: 12px;
+
+                padding: 10px;
             }
 
             .card-jogo h3 {
-                font-size: 14px;
+
+                font-size: 13px;
             }
 
             .botao-biblioteca {
-                font-size: 12px;
-                padding: 9px;
+
+                font-size: 11px;
+
+                padding: 9px 5px;
             }
+
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 380px) {
 
             .catalogo-jogos {
+
                 grid-template-columns: 1fr;
             }
 
             .card-jogo img {
+
                 height: 300px;
             }
         }
@@ -382,577 +716,597 @@
 
 <body>
 
-<header>
-
-    <h1>Inventory</h1>
-
-    <nav>
-
-        <a href="index.html">
-            Início
-        </a>
-
-        <a href="buscar-usuarios">
-            Buscar usuários
-        </a>
-
-        <a href="jogos">
-            Jogos
-        </a>
-
-        <a href="perfil">
-            Meu Perfil
-        </a>
-
-        <a href="biblioteca">
-            Biblioteca
-        </a>
-
-        <a href="listas">
-            Listas
-        </a>
-
-        <a href="logout">
-            Sair
-        </a>
-
-    </nav>
-
-</header>
-
-
-<main>
-
     <!-- =====================================================
-         BEM-VINDO
+         HEADER
          ===================================================== -->
 
-    <section class="inicio">
+    <header>
 
-        <h2>
-            Bem-vindo ao <span>Inventory</span>
-        </h2>
+        <div class="logo-area">
 
-        <p>
-            Descubra jogos, avalie suas experiências
-            e monte sua biblioteca.
-        </p>
-
-    </section>
-
-
-    <!-- =====================================================
-         BUSCAR JOGO
-         ===================================================== -->
-
-    <section class="busca">
-
-        <h2>
-            🔎 Buscar jogo
-        </h2>
-
-        <form
-            class="busca-form"
-            method="GET"
-            action="jogos"
-        >
-
-            <input
-                type="text"
-                name="busca"
-                placeholder="Digite o nome do jogo..."
-                required
+            <img
+                src="ICON.png"
+                alt="Logo Inventory"
+                class="logo-header"
             >
 
-            <button type="submit">
-                Buscar
-            </button>
+            <h1>Inventory</h1>
 
-        </form>
+        </div>
 
-    </section>
+        <nav>
+
+            <a href="index.html">
+                Início
+            </a>
+
+            <a href="buscar-usuarios">
+                Buscar usuários
+            </a>
+
+            <a href="jogos">
+                Jogos
+            </a>
+
+            <a href="perfil">
+                Meu Perfil
+            </a>
+
+            <a href="biblioteca">
+                Biblioteca
+            </a>
+
+            <a href="listas">
+                Listas
+            </a>
+
+            <a href="logout">
+                Sair
+            </a>
+
+        </nav>
+
+    </header>
 
 
     <!-- =====================================================
-         JOGOS
+         CONTEÚDO
          ===================================================== -->
 
-    <section>
+    <main>
 
-        <div class="titulo-catalogo">
+        <!-- BEM-VINDO -->
+
+        <section class="inicio">
 
             <h2>
-                🎮 Jogos populares
+                Bem-vindo ao Inventory
             </h2>
 
             <p>
-                Confira alguns jogos disponíveis no Inventory.
+                Descubra jogos, avalie suas experiências
+                e monte sua biblioteca.
             </p>
 
-        </div>
+        </section>
 
 
-        <div class="catalogo-jogos">
+        <!-- =================================================
+             BUSCAR JOGO
+             ================================================= -->
 
+        <section class="busca">
 
-            <!-- =================================================
-                 RESIDENT EVIL 4
-                 ================================================= -->
+            <h2>
+                Buscar jogo
+            </h2>
 
-            <article class="card-jogo">
+            <form
+                class="busca-form"
+                method="GET"
+                action="jogos"
+            >
 
-                <img
-                    src="resident-evil-4.jpg"
-                    alt="Resident Evil 4"
+                <input
+                    class="campo-busca"
+                    type="text"
+                    name="busca"
+                    placeholder="Digite o nome do jogo..."
+                    required
                 >
 
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Resident Evil 4
-                    </h3>
-
-                    <p class="genero">
-                        Terror / Ação
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 5.0
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=1"
-                    >
-                        + Minha biblioteca
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- =================================================
-                 THE LAST OF US
-                 ================================================= -->
-
-            <article class="card-jogo">
-
-                <img
-                    src="the-last-of-us-part-1.jpg"
-                    alt="The Last of Us Part I"
+                <button
+                    class="botao-busca"
+                    type="submit"
                 >
+                    Buscar
+                </button>
 
-                <div class="card-jogo-conteudo">
+            </form>
 
-                    <h3>
-                        The Last of Us Part I
-                    </h3>
+        </section>
 
-                    <p class="genero">
-                        Ação / Aventura
-                    </p>
 
-                    <p class="nota">
-                        ⭐ 4.8
-                    </p>
+        <!-- =================================================
+             JOGOS POPULARES
+             ================================================= -->
 
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=2"
+        <section class="jogos-section">
+
+            <h2>
+                Jogos populares
+            </h2>
+
+            <p>
+                Confira alguns dos jogos disponíveis no Inventory.
+            </p>
+
+
+            <div class="catalogo-jogos">
+
+
+                <!-- =================================================
+                     RESIDENT EVIL 4
+                     ================================================= -->
+
+                <article class="card-jogo">
+
+                    <img
+                        src="resident-evil-4.jpg"
+                        alt="Resident Evil 4"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Resident Evil 4
+                        </h3>
+
+                        <p>
+                            Terror / Ação
+                        </p>
+
+                        <p class="nota">
+                            5.0
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=1"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 GOD OF WAR
-                 ================================================= -->
+                <!-- =================================================
+                     THE LAST OF US
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="god-of-war-ragnarok.jpg"
-                    alt="God of War Ragnarök"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        God of War Ragnarök
-                    </h3>
-
-                    <p class="genero">
-                        Ação / Aventura
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.9
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=3"
+                    <img
+                        src="the-last-of-us-part-1.jpg"
+                        alt="The Last of Us Part I"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            The Last of Us Part I
+                        </h3>
+
+                        <p>
+                            Ação / Aventura
+                        </p>
+
+                        <p class="nota">
+                            4.8
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=2"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 MINECRAFT
-                 ================================================= -->
+                <!-- =================================================
+                     GOD OF WAR
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="minecraft.jpg"
-                    alt="Minecraft"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Minecraft
-                    </h3>
-
-                    <p class="genero">
-                        Sandbox
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.7
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=4"
+                    <img
+                        src="god-of-war-ragnarok.jpg"
+                        alt="God of War Ragnarök"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            God of War Ragnarök
+                        </h3>
+
+                        <p>
+                            Ação / Aventura
+                        </p>
+
+                        <p class="nota">
+                            4.9
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=3"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 RED DEAD REDEMPTION 2
-                 ================================================= -->
+                <!-- =================================================
+                     MINECRAFT
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="red-dead-redemption-2.jpg"
-                    alt="Red Dead Redemption 2"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Red Dead Redemption 2
-                    </h3>
-
-                    <p class="genero">
-                        Ação / Aventura
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 5.0
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=5"
+                    <img
+                        src="minecraft.jpg"
+                        alt="Minecraft"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Minecraft
+                        </h3>
+
+                        <p>
+                            Sandbox
+                        </p>
+
+                        <p class="nota">
+                            4.7
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=4"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 GTA V
-                 ================================================= -->
+                <!-- =================================================
+                     RED DEAD REDEMPTION 2
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="gta-v.jpg"
-                    alt="Grand Theft Auto V"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Grand Theft Auto V
-                    </h3>
-
-                    <p class="genero">
-                        Ação / Mundo Aberto
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.6
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=6"
+                    <img
+                        src="red-dead-redemption-2.jpg"
+                        alt="Red Dead Redemption 2"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Red Dead Redemption 2
+                        </h3>
+
+                        <p>
+                            Ação / Aventura
+                        </p>
+
+                        <p class="nota">
+                            5.0
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=5"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 SILENT HILL 2
-                 ================================================= -->
+                <!-- =================================================
+                     GTA V
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="silent-hill-2.jpg"
-                    alt="Silent Hill 2"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Silent Hill 2
-                    </h3>
-
-                    <p class="genero">
-                        Terror
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.8
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=7"
+                    <img
+                        src="gta-v.jpg"
+                        alt="Grand Theft Auto V"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Grand Theft Auto V
+                        </h3>
+
+                        <p>
+                            Ação / Mundo Aberto
+                        </p>
+
+                        <p class="nota">
+                            4.6
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=6"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 ELDEN RING
-                 ================================================= -->
+                <!-- =================================================
+                     SILENT HILL 2
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="elden-ring.jpg"
-                    alt="Elden Ring"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Elden Ring
-                    </h3>
-
-                    <p class="genero">
-                        RPG / Ação
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.9
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=8"
+                    <img
+                        src="silent-hill-2.jpg"
+                        alt="Silent Hill 2"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Silent Hill 2
+                        </h3>
+
+                        <p>
+                            Terror
+                        </p>
+
+                        <p class="nota">
+                            4.8
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=7"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 RESIDENT EVIL VILLAGE
-                 ================================================= -->
+                <!-- =================================================
+                     ELDEN RING
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="resident-evil-village.jpg"
-                    alt="Resident Evil Village"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Resident Evil Village
-                    </h3>
-
-                    <p class="genero">
-                        Terror / Ação
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.7
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=9"
+                    <img
+                        src="elden-ring.jpg"
+                        alt="Elden Ring"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Elden Ring
+                        </h3>
+
+                        <p>
+                            RPG / Ação
+                        </p>
+
+                        <p class="nota">
+                            4.9
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=8"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 THE WITCHER 3
-                 ================================================= -->
+                <!-- =================================================
+                     RESIDENT EVIL VILLAGE
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="the-witcher-3.jpg"
-                    alt="The Witcher 3"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        The Witcher 3
-                    </h3>
-
-                    <p class="genero">
-                        RPG / Aventura
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.9
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=10"
+                    <img
+                        src="resident-evil-village.jpg"
+                        alt="Resident Evil Village"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Resident Evil Village
+                        </h3>
+
+                        <p>
+                            Terror / Ação
+                        </p>
+
+                        <p class="nota">
+                            4.7
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=9"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 CYBERPUNK 2077
-                 ================================================= -->
+                <!-- =================================================
+                     THE WITCHER 3
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="cyberpunk-2077.jpg"
-                    alt="Cyberpunk 2077"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Cyberpunk 2077
-                    </h3>
-
-                    <p class="genero">
-                        RPG / Ação
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.5
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=11"
+                    <img
+                        src="the-witcher-3.jpg"
+                        alt="The Witcher 3"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            The Witcher 3
+                        </h3>
+
+                        <p>
+                            RPG / Aventura
+                        </p>
+
+                        <p class="nota">
+                            4.9
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=10"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-            <!-- =================================================
-                 SPIDER-MAN 2
-                 ================================================= -->
+                <!-- =================================================
+                     CYBERPUNK 2077
+                     ================================================= -->
 
-            <article class="card-jogo">
+                <article class="card-jogo">
 
-                <img
-                    src="marvel-spider-man-2.jpg"
-                    alt="Marvel's Spider-Man 2"
-                >
-
-                <div class="card-jogo-conteudo">
-
-                    <h3>
-                        Marvel's Spider-Man 2
-                    </h3>
-
-                    <p class="genero">
-                        Ação / Aventura
-                    </p>
-
-                    <p class="nota">
-                        ⭐ 4.8
-                    </p>
-
-                    <a
-                        class="botao-biblioteca"
-                        href="adicionar-biblioteca?id=12"
+                    <img
+                        src="cyberpunk-2077.jpg"
+                        alt="Cyberpunk 2077"
                     >
-                        + Minha biblioteca
-                    </a>
 
-                </div>
+                    <div class="card-jogo-conteudo">
 
-            </article>
+                        <h3>
+                            Cyberpunk 2077
+                        </h3>
+
+                        <p>
+                            RPG / Ação
+                        </p>
+
+                        <p class="nota">
+                            4.5
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=11"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-        </div>
+                <!-- =================================================
+                     SPIDER-MAN 2
+                     ================================================= -->
 
-    </section>
+                <article class="card-jogo">
 
-</main>
+                    <img
+                        src="marvel-spider-man-2.jpg"
+                        alt="Marvel's Spider-Man 2"
+                    >
+
+                    <div class="card-jogo-conteudo">
+
+                        <h3>
+                            Marvel's Spider-Man 2
+                        </h3>
+
+                        <p>
+                            Ação / Aventura
+                        </p>
+
+                        <p class="nota">
+                            4.8
+                        </p>
+
+                        <a
+                            class="botao-biblioteca"
+                            href="adicionar-biblioteca?id=12"
+                        >
+                            Minha biblioteca
+                        </a>
+
+                    </div>
+
+                </article>
 
 
-<footer>
+            </div>
 
-    <p>
-        © 2026 Inventory
-    </p>
+        </section>
 
-</footer>
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <p>
+            © 2026 Inventory
+        </p>
+
+    </footer>
 
 </body>
 
