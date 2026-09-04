@@ -10,7 +10,7 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>Entrar - Inventory</title>
- <link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="icon.png">
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -37,7 +37,23 @@
                 );
 
             overflow-x: hidden;
-        }
+        }.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-header {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-area h1 {
+    margin: 0;
+}
+        
 
         /* =========================================
            CONTAINER
@@ -462,7 +478,10 @@
 
 <header>
 
+        <div class="logo-area">
+    <img src="icon.png" alt="Logo Inventory" class="logo-header">
     <h1>Inventory</h1>
+</div>
 
     <nav>
 
