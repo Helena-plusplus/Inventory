@@ -98,7 +98,9 @@ public class PerfilServlet extends HttpServlet {
             html.append("<html lang='pt-BR'>");
 
             html.append("<head>");
-
+html.append(
+    "<link rel='icon' type='image/png' href='icon.png'>"
+);
             html.append("<meta charset='UTF-8'>");
 
             html.append(
@@ -831,7 +833,17 @@ public class PerfilServlet extends HttpServlet {
             html.append("<header>");
 
             html.append(
-                    "<h1>Inventory</h1>"
+                    "<div class=\"logo-area\">\n" +
+"\n" +
+"        <img\n" +
+"            src=\"icon.png\"\n" +
+"            alt=\"Logo Inventory\"\n" +
+"            class=\"logo-header\"\n" +
+"        >\n" +
+"\n" +
+"        <h1>Inventory</h1>\n" +
+"\n" +
+"    </div>"
             );
 
             html.append("<nav>");

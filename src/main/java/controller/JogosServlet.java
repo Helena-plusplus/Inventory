@@ -476,7 +476,17 @@ public class JogosServlet extends HttpServlet {
 
         html.append("<header>");
 
-        html.append("<h1>Inventory</h1>");
+        html.append("<div class=\"logo-area\">\n" +
+"\n" +
+"        <img\n" +
+"            src=\"icon.png\"\n" +
+"            alt=\"Logo Inventory\"\n" +
+"            class=\"logo-header\"\n" +
+"        >\n" +
+"\n" +
+"        <h1>Inventory</h1>\n" +
+"\n" +
+"    </div>");
 
         html.append("<nav>");
 
