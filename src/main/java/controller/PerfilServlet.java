@@ -132,8 +132,14 @@ public class PerfilServlet extends HttpServlet {
             html.append("<style>");
 
             // =====================================================
-            // CORREÇÃO DO LAYOUT GLOBAL
+            // RESET
             // =====================================================
+
+            html.append(
+                    "*{" +
+                    "box-sizing:border-box;" +
+                    "}"
+            );
 
             html.append(
                     "html,body{" +
@@ -143,6 +149,10 @@ public class PerfilServlet extends HttpServlet {
                     "padding:0 !important;" +
                     "}"
             );
+
+            // =====================================================
+            // BODY
+            // =====================================================
 
             html.append(
                     "body{" +
@@ -182,7 +192,7 @@ public class PerfilServlet extends HttpServlet {
                     "gap:30px !important;" +
                     "background:#150a1e !important;" +
                     "border:none !important;" +
-                    "border-bottom:1px solid #342044 !important;" +
+                    "border-bottom:1px solid #382047 !important;" +
                     "box-shadow:0 5px 20px rgba(0,0,0,.20) !important;" +
                     "}"
             );
@@ -222,6 +232,7 @@ public class PerfilServlet extends HttpServlet {
                     "font-size:14px !important;" +
                     "font-weight:500 !important;" +
                     "text-decoration:none !important;" +
+                    "transition:.2s;" +
                     "}"
             );
 
@@ -279,6 +290,7 @@ public class PerfilServlet extends HttpServlet {
                     "border-radius:50%;" +
                     "background:#7923aa;" +
                     "opacity:.09;" +
+                    "pointer-events:none;" +
                     "}"
             );
 
@@ -452,6 +464,26 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
+            // EXCLUIR CONTA
+            // =====================================================
+
+            html.append(
+                    ".excluir-button{" +
+                    "background:#29101f;" +
+                    "border:1px solid #633052;" +
+                    "color:#c98aa9;" +
+                    "}"
+            );
+
+            html.append(
+                    ".excluir-button:hover{" +
+                    "background:#42162e;" +
+                    "border-color:#88436d;" +
+                    "color:#e1a9c2;" +
+                    "}"
+            );
+
+            // =====================================================
             // GRID
             // =====================================================
 
@@ -573,6 +605,7 @@ public class PerfilServlet extends HttpServlet {
                     "border-radius:11px;" +
                     "padding:16px;" +
                     "margin-bottom:12px;" +
+                    "transition:.2s;" +
                     "}"
             );
 
@@ -657,6 +690,7 @@ public class PerfilServlet extends HttpServlet {
                     "text-decoration:none;" +
                     "font-weight:bold;" +
                     "font-size:14px;" +
+                    "transition:.2s;" +
                     "}"
             );
 
@@ -891,7 +925,9 @@ public class PerfilServlet extends HttpServlet {
                     "<div class='perfil-info'>"
             );
 
+            // =====================================================
             // NOME
+            // =====================================================
 
             html.append(
                     "<h1 class='perfil-nome'>" +
@@ -899,7 +935,9 @@ public class PerfilServlet extends HttpServlet {
                     "</h1>"
             );
 
+            // =====================================================
             // USERNAME
+            // =====================================================
 
             String username =
                     usuario.getUsername();
@@ -917,7 +955,9 @@ public class PerfilServlet extends HttpServlet {
                     "</div>"
             );
 
+            // =====================================================
             // BIO
+            // =====================================================
 
             if (usuario.getBio() != null &&
                     !usuario.getBio().trim().isEmpty()) {
@@ -929,7 +969,9 @@ public class PerfilServlet extends HttpServlet {
                 );
             }
 
+            // =====================================================
             // EMBLEMA
+            // =====================================================
 
             if (especial) {
 
@@ -1008,6 +1050,17 @@ public class PerfilServlet extends HttpServlet {
                     "</a>"
             );
 
+            html.append(
+                    "<a class='perfil-button excluir-button' " +
+                    "href='excluir-conta' " +
+                    "onclick=\"return confirm(" +
+                    "'Tem certeza que deseja excluir sua conta? " +
+                    "Esta ação não pode ser desfeita.'" +
+                    ");\">" +
+                    "Excluir conta" +
+                    "</a>"
+            );
+
             html.append("</div>");
 
             html.append("</div>");
@@ -1015,7 +1068,7 @@ public class PerfilServlet extends HttpServlet {
             html.append("</section>");
 
             // =====================================================
-            // GRID
+            // GRID PRINCIPAL
             // =====================================================
 
             html.append(
@@ -1023,7 +1076,7 @@ public class PerfilServlet extends HttpServlet {
             );
 
             // =====================================================
-            // ESQUERDA
+            // COLUNA ESQUERDA
             // =====================================================
 
             html.append("<div>");
@@ -1037,7 +1090,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<h2 class='secao-titulo'>Favoritos</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "Favoritos" +
+                    "</h2>"
             );
 
             if (favoritos.isEmpty()) {
@@ -1079,7 +1134,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<h2 class='secao-titulo'>Minhas listas</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "Minhas listas" +
+                    "</h2>"
             );
 
             if (listas.isEmpty()) {
@@ -1159,7 +1216,7 @@ public class PerfilServlet extends HttpServlet {
             html.append("</div>");
 
             // =====================================================
-            // DIREITA
+            // COLUNA DIREITA
             // =====================================================
 
             html.append("<div>");
@@ -1173,7 +1230,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<h2 class='secao-titulo'>Seguidores</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "Seguidores" +
+                    "</h2>"
             );
 
             if (seguidores.isEmpty()) {
@@ -1209,7 +1268,9 @@ public class PerfilServlet extends HttpServlet {
             );
 
             html.append(
-                    "<h2 class='secao-titulo'>Seguindo</h2>"
+                    "<h2 class='secao-titulo'>" +
+                    "Seguindo" +
+                    "</h2>"
             );
 
             if (seguindo.isEmpty()) {
@@ -1365,7 +1426,7 @@ public class PerfilServlet extends HttpServlet {
     }
 
     // =========================================================
-    // JOGOS DAS LISTAS
+    // JOGOS DA LISTA
     // =========================================================
 
     private List<Jogo> carregarJogosLista(
@@ -1596,9 +1657,7 @@ public class PerfilServlet extends HttpServlet {
         capa =
                 capa.trim();
 
-        // =====================================================
         // MARKDOWN
-        // =====================================================
 
         if (capa.startsWith("[") &&
                 capa.contains("](") &&
@@ -1623,9 +1682,7 @@ public class PerfilServlet extends HttpServlet {
             }
         }
 
-        // =====================================================
         // APP ID
-        // =====================================================
 
         if (capa.matches("\\d+")) {
 
@@ -1636,9 +1693,7 @@ public class PerfilServlet extends HttpServlet {
                     "/library_600x900_2x.jpg";
         }
 
-        // =====================================================
-        // URL DA STEAM
-        // =====================================================
+        // URL STEAM
 
         java.util.regex.Matcher matcher =
                 java.util.regex.Pattern
@@ -1657,9 +1712,7 @@ public class PerfilServlet extends HttpServlet {
                     "/library_600x900_2x.jpg";
         }
 
-        // =====================================================
         // URL NORMAL
-        // =====================================================
 
         if (capa.startsWith("http://") ||
                 capa.startsWith("https://")) {
@@ -1667,9 +1720,7 @@ public class PerfilServlet extends HttpServlet {
             return capa;
         }
 
-        // =====================================================
         // CAMINHO LOCAL
-        // =====================================================
 
         return
                 request.getContextPath()
