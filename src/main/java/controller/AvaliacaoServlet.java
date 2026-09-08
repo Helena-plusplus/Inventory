@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -105,13 +108,8 @@ public class AvaliacaoServlet extends HttpServlet {
             // HTML
             // =====================================================
 
-            html.append(
-                    "<!DOCTYPE html>"
-            );
-
-            html.append(
-                    "<html lang='pt-BR'>"
-            );
+            html.append("<!DOCTYPE html>");
+            html.append("<html lang='pt-BR'>");
 
             html.append("<head>");
 
@@ -148,11 +146,19 @@ public class AvaliacaoServlet extends HttpServlet {
 
             html.append("<style>");
 
+            // =====================================================
+            // RESET
+            // =====================================================
+
             html.append(
                     "* {"
                     + "box-sizing:border-box;"
                     + "}"
             );
+
+            // =====================================================
+            // BODY
+            // =====================================================
 
             html.append(
                     "body {"
@@ -189,6 +195,10 @@ public class AvaliacaoServlet extends HttpServlet {
                     + "}"
             );
 
+            // =====================================================
+            // LOGO
+            // =====================================================
+
             html.append(
                     ".logo-area {"
                     + "display:flex;"
@@ -220,6 +230,10 @@ public class AvaliacaoServlet extends HttpServlet {
                     + "color:#fff;"
                     + "}"
             );
+
+            // =====================================================
+            // NAV
+            // =====================================================
 
             html.append(
                     "nav {"
@@ -336,14 +350,9 @@ public class AvaliacaoServlet extends HttpServlet {
                     + "}"
             );
 
-            /*
-             * IMPORTANTE:
-             *
-             * Como os elementos são renderizados na ordem
-             * 5, 4, 3, 2, 1 e o container usa row-reverse,
-             * podemos usar ~ para pintar todas as estrelas
-             * até a selecionada.
-             */
+            // =====================================================
+            // ACUMULAR ESTRELAS
+            // =====================================================
 
             html.append(
                     ".estrelas label:hover,"
@@ -432,7 +441,7 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             // =====================================================
-            // BOTÃO
+            // BOTAO
             // =====================================================
 
             html.append(
@@ -624,7 +633,7 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             // =====================================================
-            // FORM
+            // FORMULARIO
             // =====================================================
 
             html.append(
@@ -633,7 +642,8 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             html.append(
-                    "<input type='hidden' "
+                    "<input "
+                    + "type='hidden' "
                     + "name='idJogo' "
                     + "value='"
                     + idJogo
@@ -653,15 +663,8 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             /*
-             * A ordem precisa ser 5 -> 1.
-             *
-             * Visualmente, com row-reverse:
-             *
-             * 1  2  3  4  5
-             *
-             * Quando selecionar 4:
-             *
-             * ★  ★  ★  ★  ☆
+             * Ordem 5 -> 1.
+             * O row-reverse faz a exibição visual ser 1 -> 5.
              */
 
             for (int i = 5; i >= 1; i--) {
@@ -692,7 +695,7 @@ public class AvaliacaoServlet extends HttpServlet {
             html.append("</div>");
 
             // =====================================================
-            // HORAS
+            // HORAS JOGADAS
             // =====================================================
 
             html.append(
@@ -885,7 +888,7 @@ public class AvaliacaoServlet extends HttpServlet {
             conexao.close();
 
             // =====================================================
-            // MUDAR PARA ZERADO
+            // COLOCAR COMO ZERADO
             // =====================================================
 
             try {
@@ -926,10 +929,6 @@ public class AvaliacaoServlet extends HttpServlet {
 
                 erroBiblioteca.printStackTrace();
             }
-
-            // =====================================================
-            // VOLTAR PARA BIBLIOTECA
-            // =====================================================
 
             response.sendRedirect(
                     "biblioteca"
