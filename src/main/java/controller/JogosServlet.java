@@ -45,6 +45,10 @@ public class JogosServlet extends HttpServlet {
         StringBuilder html =
                 new StringBuilder();
 
+        // =====================================================
+        // HTML
+        // =====================================================
+
         html.append("<!DOCTYPE html>");
         html.append("<html lang='pt-BR'>");
 
@@ -64,6 +68,7 @@ public class JogosServlet extends HttpServlet {
                 "<title>Jogos - Inventory</title>"
         );
 
+        // FAVICON
         html.append(
                 "<link rel='icon' " +
                 "type='image/png' " +
@@ -76,7 +81,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         // =====================================================
-        // CSS
+        // CSS DA PÁGINA
         // =====================================================
 
         html.append("<style>");
@@ -184,6 +189,10 @@ public class JogosServlet extends HttpServlet {
                 "}"
         );
 
+        // =====================================================
+        // TÍTULO
+        // =====================================================
+
         html.append(
                 ".titulo-jogos{" +
                 "text-align:center;" +
@@ -284,7 +293,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         // =====================================================
-        // CAPA
+        // CAPAS DOS JOGOS
         // =====================================================
 
         html.append(
@@ -295,6 +304,7 @@ public class JogosServlet extends HttpServlet {
                 "border-radius:12px;" +
                 "display:block;" +
                 "transition:transform .3s ease;" +
+                "background:#120d18;" +
                 "}"
         );
 
@@ -318,7 +328,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         // =====================================================
-        // TÍTULO
+        // TÍTULO DO JOGO
         // =====================================================
 
         html.append(
@@ -571,6 +581,7 @@ public class JogosServlet extends HttpServlet {
         );
 
         String[] generos = {
+
             "Ação",
             "Aventura",
             "RPG",
@@ -581,12 +592,15 @@ public class JogosServlet extends HttpServlet {
             "Esporte",
             "Simulação",
             "Plataforma"
+
         };
 
         for (String genero : generos) {
 
             String selecionado =
-                    generoFiltro.equalsIgnoreCase(genero)
+                    generoFiltro.equalsIgnoreCase(
+                            genero
+                    )
                     ? " selected"
                     : "";
 
@@ -747,43 +761,41 @@ public class JogosServlet extends HttpServlet {
                             "<div class='brilho-card'></div>"
                     );
 
+                    // =================================================
+                    // CAPA CORRIGIDA
+                    // =================================================
+
                     if (capa != null &&
                             !capa.trim().isEmpty()) {
 
                         String caminhoCapa =
-                                capa.trim();
+                                prepararCapa(
+                                        capa,
+                                        request
+                                );
 
-                        if (!caminhoCapa.startsWith(
-                                "http://")
-                                &&
-                                !caminhoCapa.startsWith(
-                                "https://")) {
+                        if (caminhoCapa != null &&
+                                !caminhoCapa.isEmpty()) {
 
-                            if (caminhoCapa.startsWith("/")) {
+                            html.append(
+                                    "<img " +
+                                    "class='capa-jogo' " +
+                                    "src='" +
+                                    escapar(caminhoCapa) +
+                                    "' " +
+                                    "alt='Capa de " +
+                                    escapar(titulo) +
+                                    "'>"
+                            );
 
-                                caminhoCapa =
-                                        request.getContextPath()
-                                        + caminhoCapa;
+                        } else {
 
-                            } else {
-
-                                caminhoCapa =
-                                        request.getContextPath()
-                                        + "/"
-                                        + caminhoCapa;
-                            }
+                            html.append(
+                                    "<div class='sem-capa'>" +
+                                    "🎮 Sem capa" +
+                                    "</div>"
+                            );
                         }
-
-                        html.append(
-                                "<img " +
-                                "class='capa-jogo' " +
-                                "src='" +
-                                escapar(caminhoCapa) +
-                                "' " +
-                                "alt='Capa de " +
-                                escapar(titulo) +
-                                "'>"
-                        );
 
                     } else {
 
@@ -794,11 +806,19 @@ public class JogosServlet extends HttpServlet {
                         );
                     }
 
+                    // =================================================
+                    // TÍTULO
+                    // =================================================
+
                     html.append(
                             "<h3>" +
                             escapar(titulo) +
                             "</h3>"
                     );
+
+                    // =================================================
+                    // INFORMAÇÕES
+                    // =================================================
 
                     html.append(
                             "<div class='info-jogo'>"
@@ -839,6 +859,10 @@ public class JogosServlet extends HttpServlet {
 
                     html.append("</div>");
 
+                    // =================================================
+                    // BOTÃO
+                    // =================================================
+
                     html.append(
                             "<a " +
                             "class='botao-biblioteca' " +
@@ -855,7 +879,7 @@ public class JogosServlet extends HttpServlet {
                 if (quantidadeJogos == 0) {
 
                     html.append(
-                            "<div class='nenhum-jogo' " +
+                            "<div " +
                             "style='grid-column:1/-1;" +
                             "text-align:center;" +
                             "padding:30px;" +
@@ -892,11 +916,114 @@ public class JogosServlet extends HttpServlet {
         );
     }
 
-    // =====================================================
-    // ESCAPAR HTML
-    // =====================================================
+    // =========================================================
+    // PREPARAR CAPA
+    // =========================================================
 
-    private String escapar(String texto) {
+    private String prepararCapa(
+            String capa,
+            HttpServletRequest request) {
+
+        if (capa == null ||
+                capa.trim().isEmpty()) {
+
+            return "";
+        }
+
+        capa = capa.trim();
+
+        // =====================================================
+        // MARKDOWN
+        // =====================================================
+
+        if (capa.startsWith("[") &&
+                capa.contains("](") &&
+                capa.endsWith(")")) {
+
+            int inicio =
+                    capa.indexOf("](") + 2;
+
+            int fim =
+                    capa.lastIndexOf(")");
+
+            if (fim > inicio) {
+
+                capa =
+                        capa.substring(
+                                inicio,
+                                fim
+                        );
+            }
+        }
+
+        // =====================================================
+        // APENAS ID STEAM
+        // =====================================================
+
+        if (capa.matches("\\d+")) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    capa +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =====================================================
+        // URL STEAM COM /apps/ID
+        // =====================================================
+
+        java.util.regex.Matcher matcher =
+                java.util.regex.Pattern
+                        .compile("/apps/(\\d+)")
+                        .matcher(capa);
+
+        if (matcher.find()) {
+
+            return
+                    "https://cdn.akamai.steamstatic.com/" +
+                    "steam/apps/" +
+                    matcher.group(1) +
+                    "/library_600x900_2x.jpg";
+        }
+
+        // =====================================================
+        // URL DA INTERNET
+        // =====================================================
+
+        if (capa.startsWith("http://") ||
+                capa.startsWith("https://")) {
+
+            return capa;
+        }
+
+        // =====================================================
+        // CAMINHO ABSOLUTO
+        // =====================================================
+
+        if (capa.startsWith("/")) {
+
+            return
+                    request.getContextPath()
+                    + capa;
+        }
+
+        // =====================================================
+        // CAMINHO RELATIVO
+        // =====================================================
+
+        return
+                request.getContextPath()
+                + "/"
+                + capa;
+    }
+
+    // =========================================================
+    // ESCAPAR HTML
+    // =========================================================
+
+    private String escapar(
+            String texto) {
 
         if (texto == null) {
             return "";
