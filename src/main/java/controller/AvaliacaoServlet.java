@@ -18,10 +18,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/avaliar")
 public class AvaliacaoServlet extends HttpServlet {
 
-    // =========================================================
-    // GET - MOSTRAR TELA DE AVALIAÇÃO
-    // =========================================================
-
     @Override
     protected void doGet(
             HttpServletRequest request,
@@ -58,12 +54,15 @@ public class AvaliacaoServlet extends HttpServlet {
 
             PreparedStatement stmt =
                     conexao.prepareStatement(
-                            "SELECT titulo, capa " +
-                            "FROM jogo " +
-                            "WHERE id = ?"
+                            "SELECT titulo, capa "
+                            + "FROM jogo "
+                            + "WHERE id = ?"
                     );
 
-            stmt.setInt(1, idJogo);
+            stmt.setInt(
+                    1,
+                    idJogo
+            );
 
             ResultSet resultado =
                     stmt.executeQuery();
@@ -74,15 +73,22 @@ public class AvaliacaoServlet extends HttpServlet {
                 stmt.close();
                 conexao.close();
 
-                response.sendRedirect("biblioteca");
+                response.sendRedirect(
+                        "biblioteca"
+                );
+
                 return;
             }
 
             String titulo =
-                    resultado.getString("titulo");
+                    resultado.getString(
+                            "titulo"
+                    );
 
             String capa =
-                    resultado.getString("capa");
+                    resultado.getString(
+                            "capa"
+                    );
 
             resultado.close();
             stmt.close();
@@ -99,37 +105,41 @@ public class AvaliacaoServlet extends HttpServlet {
             // HTML
             // =====================================================
 
-            html.append("<!DOCTYPE html>");
-            html.append("<html lang='pt-BR'>");
+            html.append(
+                    "<!DOCTYPE html>"
+            );
+
+            html.append(
+                    "<html lang='pt-BR'>"
+            );
 
             html.append("<head>");
 
-            html.append("<meta charset='UTF-8'>");
-
             html.append(
-                    "<meta name='viewport' " +
-                    "content='width=device-width, initial-scale=1.0'>"
-            );
-
-            // =====================================================
-            // FAVICON
-            // =====================================================
-
-            html.append(
-                    "<link rel='icon' " +
-                    "type='image/png' " +
-                    "href='favicon.png'>"
+                    "<meta charset='UTF-8'>"
             );
 
             html.append(
-                    "<title>Avaliar " +
-                    escaparHtml(titulo) +
-                    " - Inventory</title>"
+                    "<meta name='viewport' "
+                    + "content='width=device-width, "
+                    + "initial-scale=1.0'>"
             );
 
             html.append(
-                    "<link rel='stylesheet' " +
-                    "href='style.css'>"
+                    "<title>Avaliar "
+                    + escapar(titulo)
+                    + " - Inventory</title>"
+            );
+
+            html.append(
+                    "<link rel='icon' "
+                    + "type='image/png' "
+                    + "href='icon.png'>"
+            );
+
+            html.append(
+                    "<link rel='stylesheet' "
+                    + "href='style.css'>"
             );
 
             // =====================================================
@@ -139,32 +149,26 @@ public class AvaliacaoServlet extends HttpServlet {
             html.append("<style>");
 
             html.append(
-                    "*{" +
-                    "box-sizing:border-box;" +
-                    "}"
-            );
-
-            // BODY
-
-            html.append(
-                    "html,body{" +
-                    "width:100%;" +
-                    "min-height:100%;" +
-                    "margin:0;" +
-                    "padding:0;" +
-                    "}"
+                    "* {"
+                    + "box-sizing:border-box;"
+                    + "}"
             );
 
             html.append(
-                    "body{" +
-                    "font-family:Arial,Helvetica,sans-serif;" +
-                    "background:" +
-                    "radial-gradient(circle at 15% 0%,#29103d 0%,transparent 32%)," +
-                    "radial-gradient(circle at 100% 100%,#1c0a2a 0%,transparent 35%)," +
-                    "#0d0714;" +
-                    "color:#fff;" +
-                    "min-height:100vh;" +
-                    "}"
+                    "body {"
+                    + "margin:0;"
+                    + "min-height:100vh;"
+                    + "background:"
+                    + "radial-gradient("
+                    + "circle at top,"
+                    + "#35105f 0%,"
+                    + "#160b22 45%,"
+                    + "#09060d 100%"
+                    + ");"
+                    + "color:#fff;"
+                    + "font-family:"
+                    + "Arial,Helvetica,sans-serif;"
+                    + "}"
             );
 
             // =====================================================
@@ -172,59 +176,75 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    "body > header{" +
-                    "position:relative !important;" +
-                    "width:100% !important;" +
-                    "min-height:72px;" +
-                    "margin:0 !important;" +
-                    "padding:18px 40px !important;" +
-                    "display:flex !important;" +
-                    "align-items:center !important;" +
-                    "justify-content:space-between !important;" +
-                    "gap:30px;" +
-                    "background:#150a1e !important;" +
-                    "border-bottom:1px solid #382047 !important;" +
-                    "}"
+                    "header {"
+                    + "width:100%;"
+                    + "min-height:80px;"
+                    + "padding:14px 35px;"
+                    + "display:flex;"
+                    + "align-items:center;"
+                    + "justify-content:space-between;"
+                    + "gap:25px;"
+                    + "background:rgba(10,6,15,0.96);"
+                    + "border-bottom:1px solid #322044;"
+                    + "}"
             );
 
             html.append(
-                    "body > header h1{" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
-                    "font-size:28px !important;" +
-                    "font-weight:700 !important;" +
-                    "color:#fff !important;" +
-                    "}"
+                    ".logo-area {"
+                    + "display:flex;"
+                    + "align-items:center;"
+                    + "gap:9px;"
+                    + "flex-shrink:0;"
+                    + "}"
             );
 
             html.append(
-                    "body > header nav{" +
-                    "display:flex !important;" +
-                    "align-items:center !important;" +
-                    "justify-content:flex-end !important;" +
-                    "flex-wrap:wrap !important;" +
-                    "gap:24px !important;" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
-                    "}"
+                    ".logo-header {"
+                    + "width:40px !important;"
+                    + "height:40px !important;"
+                    + "max-width:40px !important;"
+                    + "max-height:40px !important;"
+                    + "object-fit:contain !important;"
+                    + "display:block !important;"
+                    + "flex-shrink:0;"
+                    + "}"
             );
 
             html.append(
-                    "body > header nav a{" +
-                    "display:inline-block !important;" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
-                    "color:#ac8cbc !important;" +
-                    "font-size:14px !important;" +
-                    "font-weight:500 !important;" +
-                    "text-decoration:none !important;" +
-                    "}"
+                    ".logo-area h1 {"
+                    + "margin:0;"
+                    + "padding:0;"
+                    + "font-size:30px;"
+                    + "font-weight:bold;"
+                    + "line-height:1;"
+                    + "color:#fff;"
+                    + "}"
             );
 
             html.append(
-                    "body > header nav a:hover{" +
-                    "color:#c17ade !important;" +
-                    "}"
+                    "nav {"
+                    + "display:flex;"
+                    + "align-items:center;"
+                    + "justify-content:flex-end;"
+                    + "gap:28px;"
+                    + "flex-wrap:wrap;"
+                    + "}"
+            );
+
+            html.append(
+                    "nav a {"
+                    + "color:#aaa1b5;"
+                    + "text-decoration:none;"
+                    + "font-size:14px;"
+                    + "font-weight:bold;"
+                    + "transition:0.2s;"
+                    + "}"
+            );
+
+            html.append(
+                    "nav a:hover {"
+                    + "color:#b66cff;"
+                    + "}"
             );
 
             // =====================================================
@@ -232,28 +252,23 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".avaliacao-page{" +
-                    "width:100%;" +
-                    "max-width:760px;" +
-                    "margin:0 auto;" +
-                    "padding:40px 20px 70px;" +
-                    "}"
-            );
-
-            // =====================================================
-            // CARD
-            // =====================================================
-
-            html.append(
-                    ".avaliacao-container{" +
-                    "width:100%;" +
-                    "background:linear-gradient(145deg,#1b0d27,#110816);" +
-                    "border:1px solid #3c2050;" +
-                    "border-radius:20px;" +
-                    "padding:35px;" +
-                    "text-align:center;" +
-                    "box-shadow:0 18px 50px rgba(35,0,55,.30);" +
-                    "}"
+                    ".avaliacao-container {"
+                    + "max-width:600px;"
+                    + "margin:50px auto;"
+                    + "padding:35px;"
+                    + "background:"
+                    + "linear-gradient("
+                    + "135deg,"
+                    + "#24102f,"
+                    + "#140b1b"
+                    + ");"
+                    + "border:1px solid #4b2464;"
+                    + "border-radius:16px;"
+                    + "text-align:center;"
+                    + "box-shadow:"
+                    + "0 15px 45px "
+                    + "rgba(0,0,0,0.35);"
+                    + "}"
             );
 
             // =====================================================
@@ -261,17 +276,16 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".capa-avaliacao{" +
-                    "width:190px;" +
-                    "height:265px;" +
-                    "display:block;" +
-                    "margin:0 auto 24px;" +
-                    "object-fit:cover;" +
-                    "border-radius:10px;" +
-                    "background:#140a1c;" +
-                    "border:1px solid #4d2864;" +
-                    "box-shadow:0 12px 30px rgba(0,0,0,.35);" +
-                    "}"
+                    ".capa-avaliacao {"
+                    + "width:180px !important;"
+                    + "height:250px !important;"
+                    + "max-width:180px !important;"
+                    + "max-height:250px !important;"
+                    + "object-fit:cover !important;"
+                    + "border-radius:8px;"
+                    + "display:block;"
+                    + "margin:0 auto 20px;"
+                    + "}"
             );
 
             // =====================================================
@@ -279,20 +293,17 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".titulo-avaliacao{" +
-                    "margin:0;" +
-                    "font-size:29px;" +
-                    "font-weight:700;" +
-                    "color:#fff;" +
-                    "}"
+                    ".avaliacao-container h2 {"
+                    + "margin:10px 0;"
+                    + "font-size:26px;"
+                    + "color:#fff;"
+                    + "}"
             );
 
             html.append(
-                    ".subtitulo-avaliacao{" +
-                    "margin:10px 0 0;" +
-                    "color:#aa8cba;" +
-                    "font-size:15px;" +
-                    "}"
+                    ".avaliacao-container p {"
+                    + "color:#bbb0c2;"
+                    + "}"
             );
 
             // =====================================================
@@ -300,41 +311,49 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".estrelas{" +
-                    "display:flex;" +
-                    "flex-direction:row;" +
-                    "justify-content:center;" +
-                    "gap:5px;" +
-                    "margin:25px 0;" +
-                    "}"
+                    ".estrelas {"
+                    + "display:flex;"
+                    + "flex-direction:row-reverse;"
+                    + "justify-content:center;"
+                    + "gap:5px;"
+                    + "margin:22px 0;"
+                    + "}"
             );
 
             html.append(
-                    ".estrelas input{" +
-                    "display:none;" +
-                    "}"
+                    ".estrelas input {"
+                    + "display:none;"
+                    + "}"
             );
 
             html.append(
-                    ".estrelas label{" +
-                    "font-size:41px;" +
-                    "color:#62506b;" +
-                    "cursor:pointer;" +
-                    "transition:.2s;" +
-                    "line-height:1;" +
-                    "}"
+                    ".estrelas label {"
+                    + "font-size:42px;"
+                    + "line-height:1;"
+                    + "color:#666;"
+                    + "cursor:pointer;"
+                    + "transition:0.2s;"
+                    + "}"
             );
 
-            html.append(
-                    ".estrelas label:hover{" +
-                    "color:#b960df;" +
-                    "}"
-            );
+            /*
+             * IMPORTANTE:
+             *
+             * Como os elementos são renderizados na ordem
+             * 5, 4, 3, 2, 1 e o container usa row-reverse,
+             * podemos usar ~ para pintar todas as estrelas
+             * até a selecionada.
+             */
 
             html.append(
-                    ".estrelas input:checked + label{" +
-                    "color:#9b3dcb;" +
-                    "}"
+                    ".estrelas label:hover,"
+                    + ".estrelas label:hover ~ label,"
+                    + ".estrelas input:checked ~ label {"
+                    + "color:#ffd700;"
+                    + "text-shadow:"
+                    + "0 0 8px "
+                    + "rgba(255,215,0,0.35);"
+                    + "}"
             );
 
             // =====================================================
@@ -342,40 +361,39 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".horas-container{" +
-                    "margin-top:20px;" +
-                    "text-align:left;" +
-                    "}"
+                    ".horas-container {"
+                    + "margin-top:20px;"
+                    + "text-align:left;"
+                    + "}"
             );
 
             html.append(
-                    ".horas-container label{" +
-                    "display:block;" +
-                    "margin-bottom:8px;" +
-                    "font-size:14px;" +
-                    "font-weight:bold;" +
-                    "color:#d8c8df;" +
-                    "}"
+                    ".horas-container label {"
+                    + "display:block;"
+                    + "margin-bottom:8px;"
+                    + "color:#ddd;"
+                    + "font-weight:bold;"
+                    + "}"
             );
 
             html.append(
-                    ".campo-horas{" +
-                    "width:100%;" +
-                    "padding:13px;" +
-                    "box-sizing:border-box;" +
-                    "background:#100817;" +
-                    "color:#fff;" +
-                    "border:1px solid #40264d;" +
-                    "border-radius:9px;" +
-                    "font-size:15px;" +
-                    "outline:none;" +
-                    "}"
+                    ".campo-horas {"
+                    + "width:100%;"
+                    + "padding:12px;"
+                    + "box-sizing:border-box;"
+                    + "background:#14101a;"
+                    + "color:white;"
+                    + "border:1px solid #493252;"
+                    + "border-radius:8px;"
+                    + "font-size:16px;"
+                    + "outline:none;"
+                    + "}"
             );
 
             html.append(
-                    ".campo-horas:focus{" +
-                    "border-color:#7c29a9;" +
-                    "}"
+                    ".campo-horas:focus {"
+                    + "border-color:#8b35d6;"
+                    + "}"
             );
 
             // =====================================================
@@ -383,27 +401,34 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".campo-resenha{" +
-                    "width:100%;" +
-                    "height:155px;" +
-                    "margin-top:20px;" +
-                    "padding:14px;" +
-                    "box-sizing:border-box;" +
-                    "background:#100817;" +
-                    "color:#fff;" +
-                    "border:1px solid #40264d;" +
-                    "border-radius:9px;" +
-                    "resize:vertical;" +
-                    "font-family:Arial,Helvetica,sans-serif;" +
-                    "font-size:15px;" +
-                    "outline:none;" +
-                    "}"
+                    ".campo-resenha {"
+                    + "width:100%;"
+                    + "height:150px;"
+                    + "padding:15px;"
+                    + "box-sizing:border-box;"
+                    + "background:#14101a;"
+                    + "color:white;"
+                    + "border:1px solid #493252;"
+                    + "border-radius:8px;"
+                    + "resize:vertical;"
+                    + "font-family:Arial,Helvetica,sans-serif;"
+                    + "font-size:15px;"
+                    + "margin-top:20px;"
+                    + "outline:none;"
+                    + "}"
             );
 
             html.append(
-                    ".campo-resenha:focus{" +
-                    "border-color:#7c29a9;" +
-                    "}"
+                    ".campo-resenha:focus {"
+                    + "border-color:#8b35d6;"
+                    + "}"
+            );
+
+            html.append(
+                    ".campo-resenha::placeholder,"
+                    + ".campo-horas::placeholder {"
+                    + "color:#71677a;"
+                    + "}"
             );
 
             // =====================================================
@@ -411,25 +436,30 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    ".botao-postar{" +
-                    "margin-top:22px;" +
-                    "padding:12px 30px;" +
-                    "border:1px solid #8232af;" +
-                    "border-radius:8px;" +
-                    "background:#6819a0;" +
-                    "color:#fff;" +
-                    "font-weight:bold;" +
-                    "cursor:pointer;" +
-                    "font-size:15px;" +
-                    "transition:.2s;" +
-                    "}"
+                    ".botao-postar {"
+                    + "margin-top:20px;"
+                    + "padding:12px 30px;"
+                    + "border:none;"
+                    + "border-radius:7px;"
+                    + "background:"
+                    + "linear-gradient("
+                    + "135deg,"
+                    + "#7c3aed,"
+                    + "#9333ea"
+                    + ");"
+                    + "color:white;"
+                    + "font-weight:bold;"
+                    + "cursor:pointer;"
+                    + "font-size:16px;"
+                    + "transition:0.2s;"
+                    + "}"
             );
 
             html.append(
-                    ".botao-postar:hover{" +
-                    "background:#8127b8;" +
-                    "border-color:#a04acb;" +
-                    "}"
+                    ".botao-postar:hover {"
+                    + "background:#a33cff;"
+                    + "transform:translateY(-1px);"
+                    + "}"
             );
 
             // =====================================================
@@ -437,47 +467,49 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    "@media(max-width:850px){" +
+                    "@media(max-width:800px) {"
 
-                    "body > header{" +
-                    "flex-direction:column !important;" +
-                    "padding:18px 15px !important;" +
-                    "gap:15px !important;" +
-                    "}" +
+                    + "header {"
+                    + "padding:14px 20px;"
+                    + "flex-direction:column;"
+                    + "align-items:flex-start;"
+                    + "}"
 
-                    "body > header nav{" +
-                    "justify-content:center !important;" +
-                    "gap:15px !important;" +
-                    "}" +
+                    + "nav {"
+                    + "justify-content:flex-start;"
+                    + "gap:16px;"
+                    + "}"
 
-                    ".avaliacao-page{" +
-                    "padding:25px 12px 50px;" +
-                    "}" +
-
-                    ".avaliacao-container{" +
-                    "padding:25px 18px;" +
-                    "}" +
-
-                    "}"
+                    + "}"
             );
 
             html.append(
-                    "@media(max-width:500px){" +
+                    "@media(max-width:600px) {"
 
-                    ".capa-avaliacao{" +
-                    "width:160px;" +
-                    "height:225px;" +
-                    "}" +
+                    + ".avaliacao-container {"
+                    + "margin:25px 12px;"
+                    + "padding:25px 18px;"
+                    + "}"
 
-                    ".titulo-avaliacao{" +
-                    "font-size:24px;" +
-                    "}" +
+                    + ".logo-header {"
+                    + "width:36px !important;"
+                    + "height:36px !important;"
+                    + "}"
 
-                    ".estrelas label{" +
-                    "font-size:34px;" +
-                    "}" +
+                    + ".logo-area h1 {"
+                    + "font-size:26px;"
+                    + "}"
 
-                    "}"
+                    + ".capa-avaliacao {"
+                    + "width:160px !important;"
+                    + "height:225px !important;"
+                    + "}"
+
+                    + ".estrelas label {"
+                    + "font-size:36px;"
+                    + "}"
+
+                    + "}"
             );
 
             html.append("</style>");
@@ -493,7 +525,13 @@ public class AvaliacaoServlet extends HttpServlet {
             html.append("<header>");
 
             html.append(
-                    "<h1>Inventory</h1>"
+                    "<div class='logo-area'>"
+                    + "<img "
+                    + "src='icon.png' "
+                    + "alt='Logo Inventory' "
+                    + "class='logo-header'>"
+                    + "<h1>Inventory</h1>"
+                    + "</div>"
             );
 
             html.append("<nav>");
@@ -511,7 +549,9 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             html.append(
-                    "<a href='buscar-usuarios'>Buscar usuários</a>"
+                    "<a href='buscar-usuarios'>"
+                    + "Buscar usuários"
+                    + "</a>"
             );
 
             html.append(
@@ -531,15 +571,11 @@ public class AvaliacaoServlet extends HttpServlet {
             html.append("</header>");
 
             // =====================================================
-            // PÁGINA
+            // CONTEUDO
             // =====================================================
 
             html.append(
-                    "<main class='avaliacao-page'>"
-            );
-
-            html.append(
-                    "<div class='avaliacao-container'>"
+                    "<main class='avaliacao-container'>"
             );
 
             // =====================================================
@@ -548,23 +584,26 @@ public class AvaliacaoServlet extends HttpServlet {
 
             String caminhoCapa =
                     prepararCapa(
-                            capa,
-                            request
+                            request,
+                            capa
                     );
 
             if (caminhoCapa != null &&
                     !caminhoCapa.isEmpty()) {
 
                 html.append(
-                        "<img " +
-                        "class='capa-avaliacao' " +
-                        "src='" +
-                        escaparHtml(caminhoCapa) +
-                        "' " +
-                        "alt='Capa de " +
-                        escaparHtml(titulo) +
-                        "' " +
-                        "onerror='this.style.display=\"none\";'>"
+                        "<img "
+                        + "class='capa-avaliacao' "
+                        + "src='"
+                        + escapar(caminhoCapa)
+                        + "' "
+                        + "alt='Capa de "
+                        + escapar(titulo)
+                        + "' "
+                        + "onerror=\""
+                        + "this.style.display='none';"
+                        + "\""
+                        + ">"
                 );
             }
 
@@ -572,16 +611,16 @@ public class AvaliacaoServlet extends HttpServlet {
             // TITULO
             // =====================================================
 
-            html.append(
-                    "<h2 class='titulo-avaliacao'>" +
-                    escaparHtml(titulo) +
-                    "</h2>"
-            );
+            html.append("<h2>");
 
             html.append(
-                    "<p class='subtitulo-avaliacao'>" +
-                    "O que você achou desse jogo?" +
-                    "</p>"
+                    escapar(titulo)
+            );
+
+            html.append("</h2>");
+
+            html.append(
+                    "<p>O que você achou desse jogo?</p>"
             );
 
             // =====================================================
@@ -589,15 +628,16 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    "<form method='POST' action='avaliar'>"
+                    "<form method='POST' "
+                    + "action='avaliar'>"
             );
 
             html.append(
-                    "<input type='hidden' " +
-                    "name='idJogo' " +
-                    "value='" +
-                    idJogo +
-                    "'>"
+                    "<input type='hidden' "
+                    + "name='idJogo' "
+                    + "value='"
+                    + idJogo
+                    + "'>"
             );
 
             // =====================================================
@@ -605,32 +645,47 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    "<p><strong>Sua nota</strong></p>"
+                    "<p><strong>Sua nota:</strong></p>"
             );
 
             html.append(
                     "<div class='estrelas'>"
             );
 
-            for (int i = 1; i <= 5; i++) {
+            /*
+             * A ordem precisa ser 5 -> 1.
+             *
+             * Visualmente, com row-reverse:
+             *
+             * 1  2  3  4  5
+             *
+             * Quando selecionar 4:
+             *
+             * ★  ★  ★  ★  ☆
+             */
+
+            for (int i = 5; i >= 1; i--) {
 
                 html.append(
-                        "<input " +
-                        "type='radio' " +
-                        "id='estrela" +
-                        i +
-                        "' " +
-                        "name='nota' " +
-                        "value='" +
-                        i +
-                        "' " +
-                        "required>"
+                        "<input "
+                        + "type='radio' "
+                        + "id='estrela"
+                        + i
+                        + "' "
+                        + "name='nota' "
+                        + "value='"
+                        + i
+                        + "' "
+                        + "required>"
                 );
 
                 html.append(
-                        "<label for='estrela" +
-                        i +
-                        "'>★</label>"
+                        "<label "
+                        + "for='estrela"
+                        + i
+                        + "'>"
+                        + "★"
+                        + "</label>"
                 );
             }
 
@@ -645,21 +700,21 @@ public class AvaliacaoServlet extends HttpServlet {
             );
 
             html.append(
-                    "<label for='horasJogadas'>" +
-                    "Horas jogadas" +
-                    "</label>"
+                    "<label for='horasJogadas'>"
+                    + "Horas jogadas"
+                    + "</label>"
             );
 
             html.append(
-                    "<input " +
-                    "class='campo-horas' " +
-                    "type='number' " +
-                    "id='horasJogadas' " +
-                    "name='horasJogadas' " +
-                    "min='0' " +
-                    "step='0.1' " +
-                    "placeholder='Ex: 25.5' " +
-                    "required>"
+                    "<input "
+                    + "class='campo-horas' "
+                    + "type='number' "
+                    + "id='horasJogadas' "
+                    + "name='horasJogadas' "
+                    + "min='0' "
+                    + "step='0.1' "
+                    + "placeholder='Ex: 25.5' "
+                    + "required>"
             );
 
             html.append("</div>");
@@ -669,28 +724,28 @@ public class AvaliacaoServlet extends HttpServlet {
             // =====================================================
 
             html.append(
-                    "<textarea " +
-                    "class='campo-resenha' " +
-                    "name='comentario' " +
-                    "placeholder='Escreva sua resenha...' " +
-                    "required></textarea>"
+                    "<textarea "
+                    + "class='campo-resenha' "
+                    + "name='comentario' "
+                    + "placeholder='Escreva sua resenha...' "
+                    + "required></textarea>"
             );
 
+            html.append("<br>");
+
             // =====================================================
-            // BOTAO
+            // BOTÃO
             // =====================================================
 
             html.append(
-                    "<button " +
-                    "class='botao-postar' " +
-                    "type='submit'>" +
-                    "Postar avaliação" +
-                    "</button>"
+                    "<button "
+                    + "class='botao-postar' "
+                    + "type='submit'>"
+                    + "Postar avaliação"
+                    + "</button>"
             );
 
             html.append("</form>");
-
-            html.append("</div>");
 
             html.append("</main>");
 
@@ -706,7 +761,9 @@ public class AvaliacaoServlet extends HttpServlet {
 
             e.printStackTrace();
 
-            response.sendRedirect("biblioteca");
+            response.sendRedirect(
+                    "biblioteca"
+            );
         }
     }
 
@@ -720,7 +777,9 @@ public class AvaliacaoServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding(
+                "UTF-8"
+        );
 
         HttpSession sessao =
                 request.getSession(false);
@@ -728,62 +787,97 @@ public class AvaliacaoServlet extends HttpServlet {
         if (sessao == null ||
                 sessao.getAttribute("usuario") == null) {
 
-            response.sendRedirect("login.html");
+            response.sendRedirect(
+                    "login.html"
+            );
+
             return;
         }
 
         try {
 
             Usuario usuario =
-                    (Usuario) sessao.getAttribute("usuario");
+                    (Usuario) sessao.getAttribute(
+                            "usuario"
+                    );
 
             int idUsuario =
                     usuario.getId();
 
             int idJogo =
                     Integer.parseInt(
-                            request.getParameter("idJogo")
+                            request.getParameter(
+                                    "idJogo"
+                            )
                     );
 
             double nota =
                     Double.parseDouble(
-                            request.getParameter("nota")
+                            request.getParameter(
+                                    "nota"
+                            )
                     );
 
             double horasJogadas =
                     Double.parseDouble(
-                            request.getParameter("horasJogadas")
+                            request.getParameter(
+                                    "horasJogadas"
+                            )
                     );
 
             String comentario =
-                    request.getParameter("comentario");
+                    request.getParameter(
+                            "comentario"
+                    );
 
             Connection conexao =
                     Conexao.conectar();
 
             // =====================================================
-            // SALVAR/ATUALIZAR AVALIAÇÃO
+            // SALVAR / ATUALIZAR AVALIAÇÃO
             // =====================================================
 
             String sql =
-                    "INSERT INTO avaliacao " +
-                    "(id_usuario, id_jogo, nota, comentario, horas_jogadas) " +
-                    "VALUES (?, ?, ?, ?, ?) " +
-                    "ON CONFLICT(id_usuario, id_jogo) " +
-                    "DO UPDATE SET " +
-                    "nota = excluded.nota, " +
-                    "comentario = excluded.comentario, " +
-                    "horas_jogadas = excluded.horas_jogadas, " +
-                    "data_avaliacao = CURRENT_TIMESTAMP";
+                    "INSERT INTO avaliacao "
+                    + "(id_usuario, id_jogo, nota, "
+                    + "comentario, horas_jogadas) "
+                    + "VALUES (?, ?, ?, ?, ?) "
+                    + "ON CONFLICT(id_usuario, id_jogo) "
+                    + "DO UPDATE SET "
+                    + "nota = excluded.nota, "
+                    + "comentario = excluded.comentario, "
+                    + "horas_jogadas = excluded.horas_jogadas, "
+                    + "data_avaliacao = CURRENT_TIMESTAMP";
 
             PreparedStatement stmt =
-                    conexao.prepareStatement(sql);
+                    conexao.prepareStatement(
+                            sql
+                    );
 
-            stmt.setInt(1, idUsuario);
-            stmt.setInt(2, idJogo);
-            stmt.setDouble(3, nota);
-            stmt.setString(4, comentario);
-            stmt.setDouble(5, horasJogadas);
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            stmt.setInt(
+                    2,
+                    idJogo
+            );
+
+            stmt.setDouble(
+                    3,
+                    nota
+            );
+
+            stmt.setString(
+                    4,
+                    comentario
+            );
+
+            stmt.setDouble(
+                    5,
+                    horasJogadas
+            );
 
             stmt.executeUpdate();
 
@@ -801,14 +895,27 @@ public class AvaliacaoServlet extends HttpServlet {
 
                 PreparedStatement atualizar =
                         conexao2.prepareStatement(
-                                "UPDATE biblioteca " +
-                                "SET status = 'zerado' " +
-                                "WHERE id_usuario = ? " +
-                                "AND id_jogo = ?"
+                                "UPDATE biblioteca "
+                                + "SET status = 'zerado', "
+                                + "horas_jogadas = ? "
+                                + "WHERE id_usuario = ? "
+                                + "AND id_jogo = ?"
                         );
 
-                atualizar.setInt(1, idUsuario);
-                atualizar.setInt(2, idJogo);
+                atualizar.setDouble(
+                        1,
+                        horasJogadas
+                );
+
+                atualizar.setInt(
+                        2,
+                        idUsuario
+                );
+
+                atualizar.setInt(
+                        3,
+                        idJogo
+                );
 
                 atualizar.executeUpdate();
 
@@ -820,13 +927,21 @@ public class AvaliacaoServlet extends HttpServlet {
                 erroBiblioteca.printStackTrace();
             }
 
-            response.sendRedirect("biblioteca");
+            // =====================================================
+            // VOLTAR PARA BIBLIOTECA
+            // =====================================================
+
+            response.sendRedirect(
+                    "biblioteca"
+            );
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            response.sendRedirect("biblioteca");
+            response.sendRedirect(
+                    "biblioteca"
+            );
         }
     }
 
@@ -835,8 +950,8 @@ public class AvaliacaoServlet extends HttpServlet {
     // =========================================================
 
     private String prepararCapa(
-            String capa,
-            HttpServletRequest request) {
+            HttpServletRequest request,
+            String capa) {
 
         if (capa == null ||
                 capa.trim().isEmpty()) {
@@ -844,57 +959,53 @@ public class AvaliacaoServlet extends HttpServlet {
             return null;
         }
 
-        capa =
+        String caminho =
                 capa.trim();
 
         // =====================================================
         // MARKDOWN
         // =====================================================
 
-        if (capa.startsWith("[") &&
-                capa.contains("](") &&
-                capa.endsWith(")")) {
+        if (caminho.startsWith("[") &&
+                caminho.contains("](") &&
+                caminho.endsWith(")")) {
 
             int inicio =
-                    capa.indexOf("](");
+                    caminho.indexOf("](");
 
-            if (inicio >= 0) {
-
-                String url =
-                        capa.substring(
-                                inicio + 2,
-                                capa.length() - 1
-                        );
-
-                if (url.startsWith("http://") ||
-                        url.startsWith("https://")) {
-
-                    return url;
-                }
-            }
+            caminho =
+                    caminho.substring(
+                            inicio + 2,
+                            caminho.length() - 1
+                    );
         }
 
         // =====================================================
-        // SOMENTE APP ID
+        // STEAM APP ID
         // =====================================================
 
-        if (capa.matches("\\d+")) {
+        if (caminho.matches("\\d+")) {
 
             return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
-                    capa +
-                    "/library_600x900_2x.jpg";
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + caminho
+                    + "/library_600x900_2x.jpg";
         }
 
         // =====================================================
-        // URL STEAM COM /apps/ID
+        // /apps/ID
         // =====================================================
 
-        java.util.regex.Matcher matcher =
-                java.util.regex.Pattern
-                        .compile("/apps/(\\d+)")
-                        .matcher(capa);
+        Pattern pattern =
+                Pattern.compile(
+                        "/apps/(\\d+)"
+                );
+
+        Matcher matcher =
+                pattern.matcher(
+                        caminho
+                );
 
         if (matcher.find()) {
 
@@ -902,37 +1013,45 @@ public class AvaliacaoServlet extends HttpServlet {
                     matcher.group(1);
 
             return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
-                    appId +
-                    "/library_600x900_2x.jpg";
+                    "https://cdn.akamai.steamstatic.com/"
+                    + "steam/apps/"
+                    + appId
+                    + "/library_600x900_2x.jpg";
         }
 
         // =====================================================
-        // URL NORMAL
+        // URL
         // =====================================================
 
-        if (capa.startsWith("http://") ||
-                capa.startsWith("https://")) {
+        if (caminho.startsWith("http://") ||
+                caminho.startsWith("https://")) {
 
-            return capa;
+            return caminho;
         }
 
         // =====================================================
         // CAMINHO LOCAL
         // =====================================================
 
+        while (
+                caminho.startsWith("/")
+        ) {
+
+            caminho =
+                    caminho.substring(1);
+        }
+
         return
                 request.getContextPath()
                 + "/"
-                + capa.replaceFirst("^/+", "");
+                + caminho;
     }
 
     // =========================================================
     // ESCAPAR HTML
     // =========================================================
 
-    private String escaparHtml(
+    private String escapar(
             String texto) {
 
         if (texto == null) {
