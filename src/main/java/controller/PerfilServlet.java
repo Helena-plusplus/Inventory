@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,9 @@ public class PerfilServlet extends HttpServlet {
         try {
 
             Usuario usuarioSessao =
-                    (Usuario) sessao.getAttribute("usuario");
+                    (Usuario) sessao.getAttribute(
+                            "usuario"
+                    );
 
             int idUsuario =
                     usuarioSessao.getId();
@@ -79,9 +80,10 @@ public class PerfilServlet extends HttpServlet {
             boolean especial =
                     usuario.getEmail() != null
                     &&
-                    usuario.getEmail().equalsIgnoreCase(
-                            "rebecarodriguesduarte2@gmail.com"
-                    );
+                    usuario.getEmail()
+                            .equalsIgnoreCase(
+                                    "rebecarodriguesduarte2@gmail.com"
+                            );
 
             response.setContentType(
                     "text/html;charset=UTF-8"
@@ -98,28 +100,25 @@ public class PerfilServlet extends HttpServlet {
             html.append("<html lang='pt-BR'>");
 
             html.append("<head>");
-html.append(
-    "<link rel='icon' type='image/png' href='icon.png'>"
-);
-            html.append("<meta charset='UTF-8'>");
+
+            html.append(
+                    "<meta charset='UTF-8'>"
+            );
 
             html.append(
                     "<meta name='viewport' " +
-                    "content='width=device-width, initial-scale=1.0'>"
-            );
-
-            // =====================================================
-            // FAVICON
-            // =====================================================
-
-            html.append(
-                    "<link rel='icon' " +
-                    "type='image/png' " +
-                    "href='favicon.png'>"
+                    "content='width=device-width, " +
+                    "initial-scale=1.0'>"
             );
 
             html.append(
                     "<title>Meu Perfil - Inventory</title>"
+            );
+
+            html.append(
+                    "<link rel='icon' " +
+                    "type='image/png' " +
+                    "href='icon.png'>"
             );
 
             html.append(
@@ -133,10 +132,6 @@ html.append(
 
             html.append("<style>");
 
-            // =====================================================
-            // RESET
-            // =====================================================
-
             html.append(
                     "*{" +
                     "box-sizing:border-box;" +
@@ -145,30 +140,18 @@ html.append(
 
             html.append(
                     "html,body{" +
-                    "width:100% !important;" +
-                    "min-width:0 !important;" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
+                    "margin:0;" +
+                    "padding:0;" +
+                    "width:100%;" +
+                    "min-height:100%;" +
                     "}"
             );
 
-            // =====================================================
-            // BODY
-            // =====================================================
-
             html.append(
                     "body{" +
-                    "display:block !important;" +
-                    "position:relative !important;" +
-                    "left:auto !important;" +
-                    "right:auto !important;" +
-                    "font-family:Arial,Helvetica,sans-serif !important;" +
-                    "background:" +
-                    "radial-gradient(circle at 15% 0%,#29103d 0%,transparent 32%)," +
-                    "radial-gradient(circle at 100% 100%,#1c0a2a 0%,transparent 35%)," +
-                    "#0d0714 !important;" +
+                    "background:#14101b;" +
                     "color:#fff;" +
-                    "min-height:100vh;" +
+                    "font-family:Arial,Helvetica,sans-serif;" +
                     "}"
             );
 
@@ -177,122 +160,96 @@ html.append(
             // =====================================================
 
             html.append(
-                    "body > header{" +
-                    "position:relative !important;" +
-                    "top:auto !important;" +
-                    "left:auto !important;" +
-                    "right:auto !important;" +
-                    "width:100% !important;" +
-                    "height:auto !important;" +
-                    "min-height:72px !important;" +
-                    "margin:0 !important;" +
-                    "padding:18px 40px !important;" +
-                    "display:flex !important;" +
-                    "flex-direction:row !important;" +
-                    "align-items:center !important;" +
-                    "justify-content:space-between !important;" +
-                    "gap:30px !important;" +
-                    "background:#150a1e !important;" +
-                    "border:none !important;" +
-                    "border-bottom:1px solid #382047 !important;" +
-                    "box-shadow:0 5px 20px rgba(0,0,0,.20) !important;" +
+                    "header{" +
+                    "width:100%;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:space-between;" +
+                    "padding:18px 40px;" +
+                    "background:#0d0914;" +
+                    "border-bottom:1px solid #30263a;" +
                     "}"
             );
 
             html.append(
-                    "body > header h1{" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
-                    "width:auto !important;" +
-                    "font-size:28px !important;" +
-                    "font-weight:700 !important;" +
-                    "color:#fff !important;" +
+                    ".logo-area{" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "gap:9px;" +
                     "}"
             );
 
             html.append(
-                    "body > header nav{" +
-                    "display:flex !important;" +
-                    "flex-direction:row !important;" +
-                    "align-items:center !important;" +
-                    "justify-content:flex-end !important;" +
-                    "flex-wrap:wrap !important;" +
-                    "gap:24px !important;" +
-                    "width:auto !important;" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
+                    ".logo-header{" +
+                    "width:40px;" +
+                    "height:40px;" +
+                    "object-fit:contain;" +
+                    "display:block;" +
+                    "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
-                    "body > header nav a{" +
-                    "display:inline-block !important;" +
-                    "width:auto !important;" +
-                    "margin:0 !important;" +
-                    "padding:0 !important;" +
-                    "color:#ac8cbc !important;" +
-                    "font-size:14px !important;" +
-                    "font-weight:500 !important;" +
-                    "text-decoration:none !important;" +
+                    ".logo-area h1{" +
+                    "margin:0;" +
+                    "color:#fff;" +
+                    "font-size:30px;" +
+                    "font-weight:bold;" +
+                    "}"
+            );
+
+            html.append(
+                    "header nav{" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "gap:25px;" +
+                    "}"
+            );
+
+            html.append(
+                    "header nav a{" +
+                    "color:#b9afc5;" +
+                    "text-decoration:none;" +
+                    "font-size:14px;" +
                     "transition:.2s;" +
                     "}"
             );
 
             html.append(
-                    "body > header nav a:hover{" +
-                    "color:#c17ade !important;" +
+                    "header nav a:hover{" +
+                    "color:#c084fc;" +
                     "}"
             );
 
             // =====================================================
-            // MAIN
+            // PÁGINA
             // =====================================================
 
             html.append(
-                    "body > main.perfil-page{" +
-                    "display:block !important;" +
-                    "position:relative !important;" +
-                    "width:100% !important;" +
-                    "max-width:1180px !important;" +
-                    "margin:0 auto !important;" +
-                    "padding:36px 20px 70px !important;" +
-                    "left:auto !important;" +
-                    "right:auto !important;" +
+                    ".perfil-page{" +
+                    "max-width:1150px;" +
+                    "margin:0 auto;" +
+                    "padding:30px 20px 60px;" +
                     "}"
             );
 
             // =====================================================
-            // PERFIL PRINCIPAL
+            // CARD PERFIL
             // =====================================================
 
             html.append(
                     ".perfil-card{" +
-                    "position:relative;" +
-                    "overflow:hidden;" +
+                    "background:" +
+                    "linear-gradient(" +
+                    "135deg,#24102f,#202830);" +
+                    "border:1px solid #3e2849;" +
+                    "border-radius:18px;" +
+                    "padding:28px;" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:28px;" +
-                    "width:100%;" +
-                    "padding:30px;" +
-                    "background:linear-gradient(145deg,#1c0d29,#12091a);" +
-                    "border:1px solid #432357;" +
-                    "border-radius:20px;" +
-                    "box-shadow:0 18px 50px rgba(35,0,55,.32);" +
-                    "}"
-            );
-
-            html.append(
-                    ".perfil-card:before{" +
-                    "content:'';" +
-                    "position:absolute;" +
-                    "width:320px;" +
-                    "height:320px;" +
-                    "right:-150px;" +
-                    "top:-180px;" +
-                    "border-radius:50%;" +
-                    "background:#7923aa;" +
-                    "opacity:.09;" +
-                    "pointer-events:none;" +
+                    "gap:25px;" +
+                    "box-shadow:" +
+                    "0 12px 35px rgba(0,0,0,.3);" +
                     "}"
             );
 
@@ -301,130 +258,87 @@ html.append(
             // =====================================================
 
             html.append(
-                    ".foto-area{" +
-                    "position:relative;" +
-                    "z-index:2;" +
+                    ".perfil-foto{" +
+                    "width:125px;" +
+                    "height:125px;" +
+                    "border-radius:50%;" +
+                    "object-fit:cover;" +
+                    "border:3px solid #7300d1;" +
+                    "background:transparent;" +
                     "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
-                    ".perfil-foto{" +
-                    "width:145px;" +
-                    "height:145px;" +
-                    "border-radius:50%;" +
-                    "object-fit:cover;" +
-                    "display:block;" +
-                    "border:3px solid #7425a8;" +
-                    "background:#160b20;" +
-                    "box-shadow:0 0 0 6px rgba(116,37,168,.10);" +
-                    "}"
-            );
-
-            // =====================================================
-            // INFORMAÇÕES
-            // =====================================================
-
-            html.append(
                     ".perfil-info{" +
-                    "position:relative;" +
-                    "z-index:2;" +
                     "flex:1;" +
-                    "min-width:0;" +
                     "}"
             );
 
             html.append(
                     ".perfil-nome{" +
+                    "font-size:31px;" +
                     "margin:0;" +
-                    "font-size:37px;" +
-                    "font-weight:700;" +
-                    "line-height:1.15;" +
-                    "color:#fff;" +
+                    "font-weight:bold;" +
                     "}"
             );
 
             html.append(
                     ".perfil-username{" +
-                    "margin-top:7px;" +
-                    "font-size:15px;" +
-                    "color:#ac8cbd;" +
+                    "color:#939aa3;" +
+                    "margin-top:5px;" +
                     "}"
             );
 
             html.append(
                     ".perfil-bio{" +
-                    "max-width:700px;" +
-                    "margin-top:17px;" +
-                    "font-size:15px;" +
-                    "line-height:1.6;" +
-                    "color:#d5c4de;" +
+                    "color:#d7d7d7;" +
+                    "margin-top:14px;" +
+                    "line-height:1.5;" +
                     "}"
             );
 
             // =====================================================
-            // EMBLEMA
+            // LOVE
             // =====================================================
 
             html.append(
                     ".love-badge{" +
                     "display:inline-block;" +
-                    "margin-top:15px;" +
-                    "padding:6px 12px;" +
-                    "border-radius:7px;" +
-                    "background:#251031;" +
-                    "border:1px solid #713797;" +
-                    "color:#cc96e5;" +
-                    "font-size:12px;" +
+                    "margin-top:12px;" +
+                    "padding:7px 14px;" +
+                    "background:#6300c0;" +
+                    "border-radius:20px;" +
+                    "font-size:13px;" +
                     "font-weight:bold;" +
                     "}"
             );
 
             // =====================================================
-            // ESTATÍSTICAS
+            // STATS
             // =====================================================
 
             html.append(
                     ".perfil-stats{" +
                     "display:flex;" +
-                    "gap:10px;" +
+                    "gap:30px;" +
+                    "margin-top:19px;" +
                     "flex-wrap:wrap;" +
-                    "margin-top:23px;" +
-                    "}"
-            );
-
-            html.append(
-                    ".stat-card{" +
-                    "min-width:105px;" +
-                    "padding:12px 15px;" +
-                    "background:#150a1e;" +
-                    "border:1px solid #382148;" +
-                    "border-radius:10px;" +
-                    "transition:.2s;" +
-                    "}"
-            );
-
-            html.append(
-                    ".stat-card:hover{" +
-                    "border-color:#65318a;" +
                     "}"
             );
 
             html.append(
                     ".stat-numero{" +
-                    "font-size:23px;" +
-                    "font-weight:700;" +
-                    "color:#fff;" +
+                    "font-size:24px;" +
+                    "font-weight:bold;" +
                     "}"
             );
 
             html.append(
                     ".stat-texto{" +
-                    "margin-top:4px;" +
-                    "font-size:11px;" +
-                    "color:#9b80aa;" +
-                    "text-transform:uppercase;" +
-                    "letter-spacing:.6px;" +
+                    "font-size:13px;" +
+                    "color:#939aa2;" +
+                    "margin-top:3px;" +
                     "}"
             );
 
@@ -435,38 +349,34 @@ html.append(
             html.append(
                     ".perfil-buttons{" +
                     "display:flex;" +
-                    "gap:9px;" +
-                    "flex-wrap:wrap;" +
+                    "gap:10px;" +
                     "margin-top:18px;" +
+                    "flex-wrap:wrap;" +
                     "}"
             );
 
             html.append(
                     ".perfil-button{" +
-                    "display:inline-flex;" +
-                    "align-items:center;" +
-                    "justify-content:center;" +
+                    "display:inline-block;" +
                     "padding:10px 16px;" +
+                    "background:#6300c0;" +
                     "border-radius:8px;" +
-                    "background:#681aa0;" +
-                    "border:1px solid #7a2aac;" +
-                    "color:#fff;" +
+                    "color:white;" +
                     "text-decoration:none;" +
-                    "font-size:13px;" +
                     "font-weight:bold;" +
+                    "font-size:14px;" +
                     "transition:.2s;" +
                     "}"
             );
 
             html.append(
                     ".perfil-button:hover{" +
-                    "background:#8128b7;" +
-                    "border-color:#9844c9;" +
+                    "background:#8300ed;" +
                     "}"
             );
 
             // =====================================================
-            // EXCLUIR CONTA
+            // EXCLUIR
             // =====================================================
 
             html.append(
@@ -492,16 +402,9 @@ html.append(
             html.append(
                     ".perfil-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:minmax(0,2fr) minmax(280px,1fr);" +
-                    "gap:20px;" +
-                    "margin-top:20px;" +
-                    "width:100%;" +
-                    "}"
-            );
-
-            html.append(
-                    ".perfil-grid > div{" +
-                    "min-width:0;" +
+                    "grid-template-columns:2fr 1fr;" +
+                    "gap:22px;" +
+                    "margin-top:22px;" +
                     "}"
             );
 
@@ -511,45 +414,41 @@ html.append(
 
             html.append(
                     ".secao{" +
-                    "width:100%;" +
-                    "background:linear-gradient(145deg,#180d23,#110916);" +
-                    "border:1px solid #352044;" +
-                    "border-radius:16px;" +
-                    "padding:20px;" +
-                    "margin-bottom:20px;" +
-                    "box-shadow:0 12px 30px rgba(25,0,45,.16);" +
+                    "background:#202830;" +
+                    "border:1px solid #303942;" +
+                    "border-radius:15px;" +
+                    "padding:22px;" +
+                    "margin-bottom:22px;" +
                     "}"
             );
 
             html.append(
                     ".secao-titulo{" +
+                    "font-size:22px;" +
+                    "font-weight:bold;" +
                     "margin:0 0 18px;" +
-                    "font-size:19px;" +
-                    "font-weight:700;" +
-                    "color:#f2eaf5;" +
                     "}"
             );
 
             // =====================================================
-            // FAVORITOS
+            // JOGOS
             // =====================================================
 
             html.append(
                     ".jogos-grid{" +
                     "display:grid;" +
-                    "grid-template-columns:repeat(4,minmax(0,1fr));" +
-                    "gap:15px;" +
-                    "width:100%;" +
+                    "grid-template-columns:" +
+                    "repeat(auto-fill,minmax(145px,1fr));" +
+                    "gap:16px;" +
                     "}"
             );
 
             html.append(
                     ".jogo-card{" +
-                    "min-width:0;" +
-                    "overflow:hidden;" +
-                    "background:#100817;" +
-                    "border:1px solid #32203f;" +
+                    "background:#171b20;" +
+                    "border:1px solid #303840;" +
                     "border-radius:11px;" +
+                    "overflow:hidden;" +
                     "transition:.2s;" +
                     "}"
             );
@@ -557,42 +456,40 @@ html.append(
             html.append(
                     ".jogo-card:hover{" +
                     "transform:translateY(-4px);" +
-                    "border-color:#7424a5;" +
-                    "box-shadow:0 12px 26px rgba(72,0,105,.22);" +
+                    "border-color:#7300d1;" +
                     "}"
             );
 
             html.append(
                     ".capa-container{" +
+                    "height:215px;" +
                     "width:100%;" +
-                    "height:230px;" +
                     "overflow:hidden;" +
-                    "background:#100817;" +
+                    "background:transparent;" +
                     "}"
             );
 
             html.append(
                     ".jogo-capa{" +
                     "width:100%;" +
-                    "height:230px;" +
+                    "height:215px;" +
                     "object-fit:cover;" +
                     "display:block;" +
+                    "background:transparent;" +
                     "}"
             );
 
             html.append(
                     ".jogo-info{" +
-                    "padding:12px;" +
-                    "background:#100817;" +
+                    "padding:11px;" +
                     "}"
             );
 
             html.append(
                     ".jogo-titulo{" +
-                    "font-size:13px;" +
+                    "font-size:14px;" +
                     "font-weight:bold;" +
-                    "line-height:1.4;" +
-                    "color:#ece3f1;" +
+                    "line-height:1.35;" +
                     "}"
             );
 
@@ -602,55 +499,39 @@ html.append(
 
             html.append(
                     ".lista-card{" +
-                    "background:#130a1b;" +
-                    "border:1px solid #34203f;" +
+                    "background:#171b20;" +
+                    "border:1px solid #303840;" +
                     "border-radius:11px;" +
                     "padding:16px;" +
-                    "margin-bottom:12px;" +
-                    "transition:.2s;" +
-                    "}"
-            );
-
-            html.append(
-                    ".lista-card:hover{" +
-                    "border-color:#5d267a;" +
+                    "margin-bottom:14px;" +
                     "}"
             );
 
             html.append(
                     ".lista-nome{" +
+                    "font-size:18px;" +
+                    "font-weight:bold;" +
                     "margin-bottom:14px;" +
-                    "font-size:17px;" +
-                    "font-weight:700;" +
-                    "color:#f1e8f5;" +
                     "}"
             );
 
             html.append(
                     ".lista-jogos{" +
                     "display:grid;" +
-                    "grid-template-columns:repeat(auto-fill,minmax(84px,1fr));" +
-                    "gap:9px;" +
+                    "grid-template-columns:" +
+                    "repeat(auto-fill,minmax(90px,1fr));" +
+                    "gap:10px;" +
                     "}"
             );
 
             html.append(
                     ".lista-capa{" +
                     "width:100%;" +
-                    "height:120px;" +
+                    "height:130px;" +
                     "object-fit:cover;" +
                     "display:block;" +
+                    "background:transparent;" +
                     "border-radius:7px;" +
-                    "background:#100817;" +
-                    "border:1px solid #302039;" +
-                    "transition:.2s;" +
-                    "}"
-            );
-
-            html.append(
-                    ".lista-capa:hover{" +
-                    "transform:scale(1.03);" +
-                    "border-color:#7025a0;" +
                     "}"
             );
 
@@ -662,9 +543,9 @@ html.append(
                     ".usuario-item{" +
                     "display:flex;" +
                     "align-items:center;" +
-                    "gap:12px;" +
-                    "padding:11px 0;" +
-                    "border-bottom:1px solid #30203a;" +
+                    "gap:11px;" +
+                    "padding:10px 0;" +
+                    "border-bottom:1px solid #303840;" +
                     "}"
             );
 
@@ -676,29 +557,20 @@ html.append(
 
             html.append(
                     ".foto-mini{" +
-                    "width:44px;" +
-                    "height:44px;" +
+                    "width:42px;" +
+                    "height:42px;" +
                     "border-radius:50%;" +
                     "object-fit:cover;" +
-                    "background:#150b1e;" +
-                    "border:1px solid #4a2a5b;" +
+                    "background:transparent;" +
                     "flex-shrink:0;" +
                     "}"
             );
 
             html.append(
                     ".usuario-link{" +
-                    "color:#eee6f3;" +
+                    "color:#fff;" +
                     "text-decoration:none;" +
                     "font-weight:bold;" +
-                    "font-size:14px;" +
-                    "transition:.2s;" +
-                    "}"
-            );
-
-            html.append(
-                    ".usuario-link:hover{" +
-                    "color:#b96adc;" +
                     "}"
             );
 
@@ -709,9 +581,8 @@ html.append(
             html.append(
                     ".vazio{" +
                     "text-align:center;" +
-                    "padding:25px 8px;" +
-                    "color:#816d8b;" +
-                    "font-size:13px;" +
+                    "padding:22px 5px;" +
+                    "color:#7d858d;" +
                     "}"
             );
 
@@ -720,28 +591,18 @@ html.append(
             // =====================================================
 
             html.append(
-                    "@media(max-width:1000px){" +
+                    "@media(max-width:800px){" +
 
-                    ".jogos-grid{" +
-                    "grid-template-columns:repeat(3,minmax(0,1fr));" +
+                    "header{" +
+                    "padding:15px 20px;" +
+                    "flex-direction:column;" +
+                    "gap:15px;" +
                     "}" +
 
-                    "}"
-            );
-
-            html.append(
-                    "@media(max-width:850px){" +
-
-                    "body > header{" +
-                    "flex-direction:column !important;" +
-                    "padding:18px 15px !important;" +
-                    "gap:15px !important;" +
-                    "}" +
-
-                    "body > header nav{" +
-                    "width:100% !important;" +
-                    "justify-content:center !important;" +
-                    "gap:15px !important;" +
+                    "header nav{" +
+                    "gap:15px;" +
+                    "flex-wrap:wrap;" +
+                    "justify-content:center;" +
                     "}" +
 
                     ".perfil-card{" +
@@ -761,60 +622,13 @@ html.append(
                     "grid-template-columns:1fr;" +
                     "}" +
 
-                    ".jogos-grid{" +
-                    "grid-template-columns:repeat(3,minmax(0,1fr));" +
+                    ".logo-header{" +
+                    "width:35px;" +
+                    "height:35px;" +
                     "}" +
 
-                    ".perfil-nome{" +
-                    "font-size:31px;" +
-                    "}" +
-
-                    "}"
-            );
-
-            html.append(
-                    "@media(max-width:600px){" +
-
-                    ".perfil-page{" +
-                    "padding:20px 12px 50px !important;" +
-                    "}" +
-
-                    ".perfil-card{" +
-                    "padding:22px 16px;" +
-                    "}" +
-
-                    ".perfil-foto{" +
-                    "width:120px;" +
-                    "height:120px;" +
-                    "}" +
-
-                    ".secao{" +
-                    "padding:16px;" +
-                    "}" +
-
-                    ".jogos-grid{" +
-                    "grid-template-columns:repeat(2,minmax(0,1fr));" +
-                    "}" +
-
-                    ".capa-container," +
-                    ".jogo-capa{" +
-                    "height:210px;" +
-                    "}" +
-
-                    "}"
-            );
-
-            html.append(
-                    "@media(max-width:420px){" +
-
-                    ".jogos-grid{" +
-                    "grid-template-columns:repeat(2,minmax(0,1fr));" +
-                    "gap:10px;" +
-                    "}" +
-
-                    ".capa-container," +
-                    ".jogo-capa{" +
-                    "height:190px;" +
+                    ".logo-area h1{" +
+                    "font-size:26px;" +
                     "}" +
 
                     "}"
@@ -833,18 +647,21 @@ html.append(
             html.append("<header>");
 
             html.append(
-                    "<div class=\"logo-area\">\n" +
-"\n" +
-"        <img\n" +
-"            src=\"icon.png\"\n" +
-"            alt=\"Logo Inventory\"\n" +
-"            class=\"logo-header\"\n" +
-"        >\n" +
-"\n" +
-"        <h1>Inventory</h1>\n" +
-"\n" +
-"    </div>"
+                    "<div class='logo-area'>"
             );
+
+            html.append(
+                    "<img " +
+                    "src='icon.png' " +
+                    "class='logo-header' " +
+                    "alt='Logo Inventory'>"
+            );
+
+            html.append(
+                    "<h1>Inventory</h1>"
+            );
+
+            html.append("</div>");
 
             html.append("<nav>");
 
@@ -853,7 +670,15 @@ html.append(
             );
 
             html.append(
+                    "<a href='buscar-usuarios'>Buscar usuários</a>"
+            );
+
+            html.append(
                     "<a href='jogos'>Jogos</a>"
+            );
+
+            html.append(
+                    "<a href='perfil'>Meu Perfil</a>"
             );
 
             html.append(
@@ -861,15 +686,7 @@ html.append(
             );
 
             html.append(
-                    "<a href='buscar-usuarios'>Buscar usuários</a>"
-            );
-
-            html.append(
                     "<a href='listas'>Listas</a>"
-            );
-
-            html.append(
-                    "<a href='perfil'>Meu Perfil</a>"
             );
 
             html.append(
@@ -881,7 +698,7 @@ html.append(
             html.append("</header>");
 
             // =====================================================
-            // MAIN
+            // PÁGINA
             // =====================================================
 
             html.append(
@@ -902,14 +719,11 @@ html.append(
                             request
                     );
 
-            html.append(
-                    "<div class='foto-area'>"
-            );
-
             if (!foto.isEmpty()) {
 
                 html.append(
-                        "<img class='perfil-foto' " +
+                        "<img " +
+                        "class='perfil-foto' " +
                         "src='" +
                         escaparHtml(foto) +
                         "' " +
@@ -923,33 +737,21 @@ html.append(
                         "style='display:flex;" +
                         "align-items:center;" +
                         "justify-content:center;" +
-                        "font-size:38px;" +
-                        "font-weight:bold;" +
-                        "color:#69447a;'>" +
-                        "U" +
+                        "font-size:55px;'>" +
+                        "👤" +
                         "</div>"
                 );
             }
 
-            html.append("</div>");
-
             html.append(
                     "<div class='perfil-info'>"
             );
-
-            // =====================================================
-            // NOME
-            // =====================================================
 
             html.append(
                     "<h1 class='perfil-nome'>" +
                     escaparHtml(usuario.getNome()) +
                     "</h1>"
             );
-
-            // =====================================================
-            // USERNAME
-            // =====================================================
 
             String username =
                     usuario.getUsername();
@@ -967,10 +769,6 @@ html.append(
                     "</div>"
             );
 
-            // =====================================================
-            // BIO
-            // =====================================================
-
             if (usuario.getBio() != null &&
                     !usuario.getBio().trim().isEmpty()) {
 
@@ -981,21 +779,17 @@ html.append(
                 );
             }
 
-            // =====================================================
-            // EMBLEMA
-            // =====================================================
-
             if (especial) {
 
                 html.append(
                         "<span class='love-badge'>" +
-                        "My Love" +
+                        "♡ My Love" +
                         "</span>"
                 );
             }
 
             // =====================================================
-            // ESTATÍSTICAS
+            // STATS
             // =====================================================
 
             html.append(
@@ -1003,38 +797,46 @@ html.append(
             );
 
             html.append(
-                    "<div class='stat-card'>" +
+                    "<div>" +
                     "<div class='stat-numero'>" +
                     totalSeguidores +
                     "</div>" +
-                    "<div class='stat-texto'>Seguidores</div>" +
+                    "<div class='stat-texto'>" +
+                    "Seguidores" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div class='stat-card'>" +
+                    "<div>" +
                     "<div class='stat-numero'>" +
                     totalSeguindo +
                     "</div>" +
-                    "<div class='stat-texto'>Seguindo</div>" +
+                    "<div class='stat-texto'>" +
+                    "Seguindo" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div class='stat-card'>" +
+                    "<div>" +
                     "<div class='stat-numero'>" +
                     favoritos.size() +
                     "</div>" +
-                    "<div class='stat-texto'>Favoritos</div>" +
+                    "<div class='stat-texto'>" +
+                    "Favoritos" +
+                    "</div>" +
                     "</div>"
             );
 
             html.append(
-                    "<div class='stat-card'>" +
+                    "<div>" +
                     "<div class='stat-numero'>" +
                     listas.size() +
                     "</div>" +
-                    "<div class='stat-texto'>Listas</div>" +
+                    "<div class='stat-texto'>" +
+                    "Listas" +
+                    "</div>" +
                     "</div>"
             );
 
@@ -1080,7 +882,7 @@ html.append(
             html.append("</section>");
 
             // =====================================================
-            // GRID PRINCIPAL
+            // GRID
             // =====================================================
 
             html.append(
@@ -1103,7 +905,7 @@ html.append(
 
             html.append(
                     "<h2 class='secao-titulo'>" +
-                    "Favoritos" +
+                    "❤️ Favoritos" +
                     "</h2>"
             );
 
@@ -1147,7 +949,7 @@ html.append(
 
             html.append(
                     "<h2 class='secao-titulo'>" +
-                    "Minhas listas" +
+                    "📚 Minhas listas" +
                     "</h2>"
             );
 
@@ -1197,23 +999,21 @@ html.append(
                                             request
                                     );
 
-                            if (capa == null ||
-                                    capa.isEmpty()) {
+                            if (!capa.isEmpty()) {
 
-                                continue;
+                                html.append(
+                                        "<img " +
+                                        "class='lista-capa' " +
+                                        "src='" +
+                                        escaparHtml(capa) +
+                                        "' " +
+                                        "alt='Capa de " +
+                                        escaparHtml(
+                                                jogo.titulo
+                                        ) +
+                                        "'>"
+                                );
                             }
-
-                            html.append(
-                                    "<img " +
-                                    "class='lista-capa' " +
-                                    "src='" +
-                                    escaparHtml(capa) +
-                                    "' " +
-                                    "alt='Capa de " +
-                                    escaparHtml(jogo.titulo) +
-                                    "' " +
-                                    "onerror='this.style.display=\"none\";'>"
-                            );
                         }
 
                         html.append("</div>");
@@ -1243,7 +1043,7 @@ html.append(
 
             html.append(
                     "<h2 class='secao-titulo'>" +
-                    "Seguidores" +
+                    "👥 Seguidores" +
                     "</h2>"
             );
 
@@ -1281,7 +1081,7 @@ html.append(
 
             html.append(
                     "<h2 class='secao-titulo'>" +
-                    "Seguindo" +
+                    "➕ Seguindo" +
                     "</h2>"
             );
 
@@ -1491,7 +1291,7 @@ html.append(
     }
 
     // =========================================================
-    // CARD DE JOGO
+    // CARD FAVORITO
     // =========================================================
 
     private String montarCardJogo(
@@ -1507,15 +1307,6 @@ html.append(
                         request
                 );
 
-        if (capa == null ||
-                capa.isEmpty()) {
-
-            capa =
-                    request.getContextPath()
-                    + "/capa?id="
-                    + jogo.id;
-        }
-
         html.append(
                 "<div class='jogo-card'>"
         );
@@ -1524,17 +1315,31 @@ html.append(
                 "<div class='capa-container'>"
         );
 
-        html.append(
-                "<img " +
-                "class='jogo-capa' " +
-                "src='" +
-                escaparHtml(capa) +
-                "' " +
-                "alt='Capa de " +
-                escaparHtml(jogo.titulo) +
-                "' " +
-                "onerror='this.style.display=\"none\";'>"
-        );
+        if (!capa.isEmpty()) {
+
+            html.append(
+                    "<img " +
+                    "class='jogo-capa' " +
+                    "src='" +
+                    escaparHtml(capa) +
+                    "' " +
+                    "alt='Capa de " +
+                    escaparHtml(jogo.titulo) +
+                    "'>"
+            );
+
+        } else {
+
+            html.append(
+                    "<div style='height:215px;" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "justify-content:center;" +
+                    "color:#777;'>" +
+                    "Sem capa" +
+                    "</div>"
+            );
+        }
 
         html.append("</div>");
 
@@ -1594,10 +1399,8 @@ html.append(
                     "style='display:flex;" +
                     "align-items:center;" +
                     "justify-content:center;" +
-                    "font-size:16px;" +
-                    "font-weight:bold;" +
-                    "color:#69447a;'>" +
-                    "U" +
+                    "font-size:21px;'>" +
+                    "👤" +
                     "</div>"
             );
         }
@@ -1663,39 +1466,34 @@ html.append(
         if (capa == null ||
                 capa.trim().isEmpty()) {
 
-            return null;
+            return "";
         }
 
         capa =
                 capa.trim();
 
-        // MARKDOWN
-
+        // Markdown
         if (capa.startsWith("[") &&
                 capa.contains("](") &&
                 capa.endsWith(")")) {
 
             int inicio =
-                    capa.indexOf("](");
+                    capa.indexOf("](") + 2;
 
-            if (inicio >= 0) {
+            int fim =
+                    capa.lastIndexOf(")");
 
-                String url =
+            if (fim > inicio) {
+
+                capa =
                         capa.substring(
-                                inicio + 2,
-                                capa.length() - 1
+                                inicio,
+                                fim
                         );
-
-                if (url.startsWith("http://") ||
-                        url.startsWith("https://")) {
-
-                    return url;
-                }
             }
         }
 
-        // APP ID
-
+        // ID Steam
         if (capa.matches("\\d+")) {
 
             return
@@ -1705,8 +1503,7 @@ html.append(
                     "/library_600x900_2x.jpg";
         }
 
-        // URL STEAM
-
+        // Steam URL
         java.util.regex.Matcher matcher =
                 java.util.regex.Pattern
                         .compile("/apps/(\\d+)")
@@ -1714,17 +1511,12 @@ html.append(
 
         if (matcher.find()) {
 
-            String appId =
-                    matcher.group(1);
-
             return
                     "https://cdn.akamai.steamstatic.com/" +
                     "steam/apps/" +
-                    appId +
+                    matcher.group(1) +
                     "/library_600x900_2x.jpg";
         }
-
-        // URL NORMAL
 
         if (capa.startsWith("http://") ||
                 capa.startsWith("https://")) {
@@ -1732,12 +1524,17 @@ html.append(
             return capa;
         }
 
-        // CAMINHO LOCAL
+        if (capa.startsWith("/")) {
+
+            return
+                    request.getContextPath()
+                    + capa;
+        }
 
         return
                 request.getContextPath()
                 + "/"
-                + capa.replaceFirst("^/+", "");
+                + capa;
     }
 
     // =========================================================
@@ -1748,7 +1545,6 @@ html.append(
             String texto) {
 
         if (texto == null) {
-
             return "";
         }
 
@@ -1767,16 +1563,13 @@ html.append(
     private static class Jogo {
 
         int id;
-
         String titulo;
-
         String capa;
     }
 
     private static class Lista {
 
         int id;
-
         String nome;
 
         List<Jogo> jogos =
