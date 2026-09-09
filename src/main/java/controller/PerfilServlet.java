@@ -337,7 +337,9 @@ public class PerfilServlet extends HttpServlet {
                 "<div class='perfil-box'>"
         );
 
-        html.append("<h2>Meu Perfil</h2>");
+        html.append(
+                "<h2>Meu Perfil</h2>"
+        );
 
         html.append(imagem);
 
@@ -350,7 +352,9 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(usuario.getNome())
+                escapar(
+                        usuario.getNome()
+                )
         );
 
         html.append("</p>");
@@ -360,7 +364,9 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(usuario.getEmail())
+                escapar(
+                        usuario.getEmail()
+                )
         );
 
         html.append("</p>");
@@ -370,7 +376,9 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(usuario.getPais())
+                escapar(
+                        usuario.getPais()
+                )
         );
 
         html.append("</p>");
@@ -392,7 +400,9 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(usuario.getBio())
+                escapar(
+                        usuario.getBio()
+                )
         );
 
         html.append("</p>");
@@ -446,7 +456,8 @@ public class PerfilServlet extends HttpServlet {
 
             while (resultado.next()) {
 
-                possuiAvaliacao = true;
+                possuiAvaliacao =
+                        true;
 
                 String titulo =
                         resultado.getString("titulo");
@@ -638,9 +649,7 @@ public class PerfilServlet extends HttpServlet {
             }
 
             resultado.close();
-
             stmt.close();
-
             conexao.close();
 
         } catch (Exception e) {
