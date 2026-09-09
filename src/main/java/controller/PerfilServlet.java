@@ -54,7 +54,7 @@ public class PerfilServlet extends HttpServlet {
             imagem =
                     "<div class='foto-perfil'>"
                     + "<img src='imagens/"
-                    + escapar(foto)
+                    + foto
                     + "' alt='Foto de perfil'>"
                     + "</div>";
 
@@ -84,13 +84,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<title>Perfil - Inventory</title>"
-        );
-
-        html.append(
-                "<link rel='icon' "
-                + "type='image/png' "
-                + "href='icon.png'>"
+                "<title>Perfil - GameBoxd</title>"
         );
 
         html.append(
@@ -183,7 +177,6 @@ public class PerfilServlet extends HttpServlet {
                 + "object-fit:cover;"
                 + "border-radius:6px;"
                 + "flex-shrink:0;"
-                + "background:#1b1522;"
                 + "}"
         );
 
@@ -198,8 +191,6 @@ public class PerfilServlet extends HttpServlet {
                 + "border-radius:6px;"
                 + "color:#999;"
                 + "flex-shrink:0;"
-                + "text-align:center;"
-                + "padding:8px;"
                 + "}"
         );
 
@@ -208,47 +199,12 @@ public class PerfilServlet extends HttpServlet {
                 + "color:#ffd700;"
                 + "font-size:20px;"
                 + "letter-spacing:2px;"
-                + "margin:8px 0;"
                 + "}"
         );
 
         html.append(
                 ".texto-avaliacao {"
                 + "flex:1;"
-                + "min-width:0;"
-                + "}"
-        );
-
-        html.append(
-                ".texto-avaliacao h3 {"
-                + "margin-top:0;"
-                + "color:white;"
-                + "}"
-        );
-
-        html.append(
-                ".texto-avaliacao p {"
-                + "color:#ccc;"
-                + "line-height:1.5;"
-                + "}"
-        );
-
-        html.append(
-                ".botao-avaliar {"
-                + "display:inline-block;"
-                + "margin-top:10px;"
-                + "padding:9px 14px;"
-                + "background:#6300c0;"
-                + "color:white;"
-                + "border-radius:6px;"
-                + "text-decoration:none;"
-                + "font-weight:bold;"
-                + "}"
-        );
-
-        html.append(
-                ".botao-avaliar:hover {"
-                + "background:#7d00ef;"
                 + "}"
         );
 
@@ -262,30 +218,6 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
-        html.append(
-                ".avaliacao-card:hover {"
-                + "transform:translateY(-2px);"
-                + "transition:0.2s;"
-                + "}"
-        );
-
-        html.append(
-                "@media (max-width:700px) {"
-                + ".perfil-box {"
-                + "padding:18px;"
-                + "}"
-                + ".avaliacao-card {"
-                + "flex-direction:column;"
-                + "}"
-                + ".capa-avaliacao,"
-                + ".sem-capa-avaliacao {"
-                + "width:130px;"
-                + "height:180px;"
-                + "margin:auto;"
-                + "}"
-                + "}"
-        );
-
         html.append("</style>");
 
         // =========================
@@ -295,63 +227,60 @@ public class PerfilServlet extends HttpServlet {
         html.append("<script>");
 
         html.append(
-                "function tentarOutraCapa(img) {"
-                + "var src = img.getAttribute('src') || '';"
-                + "var match = src.match(/steam\\/apps\\/(\\d+)/);"
+                "function tentarOutraCapa(img){"
+                + "var src=img.getAttribute('src')||'';"
+                + "var match=src.match(/steam\\/apps\\/(\\d+)/);"
 
-                + "if (!match) {"
+                + "if(!match){"
                 + "img.style.display='none';"
                 + "return;"
                 + "}"
 
-                + "var id = match[1];"
+                + "var id=match[1];"
 
-                + "var tentativas = parseInt("
-                + "img.getAttribute('data-tentativas') || '0',"
+                + "var tentativas=parseInt("
+                + "img.getAttribute('data-tentativas')||'0',"
                 + "10"
                 + ");"
 
-                + "var urls = ["
+                + "var urls=["
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/library_600x900_2x.jpg',"
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/library_600x900.jpg',"
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/header.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/library_600x900_2x.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/library_600x900.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+ id + "
+                + "+id+"
                 + "'/header.jpg'"
 
                 + "];"
 
-                + "if (tentativas < urls.length) {"
-                + "img.setAttribute("
-                + "'data-tentativas',"
-                + "tentativas + 1"
-                + ");"
-                + "img.src = urls[tentativas];"
-                + "} else {"
+                + "if(tentativas<urls.length){"
+                + "img.setAttribute('data-tentativas',tentativas+1);"
+                + "img.src=urls[tentativas];"
+                + "}else{"
                 + "img.style.display='none';"
                 + "}"
 
@@ -370,33 +299,16 @@ public class PerfilServlet extends HttpServlet {
 
         html.append("<header>");
 
-        html.append(
-                "<div class='logo-area'>"
-                + "<img src='icon.png' "
-                + "alt='Logo Inventory' "
-                + "class='logo-header'>"
-                + "<h1>Inventory</h1>"
-                + "</div>"
-        );
+        html.append("<h1>GameBoxd</h1>");
 
         html.append("<nav>");
 
         html.append(
-                "<a href='index.html'>"
-                + "Início"
-                + "</a>"
+                "<a href='index.html'>Início</a>"
         );
 
         html.append(
-                "<a href='jogos'>"
-                + "Jogos"
-                + "</a>"
-        );
-
-        html.append(
-                "<a href='biblioteca'>"
-                + "Biblioteca"
-                + "</a>"
+                "<a href='biblioteca'>Biblioteca</a>"
         );
 
         html.append(
@@ -406,21 +318,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                "<a href='perfil'>"
-                + "Meu Perfil"
-                + "</a>"
-        );
-
-        html.append(
-                "<a href='listas'>"
-                + "Listas"
-                + "</a>"
-        );
-
-        html.append(
-                "<a href='logout'>"
-                + "Sair"
-                + "</a>"
+                "<a href='logout'>Sair</a>"
         );
 
         html.append("</nav>");
@@ -439,9 +337,7 @@ public class PerfilServlet extends HttpServlet {
                 "<div class='perfil-box'>"
         );
 
-        html.append(
-                "<h2>Meu Perfil</h2>"
-        );
+        html.append("<h2>Meu Perfil</h2>");
 
         html.append(imagem);
 
@@ -454,9 +350,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getNome()
-                )
+                escapar(usuario.getNome())
         );
 
         html.append("</p>");
@@ -466,9 +360,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getEmail()
-                )
+                escapar(usuario.getEmail())
         );
 
         html.append("</p>");
@@ -478,9 +370,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getPais()
-                )
+                escapar(usuario.getPais())
         );
 
         html.append("</p>");
@@ -502,9 +392,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getBio()
-                )
+                escapar(usuario.getBio())
         );
 
         html.append("</p>");
@@ -558,20 +446,13 @@ public class PerfilServlet extends HttpServlet {
 
             while (resultado.next()) {
 
-                possuiAvaliacao =
-                        true;
+                possuiAvaliacao = true;
 
                 String titulo =
                         resultado.getString("titulo");
 
                 String capa =
                         resultado.getString("capa");
-
-                String caminhoCapa =
-                        prepararCapa(
-                                request,
-                                capa
-                        );
 
                 double nota =
                         resultado.getDouble("nota");
@@ -584,6 +465,12 @@ public class PerfilServlet extends HttpServlet {
                                 "horas_jogadas"
                         );
 
+                String caminhoCapa =
+                        prepararCapa(
+                                request,
+                                capa
+                        );
+
                 html.append(
                         "<div class='avaliacao-card'>"
                 );
@@ -592,8 +479,10 @@ public class PerfilServlet extends HttpServlet {
                 // CAPA
                 // =========================
 
-                if (caminhoCapa != null &&
-                        !caminhoCapa.trim().isEmpty()) {
+                if (
+                        caminhoCapa != null &&
+                        !caminhoCapa.trim().isEmpty()
+                ) {
 
                     html.append(
                             "<img "
@@ -792,6 +681,7 @@ public class PerfilServlet extends HttpServlet {
                 capa == null ||
                 capa.trim().isEmpty()
         ) {
+
             return null;
         }
 
@@ -869,7 +759,7 @@ public class PerfilServlet extends HttpServlet {
         }
 
         // =================================================
-        // CAMINHO LOCAL
+        // LOCAL
         // =================================================
 
         while (
