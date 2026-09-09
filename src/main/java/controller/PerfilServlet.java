@@ -1,18 +1,22 @@
 package controller;
 
 import dao.Conexao;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import model.Usuario;
 
 @WebServlet("/perfil")
@@ -49,12 +53,13 @@ public class PerfilServlet extends HttpServlet {
 
         String imagem = "";
 
-        if (foto != null && !foto.isEmpty()) {
+        if (foto != null &&
+                !foto.trim().isEmpty()) {
 
             imagem =
                     "<div class='foto-perfil'>"
                     + "<img src='imagens/"
-                    + foto
+                    + escapar(foto)
                     + "' alt='Foto de perfil'>"
                     + "</div>";
 
@@ -89,6 +94,12 @@ public class PerfilServlet extends HttpServlet {
 
         html.append(
                 "<link rel='stylesheet' href='style.css'>"
+        );
+
+        html.append(
+                "<link rel='icon' "
+                + "type='image/png' "
+                + "href='icon.png'>"
         );
 
         // =========================
@@ -177,6 +188,7 @@ public class PerfilServlet extends HttpServlet {
                 + "object-fit:cover;"
                 + "border-radius:6px;"
                 + "flex-shrink:0;"
+                + "background:#333;"
                 + "}"
         );
 
@@ -191,6 +203,8 @@ public class PerfilServlet extends HttpServlet {
                 + "border-radius:6px;"
                 + "color:#999;"
                 + "flex-shrink:0;"
+                + "text-align:center;"
+                + "padding:10px;"
                 + "}"
         );
 
@@ -199,12 +213,19 @@ public class PerfilServlet extends HttpServlet {
                 + "color:#ffd700;"
                 + "font-size:20px;"
                 + "letter-spacing:2px;"
+                + "margin:8px 0;"
                 + "}"
         );
 
         html.append(
                 ".texto-avaliacao {"
                 + "flex:1;"
+                + "}"
+        );
+
+        html.append(
+                ".texto-avaliacao h3 {"
+                + "margin-top:0;"
                 + "}"
         );
 
@@ -218,6 +239,37 @@ public class PerfilServlet extends HttpServlet {
                 + "}"
         );
 
+        html.append(
+                ".botao-avaliar {"
+                + "display:inline-block;"
+                + "margin-top:10px;"
+                + "padding:10px 15px;"
+                + "background:#6300c0;"
+                + "color:white;"
+                + "text-decoration:none;"
+                + "border-radius:6px;"
+                + "font-weight:bold;"
+                + "}"
+        );
+
+        html.append(
+                ".botao-avaliar:hover {"
+                + "background:#7d00ef;"
+                + "}"
+        );
+
+        html.append(
+                "@media (max-width:700px) {"
+                + ".avaliacao-card {"
+                + "flex-direction:column;"
+                + "}"
+                + ".capa-avaliacao,"
+                + ".sem-capa-avaliacao {"
+                + "margin:auto;"
+                + "}"
+                + "}"
+        );
+
         html.append("</style>");
 
         // =========================
@@ -228,60 +280,71 @@ public class PerfilServlet extends HttpServlet {
 
         html.append(
                 "function tentarOutraCapa(img){"
-                + "var src=img.getAttribute('src')||'';"
-                + "var match=src.match(/steam\\/apps\\/(\\d+)/);"
+
+                + "var src = img.getAttribute('src') || '';"
+
+                + "var match = "
+                + "src.match(/steam\\/apps\\/(\\d+)/);"
 
                 + "if(!match){"
                 + "img.style.display='none';"
                 + "return;"
                 + "}"
 
-                + "var id=match[1];"
+                + "var id = match[1];"
 
-                + "var tentativas=parseInt("
-                + "img.getAttribute('data-tentativas')||'0',"
+                + "var tentativas = parseInt("
+                + "img.getAttribute('data-tentativas') || '0',"
                 + "10"
                 + ");"
 
-                + "var urls=["
+                + "var urls = ["
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/library_600x900_2x.jpg',"
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/library_600x900.jpg',"
 
                 + "'https://shared.cloudflare.steamstatic.com/"
                 + "store_item_assets/steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/header.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/library_600x900_2x.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/library_600x900.jpg',"
 
                 + "'https://cdn.akamai.steamstatic.com/"
                 + "steam/apps/'"
-                + "+id+"
+                + "+ id + "
                 + "'/header.jpg'"
 
                 + "];"
 
-                + "if(tentativas<urls.length){"
-                + "img.setAttribute('data-tentativas',tentativas+1);"
-                + "img.src=urls[tentativas];"
+                + "if(tentativas < urls.length){"
+
+                + "img.setAttribute("
+                + "'data-tentativas',"
+                + "tentativas + 1"
+                + ");"
+
+                + "img.src = urls[tentativas];"
+
                 + "}else{"
+
                 + "img.style.display='none';"
+
                 + "}"
 
                 + "}"
@@ -352,9 +415,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getNome()
-                )
+                escapar(usuario.getNome())
         );
 
         html.append("</p>");
@@ -364,9 +425,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getEmail()
-                )
+                escapar(usuario.getEmail())
         );
 
         html.append("</p>");
@@ -376,9 +435,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getPais()
-                )
+                escapar(usuario.getPais())
         );
 
         html.append("</p>");
@@ -400,9 +457,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         html.append(
-                escapar(
-                        usuario.getBio()
-                )
+                escapar(usuario.getBio())
         );
 
         html.append("</p>");
@@ -428,17 +483,17 @@ public class PerfilServlet extends HttpServlet {
 
             String sql =
                     "SELECT "
-                    + "avaliacao.id_jogo, "
-                    + "jogo.titulo, "
-                    + "jogo.capa, "
-                    + "avaliacao.nota, "
-                    + "avaliacao.comentario, "
-                    + "avaliacao.horas_jogadas "
-                    + "FROM avaliacao "
-                    + "INNER JOIN jogo "
-                    + "ON avaliacao.id_jogo = jogo.id "
-                    + "WHERE avaliacao.id_usuario = ? "
-                    + "ORDER BY avaliacao.data_avaliacao DESC";
+                    + "a.id_jogo, "
+                    + "j.titulo, "
+                    + "j.capa, "
+                    + "a.nota, "
+                    + "a.comentario, "
+                    + "a.horas_jogadas "
+                    + "FROM avaliacao a "
+                    + "INNER JOIN jogo j "
+                    + "ON a.id_jogo = j.id "
+                    + "WHERE a.id_usuario = ? "
+                    + "ORDER BY a.data_avaliacao DESC";
 
             PreparedStatement stmt =
                     conexao.prepareStatement(sql);
@@ -456,8 +511,10 @@ public class PerfilServlet extends HttpServlet {
 
             while (resultado.next()) {
 
-                possuiAvaliacao =
-                        true;
+                possuiAvaliacao = true;
+
+                int idJogo =
+                        resultado.getInt("id_jogo");
 
                 String titulo =
                         resultado.getString("titulo");
@@ -469,7 +526,9 @@ public class PerfilServlet extends HttpServlet {
                         resultado.getDouble("nota");
 
                 String comentario =
-                        resultado.getString("comentario");
+                        resultado.getString(
+                                "comentario"
+                        );
 
                 double horas =
                         resultado.getDouble(
@@ -505,14 +564,17 @@ public class PerfilServlet extends HttpServlet {
                             + "onerror='"
                             + "tentarOutraCapa(this);"
                             + "' "
-                            + "alt='Capa do jogo'>"
+                            + "alt='Capa de "
+                            + escapar(titulo)
+                            + "'>"
                     );
 
                 } else {
 
                     html.append(
-                            "<div class='sem-capa-avaliacao'>"
-                            + "Sem capa"
+                            "<div "
+                            + "class='sem-capa-avaliacao'>"
+                            + escapar(titulo)
                             + "</div>"
                     );
                 }
@@ -525,13 +587,11 @@ public class PerfilServlet extends HttpServlet {
                         "<div class='texto-avaliacao'>"
                 );
 
-                html.append("<h3>");
-
                 html.append(
-                        escapar(titulo)
+                        "<h3>"
+                        + escapar(titulo)
+                        + "</h3>"
                 );
-
-                html.append("</h3>");
 
                 // =========================
                 // ESTRELAS
@@ -575,15 +635,22 @@ public class PerfilServlet extends HttpServlet {
                 // =========================
 
                 html.append(
-                        "<p><strong>Nota:</strong> "
+                        "<p>"
+                        + "<strong>Nota:</strong> "
+                        + nota
+                        + "/5"
+                        + "</p>"
                 );
 
-                html.append(
-                        nota
-                );
+                // =========================
+                // HORAS
+                // =========================
 
                 html.append(
-                        "/5</p>"
+                        "<p>"
+                        + "<strong>⏱️ Horas jogadas:</strong> "
+                        + horas
+                        + "</p>"
                 );
 
                 // =========================
@@ -611,24 +678,14 @@ public class PerfilServlet extends HttpServlet {
                 html.append("</p>");
 
                 // =========================
-                // HORAS
+                // EDITAR AVALIAÇÃO
                 // =========================
 
                 html.append(
-                        "<p>"
-                        + "<strong>⏱️ Horas jogadas:</strong> "
-                        + horas
-                        + "</p>"
-                );
-
-                // =========================
-                // EDITAR
-                // =========================
-
-                html.append(
-                        "<a class='botao-avaliar' "
+                        "<a "
+                        + "class='botao-avaliar' "
                         + "href='avaliar?id="
-                        + resultado.getInt("id_jogo")
+                        + idJogo
                         + "'>"
                         + "✏️ Editar avaliação"
                         + "</a>"
