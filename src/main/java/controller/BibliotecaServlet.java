@@ -345,7 +345,27 @@ public class BibliotecaServlet extends HttpServlet {
 
             html.append("</style>");
 
-            html.append("</head>");
+            
+        html.append("<script>");
+        html.append("function tentarOutraCapa(img){" +
+                "var src=img.getAttribute('src')||'';" +
+                "var match=src.match(/steam\\/apps\\/(\\d+)/);" +
+                "if(!match){img.style.display='none';return;}" +
+                "var id=match[1];" +
+                "var tentativas=parseInt(img.getAttribute('data-tentativas')||'0',10);" +
+                "var urls=[" +
+                "'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/'+id+'/library_600x900_2x.jpg'," +
+                "'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/'+id+'/library_600x900.jpg'," +
+                "'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/'+id+'/header.jpg'," +
+                "'https://cdn.akamai.steamstatic.com/steam/apps/'+id+'/library_600x900_2x.jpg'," +
+                "'https://cdn.akamai.steamstatic.com/steam/apps/'+id+'/library_600x900.jpg'," +
+                "'https://cdn.akamai.steamstatic.com/steam/apps/'+id+'/header.jpg'" +
+                "];" +
+                "if(tentativas<urls.length){img.setAttribute('data-tentativas',tentativas+1);img.src=urls[tentativas];}else{img.style.display='none';}" +
+                "}");
+        html.append("</script>");
+
+        html.append("</head>");
 
             html.append("<body>");
 
@@ -873,8 +893,7 @@ public class BibliotecaServlet extends HttpServlet {
         if (caminho.matches("\\d+")) {
 
             return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
+                    "https://shared.cloudflare.steamstatic.com/" + "store_item_assets/steam/apps/" +
                     caminho +
                     "/library_600x900_2x.jpg";
         }
@@ -899,8 +918,7 @@ public class BibliotecaServlet extends HttpServlet {
                     matcher.group(1);
 
             return
-                    "https://cdn.akamai.steamstatic.com/" +
-                    "steam/apps/" +
+                    "https://shared.cloudflare.steamstatic.com/" + "store_item_assets/steam/apps/" +
                     appId +
                     "/library_600x900_2x.jpg";
         }
