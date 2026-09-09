@@ -104,7 +104,7 @@ public class PerfilServlet extends HttpServlet {
             html.append(
         "<link rel='icon' " +
         "type='image/png' " +
-        "href='favicon.png'>"
+        "href='icon.png'>"
 );
 
             html.append("<meta charset='UTF-8'>");
@@ -144,6 +144,38 @@ public class PerfilServlet extends HttpServlet {
                     "}"
             );
 
+            html.append(
+                    ".logo-area {" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "gap:9px;" +
+                    "flex-shrink:0;" +
+                    "}"
+            );
+
+            html.append(
+                    ".logo-header {" +
+                    "width:40px !important;" +
+                    "height:40px !important;" +
+                    "max-width:40px !important;" +
+                    "max-height:40px !important;" +
+                    "object-fit:contain !important;" +
+                    "display:block !important;" +
+                    "flex-shrink:0;" +
+                    "}"
+            );
+
+            html.append(
+                    ".logo-area h1 {" +
+                    "margin:0;" +
+                    "padding:0;" +
+                    "font-size:30px;" +
+                    "font-weight:bold;" +
+                    "line-height:1;" +
+                    "color:#fff;" +
+                    "}"
+            );
+
             // PÁGINA
 
             html.append(
@@ -158,7 +190,7 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".perfil-card {" +
-                    "background:linear-gradient(135deg,#24102f,#202830);" +
+                    "background:linear-gradient(135deg,#24102f,#14101b);" +
                     "border:1px solid #3e2849;" +
                     "border-radius:18px;" +
                     "padding:28px;" +
@@ -298,8 +330,8 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".secao {" +
-                    "background:#202830;" +
-                    "border:1px solid #303942;" +
+                    "background:rgba(18,10,29,.94);" +
+                    "border:1px solid #3b2250;" +
                     "border-radius:15px;" +
                     "padding:22px;" +
                     "margin-bottom:22px;" +
@@ -326,8 +358,8 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".jogo-card {" +
-                    "background:#171b20;" +
-                    "border:1px solid #303840;" +
+                    "background:rgba(12,7,19,.96);" +
+                    "border:1px solid #2f1a3f;" +
                     "border-radius:11px;" +
                     "overflow:hidden;" +
                     "transition:.2s;" +
@@ -388,8 +420,8 @@ public class PerfilServlet extends HttpServlet {
                     ".avaliacao-card {" +
                     "display:flex;" +
                     "gap:16px;" +
-                    "background:#171b20;" +
-                    "border:1px solid #303840;" +
+                    "background:rgba(12,7,19,.96);" +
+                    "border:1px solid #2f1a3f;" +
                     "border-radius:11px;" +
                     "padding:14px;" +
                     "transition:.2s;" +
@@ -493,8 +525,8 @@ public class PerfilServlet extends HttpServlet {
 
             html.append(
                     ".lista-card {" +
-                    "background:#171b20;" +
-                    "border:1px solid #303840;" +
+                    "background:rgba(12,7,19,.96);" +
+                    "border:1px solid #2f1a3f;" +
                     "border-radius:11px;" +
                     "padding:16px;" +
                     "margin-bottom:14px;" +
@@ -536,7 +568,7 @@ public class PerfilServlet extends HttpServlet {
                     "align-items:center;" +
                     "gap:11px;" +
                     "padding:10px 0;" +
-                    "border-bottom:1px solid #303840;" +
+                    "border-bottom:1px solid #2b1938;" +
                     "}"
             );
 
@@ -611,7 +643,14 @@ public class PerfilServlet extends HttpServlet {
 
             html.append("<header>");
 
-            html.append("<h1>Inventory</h1>");
+            html.append(
+                    "<div class='logo-area'>" +
+                    "<img src='icon.png' " +
+                    "alt='Logo Inventory' " +
+                    "class='logo-header'>" +
+                    "<h1>Inventory</h1>" +
+                    "</div>"
+            );
 
             html.append("<nav>");
 

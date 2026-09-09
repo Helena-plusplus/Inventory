@@ -134,6 +134,42 @@ public class BibliotecaServlet extends HttpServlet {
             );
 
             // =====================================================
+            // LOGO
+            // =====================================================
+
+            html.append(
+                    ".logo-area {" +
+                    "display:flex;" +
+                    "align-items:center;" +
+                    "gap:9px;" +
+                    "flex-shrink:0;" +
+                    "}"
+            );
+
+            html.append(
+                    ".logo-header {" +
+                    "width:40px !important;" +
+                    "height:40px !important;" +
+                    "max-width:40px !important;" +
+                    "max-height:40px !important;" +
+                    "object-fit:contain !important;" +
+                    "display:block !important;" +
+                    "flex-shrink:0;" +
+                    "}"
+            );
+
+            html.append(
+                    ".logo-area h1 {" +
+                    "margin:0;" +
+                    "padding:0;" +
+                    "font-size:30px;" +
+                    "font-weight:bold;" +
+                    "line-height:1;" +
+                    "color:#fff;" +
+                    "}"
+            );
+
+            // =====================================================
             // TOPO
             // =====================================================
 
@@ -722,10 +758,9 @@ public class BibliotecaServlet extends HttpServlet {
         // usa a mesma função da página Jogos
 
         String caminhoCapa =
-                prepararCapa(
-                        request,
-                        jogo.capa
-                );
+                request.getContextPath()
+                + "/capa?id="
+                + jogo.id;
 
         html.append(
                 "<div class='jogo-card'>"
@@ -745,7 +780,8 @@ public class BibliotecaServlet extends HttpServlet {
                     "' " +
                     "alt='Capa de " +
                     escaparHtml(jogo.titulo) +
-                    "'>"
+                    "' " +
+                    "onerror=\"this.style.display='none';this.nextElementSibling.style.display='flex';\">"
             );
 
         } else {

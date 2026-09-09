@@ -767,10 +767,9 @@ public class JogosServlet extends HttpServlet {
                     // =================================================
 
                     String caminhoCapa =
-                            prepararCapa(
-                                    request,
-                                    capa
-                            );
+                            request.getContextPath()
+                            + "/capa?id="
+                            + id;
 
                     if (caminhoCapa != null) {
 
