@@ -181,6 +181,15 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 );
 
         // =====================================================
+        // AVALIACOES DO PERFIL PESQUISADO
+        // =====================================================
+
+        ArrayList<String[]> avaliacoes =
+                carregarAvaliacoes(
+                        idPerfil
+                );
+
+        // =====================================================
         // HTML
         // =====================================================
 
@@ -777,6 +786,97 @@ public class PerfilUsuarioServlet extends HttpServlet {
         );
 
         // =====================================================
+        // AVALIACOES
+        // =====================================================
+
+        html.append(
+                ".avaliacoes-perfil-grid{" +
+                "display:grid;" +
+                "grid-template-columns:1fr;" +
+                "gap:15px;" +
+                "}"
+        );
+
+        html.append(
+                ".avaliacao-perfil-card{" +
+                "display:flex;" +
+                "gap:16px;" +
+                "padding:15px;" +
+                "background:#120d18;" +
+                "border:1px solid rgba(168,85,247,.14);" +
+                "border-radius:16px;" +
+                "transition:.2s;" +
+                "}"
+        );
+
+        html.append(
+                ".avaliacao-perfil-card:hover{" +
+                "border-color:#8b5cf6;" +
+                "transform:translateY(-2px);" +
+                "}"
+        );
+
+        html.append(
+                ".avaliacao-perfil-capa{" +
+                "width:85px;" +
+                "height:120px;" +
+                "object-fit:cover;" +
+                "border-radius:8px;" +
+                "display:block;" +
+                "flex-shrink:0;" +
+                "background:#24152f;" +
+                "}"
+        );
+
+        html.append(
+                ".avaliacao-perfil-texto{" +
+                "flex:1;" +
+                "min-width:0;" +
+                "}"
+        );
+
+        html.append(
+                ".avaliacao-perfil-texto h3{" +
+                "margin:0 0 8px;" +
+                "font-size:17px;" +
+                "color:#fff;" +
+                "}"
+        );
+
+        html.append(
+                ".estrelas-avaliacao{" +
+                "color:#ffd700;" +
+                "font-size:20px;" +
+                "letter-spacing:2px;" +
+                "margin-bottom:6px;" +
+                "}"
+        );
+
+        html.append(
+                ".nota-avaliacao{" +
+                "color:#c084fc;" +
+                "font-size:13px;" +
+                "font-weight:bold;" +
+                "}"
+        );
+
+        html.append(
+                ".horas-avaliacao{" +
+                "color:#a99cad;" +
+                "font-size:12px;" +
+                "margin:7px 0;" +
+                "}"
+        );
+
+        html.append(
+                ".resenha-avaliacao{" +
+                "color:#c8bfce;" +
+                "font-size:14px;" +
+                "line-height:1.5;" +
+                "}"
+        );
+
+        // =====================================================
         // VAZIO
         // =====================================================
 
@@ -1231,6 +1331,209 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append("</section>");
 
         // =====================================================
+        // AVALIACOES DO USUARIO PESQUISADO
+        // =====================================================
+
+        html.append(
+                "<section class='secao'>"
+        );
+
+        html.append(
+                "<h2 class='titulo-secao'>" +
+                "⭐ Avaliações" +
+                "</h2>"
+        );
+
+        html.append(
+                "<div class='linha-roxa'></div>"
+        );
+
+        if (avaliacoes.isEmpty()) {
+
+            html.append(
+                    "<div class='vazio'>" +
+                    "Este usuário ainda não fez nenhuma avaliação." +
+                    "</div>"
+            );
+
+        } else {
+
+            html.append(
+                    "<div class='avaliacoes-perfil-grid'>"
+            );
+
+            for (String[] avaliacao :
+                    avaliacoes) {
+
+                String titulo =
+                        avaliacao[1];
+
+                String capa =
+                        avaliacao[2];
+
+                String notaTexto =
+                        avaliacao[3];
+
+                String comentario =
+                        avaliacao[4];
+
+                String horas =
+                        avaliacao[5];
+
+                String caminhoCapa =
+                        prepararCapa(
+                                request,
+                                capa
+                        );
+
+                double nota = 0;
+
+                try {
+
+                    nota =
+                            Double.parseDouble(
+                                    notaTexto
+                            );
+
+                } catch (Exception e) {
+
+                    nota = 0;
+                }
+
+                int estrelas =
+                        (int) Math.round(nota);
+
+                if (estrelas < 0) {
+                    estrelas = 0;
+                }
+
+                if (estrelas > 5) {
+                    estrelas = 5;
+                }
+
+                html.append(
+                        "<div class='avaliacao-perfil-card'>"
+                );
+
+                // =================================================
+                // CAPA
+                // =================================================
+
+                if (caminhoCapa != null &&
+                        !caminhoCapa.trim().isEmpty()) {
+
+                    html.append(
+                            "<img " +
+                            "class='avaliacao-perfil-capa' " +
+                            "src='" +
+                            escapar(caminhoCapa) +
+                            "' " +
+                            "alt='Capa de " +
+                            escapar(titulo) +
+                            "' " +
+                            "onerror=\"this.style.display='none';\"" +
+                            ">"
+                    );
+
+                } else {
+
+                    html.append(
+                            "<div class='avaliacao-perfil-capa' " +
+                            "style='display:flex;" +
+                            "align-items:center;" +
+                            "justify-content:center;" +
+                            "color:#83758c;" +
+                            "text-align:center;" +
+                            "padding:8px;'>" +
+                            escapar(titulo) +
+                            "</div>"
+                    );
+                }
+
+                // =================================================
+                // INFORMACOES
+                // =================================================
+
+                html.append(
+                        "<div class='avaliacao-perfil-texto'>"
+                );
+
+                html.append(
+                        "<h3>" +
+                        escapar(titulo) +
+                        "</h3>"
+                );
+
+                html.append(
+                        "<div class='estrelas-avaliacao'>"
+                );
+
+                for (int i = 1; i <= 5; i++) {
+
+                    if (i <= estrelas) {
+
+                        html.append("★");
+
+                    } else {
+
+                        html.append("☆");
+                    }
+                }
+
+                html.append(
+                        "</div>"
+                );
+
+                html.append(
+                        "<div class='nota-avaliacao'>" +
+                        "Nota: " +
+                        nota +
+                        "/5" +
+                        "</div>"
+                );
+
+                if (horas != null &&
+                        !horas.trim().isEmpty() &&
+                        !horas.equals("0.0")) {
+
+                    html.append(
+                            "<div class='horas-avaliacao'>" +
+                            "⏱️ " +
+                            escapar(horas) +
+                            " horas jogadas" +
+                            "</div>"
+                    );
+                }
+
+                if (comentario != null &&
+                        !comentario.trim().isEmpty()) {
+
+                    html.append(
+                            "<div class='resenha-avaliacao'>" +
+                            escapar(comentario) +
+                            "</div>"
+                    );
+                }
+
+                html.append(
+                        "</div>"
+                );
+
+                html.append(
+                        "</div>"
+                );
+            }
+
+            html.append(
+                    "</div>"
+            );
+        }
+
+        html.append(
+                "</section>"
+        );
+
+        // =====================================================
         // LISTAS
         // =====================================================
 
@@ -1500,6 +1803,109 @@ public class PerfilUsuarioServlet extends HttpServlet {
         response.getWriter().println(
                 html.toString()
         );
+    }
+
+    // =====================================================
+    // CARREGAR AVALIACOES DO PERFIL
+    // =====================================================
+
+    private ArrayList<String[]> carregarAvaliacoes(
+            int idUsuario) {
+
+        ArrayList<String[]> avaliacoes =
+                new ArrayList<String[]>();
+
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conexao =
+                    Conexao.conectar();
+
+            String sql =
+                    "SELECT " +
+                    "j.id, " +
+                    "j.titulo, " +
+                    "j.capa, " +
+                    "a.nota, " +
+                    "a.comentario, " +
+                    "a.horas_jogadas, " +
+                    "a.data_avaliacao " +
+                    "FROM avaliacao a " +
+                    "INNER JOIN jogo j " +
+                    "ON j.id = a.id_jogo " +
+                    "WHERE a.id_usuario = ? " +
+                    "ORDER BY a.data_avaliacao DESC";
+
+            stmt =
+                    conexao.prepareStatement(sql);
+
+            stmt.setInt(
+                    1,
+                    idUsuario
+            );
+
+            rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                avaliacoes.add(
+                        new String[]{
+                            String.valueOf(
+                                    rs.getInt("id")
+                            ),
+                            rs.getString("titulo"),
+                            rs.getString("capa"),
+                            String.valueOf(
+                                    rs.getDouble("nota")
+                            ),
+                            rs.getString("comentario"),
+                            String.valueOf(
+                                    rs.getDouble("horas_jogadas")
+                            ),
+                            rs.getString("data_avaliacao")
+                        }
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+            } catch (Exception e) {
+            }
+
+            try {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+
+            } catch (Exception e) {
+            }
+
+            try {
+
+                if (conexao != null) {
+                    conexao.close();
+                }
+
+            } catch (Exception e) {
+            }
+        }
+
+        return avaliacoes;
     }
 
     // =====================================================
