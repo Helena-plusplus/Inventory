@@ -33,7 +33,7 @@ import javax.servlet.http.Part;
         maxRequestSize = 10 * 1024 * 1024
 )
 
-@WebServlet("/cadastro")
+@WebServlet("/usuario")
 public class UsuarioServlet extends HttpServlet {
 
     private static final SecureRandom RANDOM =
