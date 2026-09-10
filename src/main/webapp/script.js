@@ -157,7 +157,6 @@ function cadastrarUsuario() {
     let username = document.getElementById("username");
     let email = document.getElementById("email");
     let senha = document.getElementById("senha");
-    let dataNascimento = document.getElementById("dataNascimento");
     let pais = document.getElementById("pais");
     let plataforma = document.getElementById("plataforma");
     let bio = document.getElementById("bio");
@@ -206,7 +205,6 @@ function cadastrarUsuario() {
     console.log("Usuário:", username.value);
     console.log("E-mail:", email.value);
     console.log("Senha:", senha.value);
-    console.log("Data de nascimento:", dataNascimento.value);
     console.log("País:", pais.value);
     console.log("Plataforma:", plataforma.value);
     console.log("Bio:", bio.value);
