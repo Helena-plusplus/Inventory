@@ -147,7 +147,6 @@ function fazerLogin() {
     }
 }
 
-
 // =========================
 // CADASTRO
 // =========================
@@ -155,20 +154,19 @@ function fazerLogin() {
 function cadastrarUsuario() {
 
     let nome = document.getElementById("nome");
-    let email = document.getElementById("emailCadastro");
-    let senha = document.getElementById("senhaCadastro");
-    let dataNascimento =
-        document.getElementById("dataNascimento");
+    let username = document.getElementById("username");
+    let email = document.getElementById("email");
+    let senha = document.getElementById("senha");
+    let dataNascimento = document.getElementById("dataNascimento");
     let pais = document.getElementById("pais");
-    let plataforma =
-        document.getElementById("plataformaFavorita");
+    let plataforma = document.getElementById("plataforma");
     let bio = document.getElementById("bio");
     let foto = document.getElementById("foto");
-    let mensagem =
-        document.getElementById("mensagemCadastro");
+    let mensagem = document.getElementById("mensagemCadastro");
 
     if (
         !nome ||
+        !username ||
         !email ||
         !senha ||
         !dataNascimento ||
@@ -183,6 +181,7 @@ function cadastrarUsuario() {
 
     if (
         nome.value.trim() === "" ||
+        username.value.trim() === "" ||
         email.value.trim() === "" ||
         senha.value === "" ||
         dataNascimento.value === "" ||
@@ -204,12 +203,12 @@ function cadastrarUsuario() {
     console.log("======================");
 
     console.log("Nome:", nome.value);
+    console.log("Usuário:", username.value);
     console.log("E-mail:", email.value);
-    console.log("Data de nascimento:",
-        dataNascimento.value);
+    console.log("Senha:", senha.value);
+    console.log("Data de nascimento:", dataNascimento.value);
     console.log("País:", pais.value);
-    console.log("Plataforma:",
-        plataforma.value);
+    console.log("Plataforma:", plataforma.value);
     console.log("Bio:", bio.value);
     console.log("Foto:", foto.value);
 
