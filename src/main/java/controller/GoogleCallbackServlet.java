@@ -116,7 +116,7 @@ public class GoogleCallbackServlet extends HttpServlet {
             if (erro != null) {
 
                 System.out.println(
-                        "ERRO NO LOGIN GOOGLE: " + erro
+                        "ERRO RETORNADO PELO GOOGLE: " + erro
                 );
 
                 response.sendRedirect(
@@ -190,21 +190,25 @@ public class GoogleCallbackServlet extends HttpServlet {
                             code,
                             "UTF-8"
                     )
+
                     + "&client_id="
                     + URLEncoder.encode(
                             CLIENT_ID,
                             "UTF-8"
                     )
+
                     + "&client_secret="
                     + URLEncoder.encode(
                             CLIENT_SECRET,
                             "UTF-8"
                     )
+
                     + "&redirect_uri="
                     + URLEncoder.encode(
                             REDIRECT_URI,
                             "UTF-8"
                     )
+
                     + "&grant_type=authorization_code";
 
             URL urlToken =
@@ -349,7 +353,7 @@ public class GoogleCallbackServlet extends HttpServlet {
             conexaoUsuario.disconnect();
 
             // =================================================
-            // VERIFICAR RESPOSTA DO GOOGLE
+            // VERIFICAR DADOS DO GOOGLE
             // =================================================
 
             if (codigoUsuario < 200 ||
@@ -376,7 +380,7 @@ public class GoogleCallbackServlet extends HttpServlet {
                     ).getAsJsonObject();
 
             // =================================================
-            // PEGAR NOME
+            // NOME
             // =================================================
 
             String nome =
@@ -385,7 +389,7 @@ public class GoogleCallbackServlet extends HttpServlet {
                     : "Usuário Google";
 
             // =================================================
-            // PEGAR EMAIL
+            // EMAIL
             // =================================================
 
             String email =
@@ -394,7 +398,7 @@ public class GoogleCallbackServlet extends HttpServlet {
                     : null;
 
             // =================================================
-            // PEGAR FOTO
+            // FOTO
             // =================================================
 
             String foto =
@@ -402,16 +406,8 @@ public class GoogleCallbackServlet extends HttpServlet {
                     ? dados.get("picture").getAsString()
                     : "";
 
-            // =================================================
-            // VERIFICAR EMAIL
-            // =================================================
-
             if (email == null ||
                     email.trim().isEmpty()) {
-
-                System.out.println(
-                        "ERRO: Google não retornou email."
-                );
 
                 response.sendRedirect(
                         "login.html?erro=sem_email"
@@ -419,6 +415,18 @@ public class GoogleCallbackServlet extends HttpServlet {
 
                 return;
             }
+
+            System.out.println(
+                    "Nome Google: " + nome
+            );
+
+            System.out.println(
+                    "Email Google: " + email
+            );
+
+            System.out.println(
+                    "Foto Google: " + foto
+            );
 
             // =================================================
             // CRIAR / VERIFICAR BANCO
@@ -434,13 +442,17 @@ public class GoogleCallbackServlet extends HttpServlet {
                     buscarUsuarioPorEmail(email);
 
             // =================================================
-            // USUÁRIO NÃO EXISTE
+            // USUÁRIO NOVO
             // =================================================
 
             if (usuario == null) {
 
                 System.out.println(
-                        "USUARIO GOOGLE NÃO EXISTE. CRIANDO..."
+                        "Usuário Google não encontrado."
+                );
+
+                System.out.println(
+                        "Criando novo usuário..."
                 );
 
                 usuario =
@@ -450,17 +462,18 @@ public class GoogleCallbackServlet extends HttpServlet {
                                 foto
                         );
 
-            }
+            } else {
 
-            // =================================================
-            // USUÁRIO JÁ EXISTE
-            // ATUALIZAR NOME E FOTO
-            // =================================================
-
-            else {
+                // =================================================
+                // USUÁRIO JÁ EXISTE
+                // =================================================
 
                 System.out.println(
-                        "USUARIO GOOGLE JÁ EXISTE."
+                        "Usuário Google já existe."
+                );
+
+                System.out.println(
+                        "Atualizando nome e foto..."
                 );
 
                 atualizarDadosGoogle(
@@ -469,20 +482,16 @@ public class GoogleCallbackServlet extends HttpServlet {
                         foto
                 );
 
+                // Atualizar objeto usado pela sessão
                 usuario.setNome(nome);
-
                 usuario.setFoto(foto);
             }
 
             // =================================================
-            // VERIFICAR USUÁRIO
+            // VERIFICAR SE USUÁRIO FOI CRIADO
             // =================================================
 
             if (usuario == null) {
-
-                System.out.println(
-                        "ERRO AO CRIAR/LOCALIZAR USUARIO."
-                );
 
                 response.sendRedirect(
                         "login.html?erro=criar_usuario"
@@ -508,19 +517,25 @@ public class GoogleCallbackServlet extends HttpServlet {
             // =================================================
 
             System.out.println(
+                    "=============================="
+            );
+
+            System.out.println(
                     "LOGIN GOOGLE REALIZADO!"
             );
 
             System.out.println(
-                    "Nome: " + usuario.getNome()
+                    "Usuário: "
+                    + usuario.getUsername()
             );
 
             System.out.println(
-                    "Email: " + usuario.getEmail()
+                    "Foto: "
+                    + usuario.getFoto()
             );
 
             System.out.println(
-                    "Foto: " + usuario.getFoto()
+                    "=============================="
             );
 
             // =================================================
@@ -581,7 +596,7 @@ public class GoogleCallbackServlet extends HttpServlet {
     }
 
     // =========================================================
-    // BUSCAR USUARIO POR EMAIL
+    // BUSCAR USUÁRIO PELO EMAIL
     // =========================================================
 
     private Usuario buscarUsuarioPorEmail(
@@ -665,16 +680,14 @@ public class GoogleCallbackServlet extends HttpServlet {
         }
 
         rs.close();
-
         stmt.close();
-
         conexao.close();
 
         return usuario;
     }
 
     // =========================================================
-    // CRIAR USUARIO GOOGLE
+    // CRIAR USUÁRIO GOOGLE
     // =========================================================
 
     private Usuario criarUsuarioGoogle(
@@ -694,7 +707,7 @@ public class GoogleCallbackServlet extends HttpServlet {
         }
 
         // =====================================================
-        // GERAR USERNAME
+        // CRIAR USERNAME
         // =====================================================
 
         String usernameBase =
@@ -731,7 +744,7 @@ public class GoogleCallbackServlet extends HttpServlet {
         }
 
         // =====================================================
-        // INSERIR USUARIO
+        // INSERIR USUÁRIO
         // =====================================================
 
         String sql =
@@ -788,13 +801,11 @@ public class GoogleCallbackServlet extends HttpServlet {
         }
 
         chaves.close();
-
         stmt.close();
-
         conexao.close();
 
         // =====================================================
-        // CRIAR OBJETO USUARIO
+        // CRIAR OBJETO USUÁRIO
         // =====================================================
 
         Usuario usuario =
@@ -808,7 +819,9 @@ public class GoogleCallbackServlet extends HttpServlet {
 
         usuario.setEmail(email);
 
-        usuario.setSenha("GOOGLE_LOGIN");
+        usuario.setSenha(
+                "GOOGLE_LOGIN"
+        );
 
         usuario.setFoto(foto);
 
@@ -861,7 +874,6 @@ public class GoogleCallbackServlet extends HttpServlet {
         stmt.executeUpdate();
 
         stmt.close();
-
         conexao.close();
     }
 
@@ -894,7 +906,6 @@ public class GoogleCallbackServlet extends HttpServlet {
                 rs.next();
 
         rs.close();
-
         stmt.close();
 
         return existe;
