@@ -2102,4 +2102,192 @@ public class UsuarioDAO {
 
         return usuario;
     }
+    // =====================================================
+// LOGIN COM GOOGLE
+// =====================================================
+
+public Usuario loginGoogle(
+        String nome,
+        String email,
+        String foto) {
+
+    Connection conexao = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+
+        conexao = Conexao.conectar();
+
+        if (conexao == null) {
+            return null;
+        }
+
+        // =============================================
+        // VERIFICAR SE O USUARIO JA EXISTE
+        // =============================================
+
+        String buscar =
+                "SELECT * FROM usuario WHERE email = ?";
+
+        stmt = conexao.prepareStatement(buscar);
+
+        stmt.setString(1, email);
+
+        rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            Usuario usuario = criarUsuario(rs);
+
+            rs.close();
+            stmt.close();
+
+            // =========================================
+            // ATUALIZAR NOME E FOTO
+            // =========================================
+
+            String atualizar =
+                    "UPDATE usuario "
+                    + "SET nome = ?, foto = ? "
+                    + "WHERE id = ?";
+
+            stmt = conexao.prepareStatement(atualizar);
+
+            stmt.setString(1, nome);
+            stmt.setString(2, foto);
+            stmt.setInt(3, usuario.getId());
+
+            stmt.executeUpdate();
+
+            usuario.setNome(nome);
+            usuario.setFoto(foto);
+
+            return usuario;
+        }
+
+        rs.close();
+        stmt.close();
+
+        // =============================================
+        // CRIAR USERNAME
+        // =============================================
+
+        String usernameBase =
+                email.split("@")[0]
+                        .replaceAll("[^a-zA-Z0-9_]", "");
+
+        if (usernameBase.isEmpty()) {
+            usernameBase = "usuario";
+        }
+
+        String username = usernameBase;
+
+        int contador = 1;
+
+        while (buscarPorUsername(username) != null) {
+
+            username =
+                    usernameBase + contador;
+
+            contador++;
+        }
+
+        // =============================================
+        // CRIAR NOVO USUARIO
+        // =============================================
+
+        String inserir =
+                "INSERT INTO usuario "
+                + "(nome, username, email, senha, foto, bio, "
+                + "data_nascimento, pais, plataforma_favorita) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        stmt = conexao.prepareStatement(
+                inserir,
+                java.sql.Statement.RETURN_GENERATED_KEYS
+        );
+
+        stmt.setString(1, nome);
+        stmt.setString(2, username);
+        stmt.setString(3, email);
+
+        // Senha aleatoria porque o login sera pelo Google
+        stmt.setString(
+                4,
+                "GOOGLE_LOGIN"
+        );
+
+        stmt.setString(5, foto);
+        stmt.setString(6, "");
+        stmt.setString(7, "");
+        stmt.setString(8, "");
+        stmt.setString(9, "");
+
+        stmt.executeUpdate();
+
+        ResultSet chaves =
+                stmt.getGeneratedKeys();
+
+        int id = 0;
+
+        if (chaves.next()) {
+            id = chaves.getInt(1);
+        }
+
+        chaves.close();
+
+        Usuario usuario =
+                new Usuario();
+
+        usuario.setId(id);
+        usuario.setNome(nome);
+        usuario.setUsername(username);
+        usuario.setEmail(email);
+        usuario.setSenha("GOOGLE_LOGIN");
+        usuario.setFoto(foto);
+        usuario.setBio("");
+        usuario.setDataNascimento("");
+        usuario.setPais("");
+        usuario.setPlataformaFavorita("");
+
+        return usuario;
+
+    } catch (Exception e) {
+
+        System.out.println(
+                "ERRO NO LOGIN GOOGLE:"
+        );
+
+        e.printStackTrace();
+
+        return null;
+
+    } finally {
+
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (conexao != null) {
+                conexao.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 }
