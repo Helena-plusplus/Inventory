@@ -42,6 +42,9 @@ public class GoogleCallbackServlet extends HttpServlet {
     private static final String REDIRECT_URI =
             System.getenv("GOOGLE_REDIRECT_URI");
 
+    private static final String FRONTEND_URL =
+            "https://inventorysocial.netlify.app";
+
     @Override
     protected void doGet(
             HttpServletRequest request,
@@ -54,9 +57,9 @@ public class GoogleCallbackServlet extends HttpServlet {
             System.out.println("GOOGLE CALLBACK FOI CHAMADO");
             System.out.println("==============================");
 
-            // =================================================
-            // VERIFICAR CONFIGURAÇÕES
-            // =================================================
+            // =========================================
+            // VERIFICAR CLIENT ID
+            // =========================================
 
             if (CLIENT_ID == null ||
                     CLIENT_ID.trim().isEmpty()) {
@@ -66,11 +69,16 @@ public class GoogleCallbackServlet extends HttpServlet {
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=config_google"
+                        FRONTEND_URL +
+                        "/login.html?erro=config_google"
                 );
 
                 return;
             }
+
+            // =========================================
+            // VERIFICAR CLIENT SECRET
+            // =========================================
 
             if (CLIENT_SECRET == null ||
                     CLIENT_SECRET.trim().isEmpty()) {
@@ -80,11 +88,16 @@ public class GoogleCallbackServlet extends HttpServlet {
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=config_google"
+                        FRONTEND_URL +
+                        "/login.html?erro=config_google"
                 );
 
                 return;
             }
+
+            // =========================================
+            // VERIFICAR REDIRECT URI
+            // =========================================
 
             if (REDIRECT_URI == null ||
                     REDIRECT_URI.trim().isEmpty()) {
@@ -94,15 +107,16 @@ public class GoogleCallbackServlet extends HttpServlet {
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=config_google"
+                        FRONTEND_URL +
+                        "/login.html?erro=config_google"
                 );
 
                 return;
             }
 
-            // =================================================
-            // PEGAR CODE, STATE E ERRO
-            // =================================================
+            // =========================================
+            // PEGAR PARÂMETROS DO GOOGLE
+            // =========================================
 
             String code =
                     request.getParameter("code");
@@ -113,48 +127,67 @@ public class GoogleCallbackServlet extends HttpServlet {
             String erro =
                     request.getParameter("error");
 
+            // =========================================
+            // GOOGLE DEVOLVEU ERRO
+            // =========================================
+
             if (erro != null) {
 
                 System.out.println(
-                        "GOOGLE RETORNOU ERRO: " + erro
+                        "GOOGLE DEVOLVEU ERRO: " + erro
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=google"
+                        FRONTEND_URL +
+                        "/login.html?erro=google"
                 );
 
                 return;
             }
+
+            // =========================================
+            // VERIFICAR CODE
+            // =========================================
 
             if (code == null ||
                     code.trim().isEmpty()) {
 
+                System.out.println(
+                        "ERRO: código Google não recebido."
+                );
+
                 response.sendRedirect(
-                        "login.html?erro=sem_codigo"
+                        FRONTEND_URL +
+                        "/login.html?erro=sem_codigo"
                 );
 
                 return;
             }
 
-            // =================================================
-            // VERIFICAR SESSÃO
-            // =================================================
+            // =========================================
+            // PEGAR SESSÃO
+            // =========================================
 
             HttpSession sessao =
                     request.getSession(false);
 
             if (sessao == null) {
 
+                System.out.println(
+                        "ERRO: sessão não encontrada."
+                );
+
                 response.sendRedirect(
-                        "login.html?erro=sessao"
+                        FRONTEND_URL +
+                        "/login.html?erro=sessao"
                 );
 
                 return;
             }
 
-            // =================================================
-            // VERIFICAR STATE
-            // =================================================
+            // =========================================
+            // VALIDAR STATE
+            // =========================================
 
             String stateSalvo =
                     (String) sessao.getAttribute(
@@ -165,7 +198,7 @@ public class GoogleCallbackServlet extends HttpServlet {
                     !stateSalvo.equals(state)) {
 
                 System.out.println(
-                        "ERRO: STATE DO GOOGLE INVÁLIDO."
+                        "ERRO: State inválido."
                 );
 
                 response.sendError(
@@ -176,35 +209,40 @@ public class GoogleCallbackServlet extends HttpServlet {
                 return;
             }
 
+            // Remover state depois de usar
             sessao.removeAttribute(
                     "google_oauth_state"
             );
 
-            // =================================================
+            // =========================================
             // TROCAR CODE POR ACCESS TOKEN
-            // =================================================
+            // =========================================
 
             String dadosToken =
                     "code="
                     + URLEncoder.encode(
                             code,
-                            "UTF-8"
+                            StandardCharsets.UTF_8.name()
                     )
+
                     + "&client_id="
                     + URLEncoder.encode(
                             CLIENT_ID,
-                            "UTF-8"
+                            StandardCharsets.UTF_8.name()
                     )
+
                     + "&client_secret="
                     + URLEncoder.encode(
                             CLIENT_SECRET,
-                            "UTF-8"
+                            StandardCharsets.UTF_8.name()
                     )
+
                     + "&redirect_uri="
                     + URLEncoder.encode(
                             REDIRECT_URI,
-                            "UTF-8"
+                            StandardCharsets.UTF_8.name()
                     )
+
                     + "&grant_type=authorization_code";
 
             URL urlToken =
@@ -240,28 +278,30 @@ public class GoogleCallbackServlet extends HttpServlet {
             int codigoResposta =
                     conexaoToken.getResponseCode();
 
-            InputStream entrada;
+            InputStream entradaToken;
 
             if (codigoResposta >= 200 &&
                     codigoResposta < 300) {
 
-                entrada =
+                entradaToken =
                         conexaoToken.getInputStream();
 
             } else {
 
-                entrada =
+                entradaToken =
                         conexaoToken.getErrorStream();
             }
 
             String respostaToken =
-                    lerResposta(entrada);
+                    lerResposta(
+                            entradaToken
+                    );
 
             conexaoToken.disconnect();
 
-            // =================================================
+            // =========================================
             // VERIFICAR TOKEN
-            // =================================================
+            // =========================================
 
             if (codigoResposta < 200 ||
                     codigoResposta >= 300) {
@@ -275,7 +315,8 @@ public class GoogleCallbackServlet extends HttpServlet {
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=token"
+                        FRONTEND_URL +
+                        "/login.html?erro=token"
                 );
 
                 return;
@@ -289,11 +330,12 @@ public class GoogleCallbackServlet extends HttpServlet {
             if (!tokenJson.has("access_token")) {
 
                 System.out.println(
-                        "ERRO: ACCESS TOKEN NÃO ENCONTRADO."
+                        "ERRO: access_token não encontrado."
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=token"
+                        FRONTEND_URL +
+                        "/login.html?erro=token"
                 );
 
                 return;
@@ -304,9 +346,9 @@ public class GoogleCallbackServlet extends HttpServlet {
                             "access_token"
                     ).getAsString();
 
-            // =================================================
+            // =========================================
             // PEGAR DADOS DO USUÁRIO GOOGLE
-            // =================================================
+            // =========================================
 
             URL urlUsuario =
                     new URL(
@@ -348,9 +390,9 @@ public class GoogleCallbackServlet extends HttpServlet {
 
             conexaoUsuario.disconnect();
 
-            // =================================================
+            // =========================================
             // VERIFICAR DADOS DO GOOGLE
-            // =================================================
+            // =========================================
 
             if (codigoUsuario < 200 ||
                     codigoUsuario >= 300) {
@@ -364,7 +406,8 @@ public class GoogleCallbackServlet extends HttpServlet {
                 );
 
                 response.sendRedirect(
-                        "login.html?erro=usuario_google"
+                        FRONTEND_URL +
+                        "/login.html?erro=usuario_google"
                 );
 
                 return;
@@ -375,63 +418,76 @@ public class GoogleCallbackServlet extends HttpServlet {
                             respostaUsuario
                     ).getAsJsonObject();
 
-            // =================================================
+            // =========================================
             // NOME
-            // =================================================
+            // =========================================
 
             String nome =
                     dados.has("name")
                     ? dados.get("name").getAsString()
                     : "Usuário Google";
 
-            // =================================================
+            // =========================================
             // EMAIL
-            // =================================================
+            // =========================================
 
             String email =
                     dados.has("email")
                     ? dados.get("email").getAsString()
                     : null;
 
-            // =================================================
+            // =========================================
             // FOTO
-            // =================================================
+            // =========================================
 
             String foto =
                     dados.has("picture")
                     ? dados.get("picture").getAsString()
                     : "";
 
+            System.out.println(
+                    "NOME GOOGLE: " + nome
+            );
+
+            System.out.println(
+                    "EMAIL GOOGLE: " + email
+            );
+
+            System.out.println(
+                    "FOTO GOOGLE: " + foto
+            );
+
+            // =========================================
+            // VERIFICAR EMAIL
+            // =========================================
+
             if (email == null ||
                     email.trim().isEmpty()) {
 
-                System.out.println(
-                        "ERRO: GOOGLE NÃO RETORNOU EMAIL."
-                );
-
                 response.sendRedirect(
-                        "login.html?erro=sem_email"
+                        FRONTEND_URL +
+                        "/login.html?erro=sem_email"
                 );
 
                 return;
             }
 
-            // =================================================
-            // CRIAR / VERIFICAR BANCO
-            // =================================================
+            // =========================================
+            // CRIAR/VERIFICAR BANCO
+            // =========================================
 
             CriarBanco.criarTabela();
 
-            // =================================================
+            // =========================================
             // PROCURAR USUÁRIO PELO EMAIL
-            // =================================================
+            // =========================================
 
             Usuario usuario =
                     buscarUsuarioPorEmail(email);
 
-            // =================================================
-            // USUÁRIO NOVO
-            // =================================================
+            // =========================================
+            // USUÁRIO NÃO EXISTE
+            // =========================================
 
             if (usuario == null) {
 
@@ -444,10 +500,10 @@ public class GoogleCallbackServlet extends HttpServlet {
 
             } else {
 
-                // =================================================
+                // =====================================
                 // USUÁRIO JÁ EXISTE
                 // ATUALIZAR DADOS DO GOOGLE
-                // =================================================
+                // =====================================
 
                 atualizarDadosGoogle(
                         usuario.getId(),
@@ -460,22 +516,23 @@ public class GoogleCallbackServlet extends HttpServlet {
                 usuario.setFoto(foto);
             }
 
-            // =================================================
-            // VERIFICAR SE CRIOU ENCONTROU USUÁRIO
-            // =================================================
+            // =========================================
+            // VERIFICAR USUÁRIO
+            // =========================================
 
             if (usuario == null) {
 
                 response.sendRedirect(
-                        "login.html?erro=criar_usuario"
+                        FRONTEND_URL +
+                        "/login.html?erro=criar_usuario"
                 );
 
                 return;
             }
 
-            // =================================================
-            // CRIAR NOVA SESSÃO
-            // =================================================
+            // =========================================
+            // LOGIN
+            // =========================================
 
             HttpSession novaSessao =
                     request.getSession(true);
@@ -485,29 +542,31 @@ public class GoogleCallbackServlet extends HttpServlet {
                     usuario
             );
 
-            // =================================================
-            // LOGIN REALIZADO
-            // =================================================
+            System.out.println(
+                    "=============================="
+            );
 
             System.out.println(
                     "LOGIN GOOGLE REALIZADO!"
             );
 
             System.out.println(
-                    "Nome: " + usuario.getNome()
+                    "USUARIO: " +
+                    usuario.getUsername()
             );
 
             System.out.println(
-                    "Email: " + usuario.getEmail()
+                    "FOTO: " +
+                    usuario.getFoto()
             );
 
             System.out.println(
-                    "Foto: " + usuario.getFoto()
+                    "=============================="
             );
 
-            // =================================================
+            // =========================================
             // IR PARA HOME
-            // =================================================
+            // =========================================
 
             response.sendRedirect(
                     "home"
@@ -518,7 +577,8 @@ public class GoogleCallbackServlet extends HttpServlet {
             e.printStackTrace();
 
             response.sendRedirect(
-                    "login.html?erro=google"
+                    FRONTEND_URL +
+                    "/login.html?erro=google"
             );
         }
     }
@@ -563,7 +623,7 @@ public class GoogleCallbackServlet extends HttpServlet {
     }
 
     // =========================================================
-    // BUSCAR USUÁRIO POR EMAIL
+    // BUSCAR USUÁRIO PELO EMAIL
     // =========================================================
 
     private Usuario buscarUsuarioPorEmail(
@@ -673,9 +733,9 @@ public class GoogleCallbackServlet extends HttpServlet {
             );
         }
 
-        // =====================================================
+        // =========================================
         // CRIAR USERNAME
-        // =====================================================
+        // =========================================
 
         String usernameBase =
                 nome
@@ -710,9 +770,9 @@ public class GoogleCallbackServlet extends HttpServlet {
             contador++;
         }
 
-        // =====================================================
+        // =========================================
         // INSERIR USUÁRIO
-        // =====================================================
+        // =========================================
 
         String sql =
                 "INSERT INTO usuario " +
@@ -752,10 +812,6 @@ public class GoogleCallbackServlet extends HttpServlet {
 
         stmt.executeUpdate();
 
-        // =====================================================
-        // PEGAR ID GERADO
-        // =====================================================
-
         ResultSet chaves =
                 stmt.getGeneratedKeys();
 
@@ -771,25 +827,18 @@ public class GoogleCallbackServlet extends HttpServlet {
         stmt.close();
         conexao.close();
 
-        // =====================================================
+        // =========================================
         // CRIAR OBJETO USUÁRIO
-        // =====================================================
+        // =========================================
 
         Usuario usuario =
                 new Usuario();
 
         usuario.setId(id);
-
         usuario.setNome(nome);
-
         usuario.setUsername(username);
-
         usuario.setEmail(email);
-
-        usuario.setSenha(
-                "GOOGLE_LOGIN"
-        );
-
+        usuario.setSenha("GOOGLE_LOGIN");
         usuario.setFoto(foto);
 
         return usuario;
@@ -842,6 +891,10 @@ public class GoogleCallbackServlet extends HttpServlet {
 
         stmt.close();
         conexao.close();
+
+        System.out.println(
+                "DADOS DO GOOGLE ATUALIZADOS!"
+        );
     }
 
     // =========================================================

@@ -21,6 +21,9 @@ public class GoogleLoginServlet extends HttpServlet {
     private static final String REDIRECT_URI =
             System.getenv("GOOGLE_REDIRECT_URI");
 
+    private static final String FRONTEND_URL =
+            "https://inventorysocial.netlify.app";
+
     @Override
     protected void doGet(
             HttpServletRequest request,
@@ -31,9 +34,9 @@ public class GoogleLoginServlet extends HttpServlet {
         System.out.println("GOOGLE LOGIN FOI CHAMADO");
         System.out.println("==============================");
 
-        // =====================================================
-        // VERIFICAR CONFIGURAÇÃO
-        // =====================================================
+        // =========================================
+        // VERIFICAR CLIENT ID
+        // =========================================
 
         if (CLIENT_ID == null ||
                 CLIENT_ID.trim().isEmpty()) {
@@ -43,11 +46,16 @@ public class GoogleLoginServlet extends HttpServlet {
             );
 
             response.sendRedirect(
-                    "login.html?erro=config_google"
+                    FRONTEND_URL +
+                    "/login.html?erro=config_google"
             );
 
             return;
         }
+
+        // =========================================
+        // VERIFICAR REDIRECT URI
+        // =========================================
 
         if (REDIRECT_URI == null ||
                 REDIRECT_URI.trim().isEmpty()) {
@@ -57,22 +65,23 @@ public class GoogleLoginServlet extends HttpServlet {
             );
 
             response.sendRedirect(
-                    "login.html?erro=config_google"
+                    FRONTEND_URL +
+                    "/login.html?erro=config_google"
             );
 
             return;
         }
 
-        // =====================================================
-        // SESSÃO
-        // =====================================================
+        // =========================================
+        // CRIAR SESSÃO
+        // =========================================
 
         HttpSession sessao =
                 request.getSession(true);
 
-        // =====================================================
-        // CRIAR STATE DE SEGURANÇA
-        // =====================================================
+        // =========================================
+        // GERAR STATE
+        // =========================================
 
         SecureRandom random =
                 new SecureRandom();
@@ -93,9 +102,9 @@ public class GoogleLoginServlet extends HttpServlet {
                 state
         );
 
-        // =====================================================
+        // =========================================
         // MONTAR URL DO GOOGLE
-        // =====================================================
+        // =========================================
 
         String url =
                 "https://accounts.google.com/o/oauth2/v2/auth"
