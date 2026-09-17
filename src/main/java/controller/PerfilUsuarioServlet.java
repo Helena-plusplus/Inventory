@@ -953,6 +953,30 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 "}" +
                 "}"
         );
+        html.append(
+        ".area-editar-perfil{" +
+        "margin-top:15px;" +
+        "}" +
+
+        ".botao-editar-perfil{" +
+        "display:inline-block;" +
+        "padding:11px 25px;" +
+        "border:1px solid #8b5cf6;" +
+        "border-radius:12px;" +
+        "background:rgba(139,92,246,.10);" +
+        "color:#fff;" +
+        "text-decoration:none;" +
+        "font-size:14px;" +
+        "font-weight:700;" +
+        "transition:.25s;" +
+        "}" +
+
+        ".botao-editar-perfil:hover{" +
+        "background:#7c3aed;" +
+        "transform:translateY(-2px);" +
+        "box-shadow:0 10px 25px rgba(124,58,237,.25);" +
+        "}"
+);
 
         html.append("</style>");
         
@@ -1818,7 +1842,21 @@ public class PerfilUsuarioServlet extends HttpServlet {
         html.append("</div>");
 
         html.append("</div>");
+// =====================================================
+// BOTAO EDITAR PERFIL
+// =====================================================
 
+if (mesmoUsuario) {
+
+    html.append(
+            "<div class='area-editar-perfil'>" +
+            "<a class='botao-editar-perfil' " +
+            "href='editar-perfil'>" +
+            "✏️ Editar perfil" +
+            "</a>" +
+            "</div>"
+    );
+}
         // =====================================================
         // FECHAR GRID
         // =====================================================
